@@ -6,7 +6,7 @@ A simple skype bot used to interact with skype conversations. Based off of xkcd'
 API:
 =========
 
-# Overview: #
+### Overview: ###
 
 Bucket is designed to be set up on a Linux box with a skype Display name of Bucket. You can change this if you like,
 but you are going to have to edit code to compensate. 
@@ -17,7 +17,7 @@ Anytime a trigger is said, bucket will respond with a random response that is li
 A trigger-response grouping is one to many. That is, a single trigger can have many different possible responses.
 
 
-# Adding Triggers: #
+### Adding Triggers: ###
 
 In any chat that bucket is connected to, you can type:
 > bucket, add "trigger" "response"
@@ -28,7 +28,7 @@ the response.
 
 To that end - it is encouraged that you use fairly long triggers to avoid having bucket trigger on everything.
 
-# Forgetting Triggers: #
+### Forgetting Triggers: ###
 
 To have bucket forget the line which he last said, simply type:
 > bucket, forget that
@@ -38,7 +38,7 @@ Finding out what the trigger was:
 type:
 > bucket, what was that
 
-# Responses: #
+### Responses: ###
 
 Note that responses can contain many different variables. E.g.
 > "/me gives $someone a $noun"
