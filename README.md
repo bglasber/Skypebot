@@ -46,18 +46,19 @@ Note that responses can contain many different variables. E.g.
 These will be arbitrary selected from databases of those words.
 
 The possible variables are:
-> $someone - select someone in the chat
-> $who - the person who triggered the response
-> $noun - a singular noun (DO NOT USE "a" before the noun [ ironing board vs an ironing board ])
-> $nouns - plural noun
-> $verb - unconjugated verb (i.e. drive)
-> $verbs - does something (i.e. drives)
-> $verbing - "ing" verb (i.e. driving)
-> $verbed  - "ed" verb (i.e. drove, fitted)
-> $adjective - an adjective
+* $someone - select someone in the chat
+* $who - the person who triggered the response
+* $noun - a singular noun (DO NOT USE "a" before the noun [ ironing board vs an ironing board ])
+* $nouns - plural noun
+* $verb - unconjugated verb (i.e. drive)
+* $verbs - does something (i.e. drives)
+* $verbing - "ing" verb (i.e. driving)
+* $verbed  - "ed" verb (i.e. drove, fitted)
+* $adjective - an adjective
 
 To add a word to those databases, use:
 > bucket, "wordtype"+ thing to add
-> (i.e. bucket, noun+ car )
+
+(i.e. bucket, noun+ car )
 
 
