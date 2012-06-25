@@ -25,12 +25,16 @@ def rememberHandler(msg):
 
 def forgetHandler(msg):
     """Handle the forgetting process"""
-    prevMessage = findPreviousChatMessage(msg.Id, msg.Chat)
-    c = Command("forget", prevMessage.FromDisplayName, prevMessage.Body)
-    c.forget()
-    msg.Chat.SendMessage("okay {0}, forgetting '{1}: {2}'".format(
-        msg.FromDisplayName, prevMessage.FromDisplayName, 
-        prevMessage.Body))
+    c = Command(None)
+    c.forgetThat()
+    msg.Chat.SendMessage("okay {0}, forgetting it...")
+
+def whatHandler(msg):
+    """Handle the what process"""
+    c = Command(None)
+    prev = c.getWhatWasThat()
+    msg.Chat.SendMessage("It was: \"{0}\" -> \"{1}\"".format(*prev))
+        
 
 def addHandler(msg):
     """Handle the adding of responses to the response database"""

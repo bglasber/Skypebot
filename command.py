@@ -8,6 +8,7 @@ class Command:
     # Class variables, should be static
     database = None
     databaseCursor = None
+    previousMessage = [ "", "" ]
 
     def __init__(self, cmd, optArg3=None, optArg4=None):
         """Construct the required command instance"""
@@ -36,11 +37,15 @@ class Command:
                                        '''.format(self.cmd))
         resp = Command.databaseCursor.fetchone()
         if resp:
+            previousMessage = [ query, resp ]
             resp = resp[0].encode('ascii', 'ignore')
             ex = VariableExpander(resp,msg)
             return ex.expandVariables()
         else:
             return None
+
+    def getWhatWasThat(self):
+        return previousMessage
 
     def isValid(self):
         """Determine if the command is valid or not"""
@@ -63,6 +68,9 @@ class Command:
         elif args[0] == "noun+":
             self.parsedCommand = args
             return True
+        elif args[0] == "nouns+":
+            self.parsedCommand = args
+            return True
         elif args[0] == "adjective+":
             self.parsedCommand = args
             return True
@@ -81,46 +89,39 @@ class Command:
             return "Added: {0} -> {1}".format(self.parsedCommand[0], self.parsedCommand[1])
         else:
             if self.parsedCommand[0] == "verb+":
-                Command.databaseCursor.execute('''INSERT INTO verbs VALUES ('{0}')
+                Command.databaseCursor.execute('''INSERT INTO verbs VALUES ("{0}")
                         '''.format(' '.join(self.parsedCommand[1:])))
             elif self.parsedCommand[0] == "verbs+":
-                Command.databaseCursor.execute('''INSERT INTO presentVerbs VALUES ('{0}')
+                Command.databaseCursor.execute('''INSERT INTO presentVerbs VALUES ("{0}")
                         '''.format(' '.join(self.parsedCommand[1:])))
             elif self.parsedCommand[0] == "verbing+":
-                Command.databaseCursor.execute('''INSERT INTO ingVerbs VALUES ('{0}')
+                Command.databaseCursor.execute('''INSERT INTO ingVerbs VALUES ("{0}")
                         '''.format(' '.join(self.parsedCommand[1:])))
             elif self.parsedCommand[0] == "verbed+":
-                Command.databaseCursor.execute('''INSERT INTO pastVerbs VALUES ('{0}')
+                Command.databaseCursor.execute('''INSERT INTO pastVerbs VALUES ("{0}")
                         '''.format(' '.join(self.parsedCommand[1:])))
             elif self.parsedCommand[0] == "noun+":
-                Command.databaseCursor.execute('''INSERT INTO nouns VALUES ('{0}')
+                Command.databaseCursor.execute('''INSERT INTO nouns VALUES ("{0}")
                         '''.format(' '.join(self.parsedCommand[1:])))
             elif self.parsedCommand[0] == "nouns+":
-                Command.databaseCursor.execute('''INSERT INTO pluralNouns VALUES ('{0}')
+                Command.databaseCursor.execute('''INSERT INTO pluralNouns VALUES ("{0}")
                         '''.format(' '.join(self.parsedCommand[1:])))
             elif self.parsedCommand[0] == "adjective+":
-                Command.databaseCursor.execute('''INSERT INTO adjectives VALUES ('{0}')
+                Command.databaseCursor.execute('''INSERT INTO adjectives VALUES ("{0}")
                         '''.format(' '.join(self.parsedCommand[1:])))
             Command.database.commit()
             return "Added: {0}".format(' '.join(self.parsedCommand[1:]))
-
-
-
-
-                
-            
 
     def remember(self):
         """Insert the quote into the quotes database and commit it"""
         Command.databaseCursor.execute('''INSERT INTO quotes VALUES ( '{0}', '{1}' )'''.format(
                                        self.parsedCommand[0], self.parsedCommand[1]))
         Command.database.commit()
-    def forget(self):
+    def forgetThat(self):
         """Find the quote in the appropriate table, and delete it"""
         # Forget the response put into the response database
         # This should work on its own skype instance, we just need to strip off the BUCKETBOT::
         # Again, change the name to the bots public name, probably bucket
-        if self.parsedCommand[0] == "Brad Glasbergen":
-            Command.databaseCursor.execute('DELETE FROM responses WHERE responses="{0}"'.format(self.parsedCommand[1]))
-            Command.database.commit()
+        Command.databaseCursor.execute('''DELETE FROM responses WHERE query = "{0}" AND responses = "{1}"
+                                       '''.format(*previousMessage))
 

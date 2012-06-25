@@ -10,6 +10,7 @@ from handlers import forgetHandler
 from handlers import addHandler
 from handlers import arbitraryCommandHandler
 from handlers import responseHandler
+from handlers import whatHandler
 
 ######################## CONFIGURE THESE ##############################
 # Bot Display Name
@@ -28,12 +29,13 @@ def simpleHandler(msg, event):
             rememberHandler(msg)
         elif msg.Body == "bucket, forget that":
             forgetHandler(msg)
+        elif msg.Body == "bucket, what was that":
+            whatHandler(msg)
         elif msg.Body.startswith("bucket, add"):
             addHandler(msg)
         elif msg.Body.startswith("bucket, "):
             arbitraryCommandHandler(msg)
-#        elif msg.FromDisplayName != BOT_DISPLAY_NAME:
-        else:
+        elif msg.FromDisplayName != BOT_DISPLAY_NAME:
             responseHandler(msg)
             
 def createTablesIfNecessary(database):
