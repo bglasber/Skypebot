@@ -28,7 +28,7 @@ class Command:
         """Close the database when we are done with it"""
         Command.database.close()
 
-    def giveItem(self)
+    def giveItem(self):
         """Execute the give command"""
         Command.items.append(self.parsedCommand[0])
 

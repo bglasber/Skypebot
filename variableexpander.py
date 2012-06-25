@@ -51,5 +51,18 @@ class VariableExpander:
             command.Command.databaseCursor.execute("SELECT adjective FROM adjectives ORDER BY RANDOM() LIMIT 1")
             verb = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
             self.resp = re.sub(r"\$adjective", verb, self.resp, 1) 
+	while "$popitem" in self.resp:
+	    if not command.Command.items:
+		item = "banana"
+	    else:
+		item = random.choice(command.Command.items)
+		command.Command.items.remove(item)
+	    self.resp = re.sub(r"\$popitem", item, self.resp, 1)
+	while "$item" in self.resp:
+	    if not command.Command.items:
+	        item = "banana"
+	    else:
+		item = random.choice(command.Command.items)
+	    self.resp = re.sub(r"\$item", item, self.resp, 1)
         return self.resp
 

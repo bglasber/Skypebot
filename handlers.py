@@ -1,4 +1,5 @@
 import re
+import sys
 from command import Command
 
 def findPreviousChatMessage(messageId, chat):
@@ -62,7 +63,8 @@ def responseHandler(msg):
 
 def itemHandler(msg):
     """Take the item and put it into the bucket"""
-    item = re.sub(r".* gives bucket ", "", msg.Body)
+    item = re.sub(r".*gives bucket ", "", msg.Body)
+    sys.stdout.write(item+"\r\n")
     c = Command("give", item)
     c.giveItem()
     msg.Chat.SendMessage("/me is now holding {0}".format(item))

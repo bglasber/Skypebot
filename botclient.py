@@ -11,6 +11,7 @@ from handlers import addHandler
 from handlers import arbitraryCommandHandler
 from handlers import responseHandler
 from handlers import whatHandler
+from handlers import itemHandler
 
 ######################## CONFIGURE THESE ##############################
 # Bot Display Name
@@ -35,7 +36,7 @@ def simpleHandler(msg, event):
             addHandler(msg)
         elif msg.Body.startswith("bucket, inventory"):
             c = Command(None)
-            c.itemsInBucket()
+            c.itemsInBucket(msg)
         elif "gives bucket" in msg.Body:
             itemHandler(msg)
         elif msg.Body.startswith("bucket, "):
