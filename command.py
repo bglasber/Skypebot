@@ -32,20 +32,20 @@ class Command:
         has the value of the query column contained in it.
         Only Grab one response, and ensure that it is random"""
         Command.databaseCursor.execute('''SELECT responses FROM responses 
-                                       WHERE '{0}' LIKE '%' || query || '%'  
+                                       WHERE "{0}" LIKE "%" || query || "%" 
                                        ORDER BY RANDOM() LIMIT 1
                                        '''.format(self.cmd))
         resp = Command.databaseCursor.fetchone()
         if resp:
-            previousMessage = [ query, resp ]
             resp = resp[0].encode('ascii', 'ignore')
+            Command.previousMessage = [ self.cmd, resp ]
             ex = VariableExpander(resp,msg)
             return ex.expandVariables()
         else:
             return None
 
     def getWhatWasThat(self):
-        return previousMessage
+        return Command.previousMessage
 
     def isValid(self):
         """Determine if the command is valid or not"""
@@ -122,6 +122,7 @@ class Command:
         # Forget the response put into the response database
         # This should work on its own skype instance, we just need to strip off the BUCKETBOT::
         # Again, change the name to the bots public name, probably bucket
+	sys.stdout.write(Command.previousMessage[0] + " " + Command.previousMessage[1] +"\r\n")
         Command.databaseCursor.execute('''DELETE FROM responses WHERE query = "{0}" AND responses = "{1}"
-                                       '''.format(*previousMessage))
-
+                                       '''.format(Command.previousMessage[0], Command.previousMessage[1]))
+	Command.database.commit()

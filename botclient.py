@@ -14,7 +14,7 @@ from handlers import whatHandler
 
 ######################## CONFIGURE THESE ##############################
 # Bot Display Name
-BOT_DISPLAY_NAME = "Brad Glasbergen"
+BOT_DISPLAY_NAME = "Bucket"
 # Database to connect to (SQLite3 uses files)
 DATABASE_NAME = "responses.db"
 #######################################################################

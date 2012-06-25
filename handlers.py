@@ -27,7 +27,7 @@ def forgetHandler(msg):
     """Handle the forgetting process"""
     c = Command(None)
     c.forgetThat()
-    msg.Chat.SendMessage("okay {0}, forgetting it...")
+    msg.Chat.SendMessage("okay, forgetting it...")
 
 def whatHandler(msg):
     """Handle the what process"""
