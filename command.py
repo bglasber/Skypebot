@@ -9,6 +9,7 @@ class Command:
     database = None
     databaseCursor = None
     previousMessage = [ "", "" ]
+    items = [ ]
 
     def __init__(self, cmd, optArg3=None, optArg4=None):
         """Construct the required command instance"""
@@ -26,6 +27,10 @@ class Command:
     def closeDB(self):
         """Close the database when we are done with it"""
         Command.database.close()
+
+    def giveItem(self)
+        """Execute the give command"""
+        Command.items.append(self.parsedCommand[0])
 
     def getResponse(self, msg):
         """grab a response from the database where the query they provided
@@ -122,7 +127,13 @@ class Command:
         # Forget the response put into the response database
         # This should work on its own skype instance, we just need to strip off the BUCKETBOT::
         # Again, change the name to the bots public name, probably bucket
-	sys.stdout.write(Command.previousMessage[0] + " " + Command.previousMessage[1] +"\r\n")
         Command.databaseCursor.execute('''DELETE FROM responses WHERE query = "{0}" AND responses = "{1}"
                                        '''.format(Command.previousMessage[0], Command.previousMessage[1]))
-	Command.database.commit()
+        Command.database.commit()
+
+    def itemsInBucket(self, msg):
+        """Print out all of the items in the bucket"""
+        msg.Chat.SendMessage("I'm holding: ") 
+        for item in Command.items:
+            msg.Chat.SendMessage(" - " + item)
+

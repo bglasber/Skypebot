@@ -60,6 +60,13 @@ def responseHandler(msg):
     if response:
         msg.Chat.SendMessage(response)
 
+def itemHandler(msg):
+    """Take the item and put it into the bucket"""
+    item = re.sub(r".* gives bucket ", "", msg.Body)
+    c = Command("give", item)
+    c.giveItem()
+    msg.Chat.SendMessage("/me is now holding {0}".format(item))
+
 
 
 

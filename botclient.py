@@ -33,6 +33,11 @@ def simpleHandler(msg, event):
             whatHandler(msg)
         elif msg.Body.startswith("bucket, add"):
             addHandler(msg)
+        elif msg.Body.startswith("bucket, inventory"):
+            c = Command(None)
+            c.itemsInBucket()
+        elif "gives bucket" in msg.Body:
+            itemHandler(msg)
         elif msg.Body.startswith("bucket, "):
             arbitraryCommandHandler(msg)
         elif msg.FromDisplayName != BOT_DISPLAY_NAME:
