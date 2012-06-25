@@ -15,10 +15,12 @@ class VariableExpander:
         while "$someone" in self.resp:
             while True:
                 person = random.choice(self.msg.Chat.ActiveMembers)
-                if person.FullName != "":
+                if person.FullName != "" and person.FullName != "Bucket":
                     break
             person = person.FullName.split(" ")[0]
             self.resp = re.sub(r"\$someone", person, self.resp, 1)
+	if "$who" in self.resp:
+	    self.resp = re.sub(r"\$who", self.msg.FromDisplayName, self.resp)
         while "$nouns" in self.resp:
             command.Command.databaseCursor.execute("SELECT noun FROM pluralNouns ORDER BY RANDOM() LIMIT 1")
             noun = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
