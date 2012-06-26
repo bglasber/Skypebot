@@ -93,29 +93,8 @@ class Command:
             Command.database.commit()
             return "Added: {0} -> {1}".format(self.parsedCommand[0], self.parsedCommand[1])
         else:
-            if self.parsedCommand[0] == "verb+":
-                Command.databaseCursor.execute('''INSERT INTO verbs VALUES ("{0}")
-                        '''.format(' '.join(self.parsedCommand[1:])))
-            elif self.parsedCommand[0] == "verbs+":
-                Command.databaseCursor.execute('''INSERT INTO presentVerbs VALUES ("{0}")
-                        '''.format(' '.join(self.parsedCommand[1:])))
-            elif self.parsedCommand[0] == "verbing+":
-                Command.databaseCursor.execute('''INSERT INTO ingVerbs VALUES ("{0}")
-                        '''.format(' '.join(self.parsedCommand[1:])))
-            elif self.parsedCommand[0] == "verbed+":
-                Command.databaseCursor.execute('''INSERT INTO pastVerbs VALUES ("{0}")
-                        '''.format(' '.join(self.parsedCommand[1:])))
-            elif self.parsedCommand[0] == "noun+":
-                Command.databaseCursor.execute('''INSERT INTO nouns VALUES ("{0}")
-                        '''.format(' '.join(self.parsedCommand[1:])))
-            elif self.parsedCommand[0] == "nouns+":
-                Command.databaseCursor.execute('''INSERT INTO pluralNouns VALUES ("{0}")
-                        '''.format(' '.join(self.parsedCommand[1:])))
-            elif self.parsedCommand[0] == "adjective+":
-                Command.databaseCursor.execute('''INSERT INTO adjectives VALUES ("{0}")
-                        '''.format(' '.join(self.parsedCommand[1:])))
-            Command.database.commit()
-            return "Added: {0}".format(' '.join(self.parsedCommand[1:]))
+            wordHandler(self,parsedCommand[0], self.parsedCommand[1:])
+            return wordHandler.writeChanges()
 
     def remember(self):
         """Insert the quote into the quotes database and commit it"""
