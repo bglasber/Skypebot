@@ -2,6 +2,7 @@ import random
 import sqlite3
 import sys
 from variableexpander import VariableExpander
+from wordhandler import WordHandler
 
 class Command:
 
@@ -93,8 +94,7 @@ class Command:
             Command.database.commit()
             return "Added: {0} -> {1}".format(self.parsedCommand[0], self.parsedCommand[1])
         else:
-            wordHandler(self,parsedCommand[0], self.parsedCommand[1:])
-            return wordHandler.writeChanges()
+            return WordHandler(self.parsedCommand[0], self.parsedCommand[1:]).writeChanges()
 
     def remember(self):
         """Insert the quote into the quotes database and commit it"""

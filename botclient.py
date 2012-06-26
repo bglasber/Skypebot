@@ -39,11 +39,14 @@ def simpleHandler(msg, event):
             c.itemsInBucket(msg)
         elif "gives bucket" in msg.Body:
             itemHandler(msg)
-        elif msg.Body.startswith("bucket, "):
-            arbitraryCommandHandler(msg)
-        elif msg.FromDisplayName != BOT_DISPLAY_NAME:
-            responseHandler(msg)
-            
+        else: 
+	    wasCommand = False
+	    if msg.Body.startswith("bucket, "):
+		wasCommand = arbitraryCommandHandler(msg)
+   	    if not wasCommand:
+		if msg.FromDisplayName != BOT_DISPLAY_NAME:
+		    responseHandler(msg)
+			
 def createTablesIfNecessary(database):
     """Create the required tables in the database if they don't already exist"""
     db = sqlite3.connect(database)

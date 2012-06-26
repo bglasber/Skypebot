@@ -1,54 +1,54 @@
 import command
-class wordHandler:    
+class WordHandler:    
     """This class depends heavily on the command class being open. Ensure that this is the
     case before using this class!"""
     
-    def __init__(self, parsedcommand.Command, listOfTerms):
+    def __init__(self, parsedcommand, listOfTerms):
         """Perform the initial operations on the respective tables in the database.
         This will add or delete the provided word"""
 
-        self.parsedcommand.Command = parsedcommand.Command
+        self.parsedcommand = parsedcommand
 
-        if self.parsedcommand.Command == "verb+":
+        if self.parsedcommand == "verb+":
             command.Command.databaseCursor.execute('''INSERT INTO verbs VALUES ("{0}")
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "verb-":
+        elif self.parsedcommand == "verb-":
             command.Command.databaseCursor.execute('''DELETE FROM verbs WHERE verb = "{0}"
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "verbs+":
+        elif self.parsedcommand == "verbs+":
             command.Command.databaseCursor.execute('''INSERT INTO presentVerbs VALUES ("{0}")
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "verbs-":
+        elif self.parsedcommand == "verbs-":
             command.Command.databaseCursor.execute('''DELETE FROM presentVerbs WHERE verb = "{0}"
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "verbing+":
+        elif self.parsedcommand == "verbing+":
             command.Command.databaseCursor.execute('''INSERT INTO ingVerbs VALUES ("{0}")
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "verbing-":
+        elif self.parsedcommand == "verbing-":
             command.Command.databaseCursor.execute('''DELETE FROM ingVerbs WHERE verb = "{0}"
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "verbed+":
+        elif self.parsedcommand == "verbed+":
             command.Command.databaseCursor.execute('''INSERT INTO pastVerbs VALUES ("{0}")
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "verbed-":
+        elif self.parsedcommand == "verbed-":
             command.Command.databaseCursor.execute('''DELETE FROM pastVerbs WHERED verb = "{0}"
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "noun+":
+        elif self.parsedcommand == "noun+":
             command.Command.databaseCursor.execute('''INSERT INTO nouns VALUES ("{0}")
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "noun-":
+        elif self.parsedcommand == "noun-":
             command.Command.databaseCursor.execute('''DELETE FROM nouns WHERE noun = "{0}"
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "nouns+":
+        elif self.parsedcommand == "nouns+":
             command.Command.databaseCursor.execute('''INSERT INTO pluralNouns VALUES ("{0}")
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "nouns-":
+        elif self.parsedcommand == "nouns-":
             command.Command.databaseCursor.execute('''DELETE FROM pluralNouns WHERE noun = "{0}"
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "adjective+":
+        elif self.parsedcommand == "adjective+":
             command.Command.databaseCursor.execute('''INSERT INTO adjectives VALUES ("{0}")
                                            '''.format(' '.join(listOfTerms)))
-        elif self.parsedcommand.Command == "adjective+":
+        elif self.parsedcommand == "adjective+":
             command.Command.databaseCursor.execute('''INSERT INTO adjectives VALUES ("{0}")
                                            '''.format(' '.join(listOfTerms)))
 
@@ -57,7 +57,7 @@ class wordHandler:
         indicating whether the operation was a success or not."""
         try:
             command.Command.database.commit()
-            if "+" in self.parsedcommand.Command:
+            if "+" in self.parsedcommand:
                 return "Added successfully"
             else:
                 return "Deleted successfully"

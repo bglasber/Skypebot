@@ -53,6 +53,9 @@ def arbitraryCommandHandler(msg):
 
     if c.isValid():
         msg.Chat.SendMessage(c.execute())
+	return True
+    else:
+	return False
 
 def responseHandler(msg):
     """Handle gathering a response from the database and return it"""
