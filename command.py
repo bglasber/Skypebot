@@ -59,27 +59,9 @@ class Command:
         if args[0] == "random" and len(args) == 3:
             self.parsedCommand = args
             return True
-        elif args[0] == "verb+":
-            self.parsedCommand = args
-            return True
-        elif args[0] == "verbs+":
-            self.parsedCommand = args
-            return True
-        elif args[0] == "verbing+":
-            self.parsedCommand = args
-            return True
-        elif args[0] == "verbed+":
-            self.parsedCommand = args
-            return True
-        elif args[0] == "noun+":
-            self.parsedCommand = args
-            return True
-        elif args[0] == "nouns+":
-            self.parsedCommand = args
-            return True
-        elif args[0] == "adjective+":
-            self.parsedCommand = args
-            return True
+	elif WordHandler(args[0], args[1:]).isValidCommand():
+	    self.parsedCommand = args
+	    return True
         else:
             return False
 

@@ -53,31 +53,39 @@ def createTablesIfNecessary(database):
     c = db.cursor()
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='responses'")
     if not c.fetchone():
-        c.execute("CREATE TABLE responses ( query, responses )")
+        c.execute("CREATE TABLE responses ( query text collate nocase, responses )")
+	c.execute("CREATE INDEX responses_index ON responses ( query collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='quotes'")
     if not c.fetchone():
         c.execute("CREATE TABLE quotes ( username, quote )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='nouns'")
     if not c.fetchone():
-        c.execute("CREATE TABLE nouns ( noun )")
+        c.execute("CREATE TABLE nouns ( noun text collate nocase )")
+        c.execute("CREATE INDEX nouns_index ON nouns ( noun collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='verbs'")
     if not c.fetchone():
-        c.execute("CREATE TABLE verbs ( verb )")
+        c.execute("CREATE TABLE verbs ( verb text collate nocase )")
+        c.execute("CREATE INDEX verbs_index ON verbs ( verb collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='presentVerbs'")
     if not c.fetchone():
-        c.execute("CREATE TABLE presentVerbs ( verb )")
+        c.execute("CREATE TABLE presentVerbs ( verb text collate nocase )")
+        c.execute("CREATE INDEX presentVerbs_index ON presentVerbs ( verb collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='pastVerbs'")
     if not c.fetchone():
-        c.execute("CREATE TABLE pastVerbs ( verb )")
+        c.execute("CREATE TABLE pastVerbs ( verb text collate nocase )")
+        c.execute("CREATE INDEX pastVerbs_index ON pastVerbs ( verb collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='ingVerbs'")
     if not c.fetchone():
-        c.execute("CREATE TABLE ingVerbs ( verb )")
+        c.execute("CREATE TABLE ingVerbs ( verb text collate nocase )")
+        c.execute("CREATE INDEX ingVerbs_index ON ingVerbs ( verb collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='adjectives'")
     if not c.fetchone():
-        c.execute("CREATE TABLE adjectives ( adjective )")
+        c.execute("CREATE TABLE adjectives ( adjective text collate nocase )")
+        c.execute("CREATE INDEX adjectives_index ON adjectives( adjective collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='pluralNouns'")
     if not c.fetchone():
-        c.execute("CREATE TABLE pluralNouns ( noun )")
+        c.execute("CREATE TABLE pluralNouns ( noun text collate nocase )")
+        c.execute("CREATE INDEX pluralNouns_index ON pluralNouns ( noun collate nocase )")
     db.close()
 
 def initDB(database):
