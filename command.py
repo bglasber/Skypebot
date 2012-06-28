@@ -88,7 +88,7 @@ class Command:
         # Forget the response put into the response database
         # This should work on its own skype instance, we just need to strip off the BUCKETBOT::
         # Again, change the name to the bots public name, probably bucket
-        Command.databaseCursor.execute('''DELETE FROM responses WHERE query = "{0}" AND responses = "{1}"
+        Command.databaseCursor.execute('''DELETE FROM responses WHERE "{0}" LIKE "%" || query || "%" AND responses = "{1}"
                                        '''.format(Command.previousMessage[0], Command.previousMessage[1]))
         Command.database.commit()
 

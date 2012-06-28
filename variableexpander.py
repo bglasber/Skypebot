@@ -20,7 +20,7 @@ class VariableExpander:
             person = person.FullName.split(" ")[0]
             self.resp = re.sub(r"\$someone", person, self.resp, 1)
 	if "$who" in self.resp:
-	    self.resp = re.sub(r"\$who", self.msg.FromDisplayName, self.resp)
+	    self.resp = re.sub(r"\$who", self.msg.FromDisplayName.split(" ")[0], self.resp)
         while "$nouns" in self.resp:
             command.Command.databaseCursor.execute("SELECT noun FROM pluralNouns ORDER BY RANDOM() LIMIT 1")
             noun = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
