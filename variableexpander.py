@@ -64,5 +64,10 @@ class VariableExpander:
 	    else:
 		item = random.choice(command.Command.items)
 	    self.resp = re.sub(r"\$item", item, self.resp, 1)
+        while "$newitem" in self.resp:
+            command.Command.databaseCursor.execute('SELECT noun FROM nouns ORDER BY RANDOM() LIMIT 1')
+            item = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
+            command.Command.items.append(item)
+            self.resp = re.sub(r"\$newitem", item, self.resp, 1)
         return self.resp
 
