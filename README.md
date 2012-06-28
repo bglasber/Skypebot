@@ -1,51 +1,61 @@
 Skypebot
 ========
 
-A simple skype bot used to interact with skype conversations. Based off of xkcd's bucket bot.
+A simple skype bot used to interact with skype conversations. 
+Based off of xkcd's bucket bot.
 
-API:
-=========
+# Setup: #
 
-### Overview: ###
+Bucket is designed to be run on a linux box, though you should be able to run it
+on windows. This isn't supported, so you may have to modify some code.
 
-Bucket is designed to be set up on a Linux box with a skype Display name of Bucket. You can change this if you like,
-but you are going to have to edit code to compensate. 
+That said, it should be possible. 
 
-Bucket is based around the idea of triggers and responses. 
-Anytime a trigger is said, bucket will respond with a random response that is linked to that trigger.
+For the simplest setup, just install Skype, python development headers, and
+Skype4Py. 
 
-A trigger-response grouping is one to many. That is, a single trigger can have many different possible responses.
+This process will vary depending on your Linux distribution, but the instructions
+are all pretty clear.
+
+At this point, simply run skype, set the display name to Bucket, and run:
+$ python botclient.py
+
+It will prompt you to allow it access. Click ok, and remember it.
+Your good to go!
 
 
-### Adding Triggers: ###
+# Communicating with Bucket #
 
-In any chat that bucket is connected to, you can type:
+### Simple Breakdown ###
+
+Bucket is based off of a trigger system. Quite simply, when a trigger is said in
+conversation, bucket with respond with a programmed response.
+
+Triggers and responses are a many-to-many system. That is, one trigger can have
+many different responses, and multiple triggers may have the same response.
+However, it is recommmended that you have unique responses. 
+
+### Adding Stuff ###
+
+You can talk to bucket to add things to him.
+
+To add a trigger, simply type:
 > bucket, add "trigger" "response"
 
-Then any time trigger is said, bucket may use that response.
-Note trigger simply needs to be a substring of what is said, so "this is a trigger" will also trigger
-the response.
+Now, anytime someone says trigger in chat, bucket will respond with "response."
+Note that the trigger can actually be a substring of what is said.
+Thus, if a person types "im a trigger of awesomeness" in a sentence, bucket will
+also respond with "response."
 
-To that end - it is encouraged that you use fairly long triggers to avoid having bucket trigger on everything.
+### More Complex Responses ###
 
-### Forgetting Triggers: ###
+Bucket has many different variables to make his responses more varied.
 
-To have bucket forget the line which he last said, simply type:
-> bucket, forget that
+To use these, simply include them in the response field of the trigger.
+> bucket, add "trigger" "$someone's $noun"
 
-Finding out what the trigger was:
+Here is a list of all available variables:
 
-type:
-> bucket, what was that
-
-### Responses: ###
-
-Note that responses can contain many different variables. E.g.
-> "/me gives $someone a $noun"
-
-These will be arbitrary selected from databases of those words.
-
-The possible variables are:
 * $someone - select someone in the chat
 * $who - the person who triggered the response
 * $noun - a singular noun (DO NOT USE "a" before the noun [ ironing board vs an ironing board ])
@@ -55,10 +65,38 @@ The possible variables are:
 * $verbing - "ing" verb (i.e. driving)
 * $verbed  - "ed" verb (i.e. drove, fitted)
 * $adjective - an adjective
+* $item - Use an item from bucket's inventory
+* $popitem - Use an item from bucket's inventory, and delete it afterwards
+* $newitem - Grab an item from the $noun table, and add it to bucket's inventory
 
-To add a word to those databases, use:
-> bucket, "wordtype"+ thing to add
+For each of the word types, we can add possible words to their respective tables.
+> bucket, noun+ car
 
-(i.e. bucket, noun+ car )
+Or delete a word:
+> bucket, verb- drive
 
+Note that because the word types depend on having nouns/etc. in the database,
+we cannot use $noun or anything like that if there are no entries in the database.
 
+### Inventory ###
+
+Bucket's inventory is kept in-memory, and so will deleted on bucket restart.
+Bucket's inventory is potentially limitless, and while it can hold any word type,
+it should only hold nouns.
+
+Since bucket's inventory can hold singular nouns and plural nouns, the usage of the
+$item variables is made more complex because the surrounding syntax should be ambiguous
+to the quantity.
+
+In addition to the above variables, you can give bucket an item directly by using:
+> /me gives bucket <item>
+
+As before, do not use "a/an/the/etc" for the item.
+
+### Editing Bucket ###
+
+You can find out what triggered the last bucket response by simply talking to him:
+> bucket, what was that
+
+Furthermore, you can delete the last response using:
+> bucket, forget that
