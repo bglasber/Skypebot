@@ -89,7 +89,7 @@ $item variables is made more complex because the surrounding syntax should be am
 to the quantity.
 
 In addition to the above variables, you can give bucket an item directly by using:
-> /me gives bucket <item>
+> /me gives bucket item
 
 As before, do not use "a/an/the/etc" for the item.
 
