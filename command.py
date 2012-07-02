@@ -67,11 +67,13 @@ class Command:
         """grab a response from the database where the query they provided
         has the value of the query column contained in it.
         Only Grab one response, and ensure that it is random"""
-        Command.databaseCursor.execute('''SELECT responses FROM responses 
-                                       WHERE "{0}" LIKE "%" || query || "%" 
-                                       ORDER BY RANDOM() LIMIT 1
-                                       '''.format(self.cmd))
-        resp = Command.databaseCursor.fetchone()
+        resp = None
+        if not '"' in  self.cmd:
+            Command.databaseCursor.execute('''SELECT responses FROM responses 
+                                           WHERE "{0}" LIKE "%" || query || "%" 
+                                           ORDER BY RANDOM() LIMIT 1
+                                           '''.format(self.cmd))
+            resp = Command.databaseCursor.fetchone()
         if resp:
             resp = resp[0].encode('ascii', 'ignore')
             Command.previousMessage = [ self.cmd, resp ]
