@@ -1,6 +1,12 @@
 import re
 import sys
+import logging
+import logging.config
 from command import Command
+
+logger = logging.getLogger('handlers')
+#logging.config.fileConfig('logger.cfg')
+
 
 def findPreviousChatMessage(messageId, chat):
     """Iterate through all the recent chat messages, and return the
@@ -32,6 +38,7 @@ def forgetHandler(msg):
 
 def whatHandler(msg):
     """Handle the what process"""
+    logger.debug('Handling message using "what handler"')
     c = Command(None)
     prev = c.getWhatWasThat()
     msg.Chat.SendMessage("It was: \"{0}\" -> \"{1}\"".format(*prev))

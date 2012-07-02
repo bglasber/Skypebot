@@ -4,20 +4,28 @@ import threading
 import time
 import sqlite3
 import re
+import logging
+import logging.config
 from command import Command
-from handlers import rememberHandler
-from handlers import forgetHandler
-from handlers import addHandler
-from handlers import arbitraryCommandHandler
-from handlers import responseHandler
-from handlers import whatHandler
-from handlers import itemHandler
+from commandhandlers import rememberHandler
+from commandhandlers import forgetHandler
+from commandhandlers import addHandler
+from commandhandlers import arbitraryCommandHandler
+from commandhandlers import responseHandler
+from commandhandlers import whatHandler
+from commandhandlers import itemHandler
 
 ######################## CONFIGURE THESE ##############################
 # Bot Display Name
 BOT_DISPLAY_NAME = "Bucket"
 # Database to connect to (SQLite3 uses files)
 DATABASE_NAME = "responses.db"
+# Configuration file for logging module in python
+# Title of the logger in this file
+l = logging.getLogger('Skype4Py.api.posix_x11.SkypeAPI')
+l.setLevel(logging.WARN)
+logger = logging.getLogger('MainClient')
+logging.config.fileConfig('logger.cfg', None, False)
 #######################################################################
 
 def simpleHandler(msg, event):
@@ -25,7 +33,7 @@ def simpleHandler(msg, event):
     message is received via skype, this method is executed"""
 
     if event == u"RECEIVED" or event == u"SENT":
-        sys.stdout.write(msg.Body+"\r\n")
+        logger.info("Received Message - {0}: {1}".format(msg.FromDisplayName, msg.Body))
         if msg.Body == "bucket, remember that":
             rememberHandler(msg)
         elif msg.Body == "bucket, forget that":
@@ -51,41 +59,52 @@ def createTablesIfNecessary(database):
     """Create the required tables in the database if they don't already exist"""
     db = sqlite3.connect(database)
     c = db.cursor()
+    logger.debug("Creating tables that don't exists")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='responses'")
     if not c.fetchone():
+        logger.info("Creating the responses tablex...")
         c.execute("CREATE TABLE responses ( query text collate nocase, responses )")
-	c.execute("CREATE INDEX responses_index ON responses ( query collate nocase )")
+        c.execute("CREATE INDEX responses_index ON responses ( query collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='quotes'")
     if not c.fetchone():
+        logger.info("Creating the quotes table...")
         c.execute("CREATE TABLE quotes ( username, quote )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='nouns'")
     if not c.fetchone():
+        logger.info("Creating the nouns table...")
         c.execute("CREATE TABLE nouns ( noun text collate nocase )")
         c.execute("CREATE INDEX nouns_index ON nouns ( noun collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='verbs'")
     if not c.fetchone():
+        logger.info("Creating the verbs table...")
         c.execute("CREATE TABLE verbs ( verb text collate nocase )")
         c.execute("CREATE INDEX verbs_index ON verbs ( verb collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='presentVerbs'")
     if not c.fetchone():
+        logger.info("Creating the presentVerbs table...")
         c.execute("CREATE TABLE presentVerbs ( verb text collate nocase )")
         c.execute("CREATE INDEX presentVerbs_index ON presentVerbs ( verb collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='pastVerbs'")
     if not c.fetchone():
+        logger.info("Creating the pastVerbs table...")
         c.execute("CREATE TABLE pastVerbs ( verb text collate nocase )")
         c.execute("CREATE INDEX pastVerbs_index ON pastVerbs ( verb collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='ingVerbs'")
     if not c.fetchone():
+        logger.info("Creating the ingVerbs table...")
         c.execute("CREATE TABLE ingVerbs ( verb text collate nocase )")
         c.execute("CREATE INDEX ingVerbs_index ON ingVerbs ( verb collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='adjectives'")
     if not c.fetchone():
+        logger.info("Creating the adjectives table...")
         c.execute("CREATE TABLE adjectives ( adjective text collate nocase )")
         c.execute("CREATE INDEX adjectives_index ON adjectives( adjective collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='pluralNouns'")
     if not c.fetchone():
+        logger.info("Creating the pluralNouns table...")
         c.execute("CREATE TABLE pluralNouns ( noun text collate nocase )")
         c.execute("CREATE INDEX pluralNouns_index ON pluralNouns ( noun collate nocase )")
+    logger.debug("Finished checking for tables")
     db.close()
 
 def initDB(database):
@@ -111,7 +130,7 @@ class Bot:
         try:
             s.Attach()
         except:
-            sys.stdout.write("Could not connect to skype!\n")
+            logger.ERROR("Could not connect to skype!\n")
             sys.exit(1)
         else:
             s.OnMessageStatus = handler

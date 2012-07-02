@@ -2,6 +2,7 @@ import re
 import sys
 import command
 import random
+import logging
 
 class VariableExpander:
     """Take any variables in a response and fill them with objects
@@ -26,10 +27,8 @@ class VariableExpander:
             noun = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
             self.resp = re.sub(r"\$nouns", noun, self.resp, 1) 
         while "$noun" in self.resp:
-            sys.stdout.write(self.resp+"\r\n")
             command.Command.databaseCursor.execute("SELECT noun FROM nouns ORDER BY RANDOM() LIMIT 1")
             noun = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
-            sys.stdout.write(noun+"\r\n")
             self.resp = re.sub(r"\$noun", noun, self.resp, 1) 
         while "$verbs" in self.resp:
             command.Command.databaseCursor.execute("SELECT verb FROM presentVerbs ORDER BY RANDOM() LIMIT 1")
@@ -69,5 +68,6 @@ class VariableExpander:
             item = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
             command.Command.items.append(item)
             self.resp = re.sub(r"\$newitem", item, self.resp, 1)
+        logging.debug("Got final response: {0}".format(self.resp))
         return self.resp
 
