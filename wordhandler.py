@@ -8,7 +8,7 @@ class WordHandler:
 			"noun+",      "noun-",
 			"nouns+",     "nouns-",
 			"adjective+", "adjective-",
-            "place+", "place-",
+            		"place+", "place-",
 	]
 
 	def __init__(self, parsedcommand, listOfTerms):
