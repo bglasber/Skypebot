@@ -74,11 +74,12 @@ def responseHandler(msg):
 def itemHandler(msg):
     """Take the item and put it into the bucket"""
     item = re.sub(r".*gives bucket ", "", msg.Body)
-    sys.stdout.write(item+"\r\n")
     c = Command("give", item)
-    c.giveItem()
-    msg.Chat.SendMessage("/me is now holding {0}".format(item))
-
-
-
+    returnedOutput = c.giveItem()
+    if returnedOutput[0] == "Already Have it":
+        msg.Chat.SendMessage("I'm already holding {0}!".format(item))
+    elif len(returnedOutput) == 2:
+        msg.Chat.SendMessage("/me drops {0} and picks up {1}".format(*returnedOutput))
+    else:
+        msg.Chat.SendMessage("/me is now holding {0}".format(*returnedOutput))
 

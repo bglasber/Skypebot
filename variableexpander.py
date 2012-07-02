@@ -50,23 +50,32 @@ class VariableExpander:
             command.Command.databaseCursor.execute("SELECT adjective FROM adjectives ORDER BY RANDOM() LIMIT 1")
             verb = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
             self.resp = re.sub(r"\$adjective", verb, self.resp, 1) 
+        while "$place" in self.resp:
+            command.Command.databaseCursor.execute("SELECT place FROM places ORDER BY RANDOM() LIMIT 1")
+            place = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
+            self.resp = re.sub(r"\$place", place, self.resp, 1) 
+
 	while "$popitem" in self.resp:
-	    if not command.Command.items:
-		item = "banana"
-	    else:
-		item = random.choice(command.Command.items)
-		command.Command.items.remove(item)
-	    self.resp = re.sub(r"\$popitem", item, self.resp, 1)
+            command.Command.databaseCursor.execute('SELECT item FROM items ORDER BY RANDOM() LIMIT 1')
+            item = command.Command.databaseCursor.fetchone()
+	    if not item:
+                item = "banana"
+            else:
+                item = item[0].encode('ascii', 'ignore')
+                command.Command.databaseCursor.execute('DELETE FROM items WHERE item = "{0}"'.format(item))
+                command.Command.database.commit()
+                self.resp = re.sub(r"\$popitem", item, self.resp, 1)
 	while "$item" in self.resp:
-	    if not command.Command.items:
-	        item = "banana"
-	    else:
-		item = random.choice(command.Command.items)
+	    command.Command.databaseCursor.execute('SELECT item FROM items ORDER BY RANDOM() LIMIT 1')
+            item = Command.databaseCursor.fetchone()
+	    if not item:
+                item = "banana"
 	    self.resp = re.sub(r"\$item", item, self.resp, 1)
         while "$newitem" in self.resp:
             command.Command.databaseCursor.execute('SELECT noun FROM nouns ORDER BY RANDOM() LIMIT 1')
             item = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
-            command.Command.items.append(item)
+            command.Command.datbaseCursor.execute('INSERT INTO items VALUES ( "{0}" )'.format(item))
+            command.Command.database.commit()
             self.resp = re.sub(r"\$newitem", item, self.resp, 1)
         logging.debug("Got final response: {0}".format(self.resp))
         return self.resp

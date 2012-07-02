@@ -104,6 +104,17 @@ def createTablesIfNecessary(database):
         logger.info("Creating the pluralNouns table...")
         c.execute("CREATE TABLE pluralNouns ( noun text collate nocase )")
         c.execute("CREATE INDEX pluralNouns_index ON pluralNouns ( noun collate nocase )")
+    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='places'")
+    if not c.fetchone():
+        logger.info("Creating the places table...")
+        c.execute("CREATE TABLE places ( place text collate nocase )")
+        c.execute("CREATE INDEX places_index ON places ( place collate nocase )")
+    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='items'")
+    if not c.fetchone():
+        logger.info("Creating the items table...")
+        c.execute("CREATE TABLE items ( item text collate nocase )")
+        c.execute("CREATE INDEX items_index ON items ( item collate nocase )")
+
     logger.debug("Finished checking for tables")
     db.close()
 

@@ -3,6 +3,8 @@ import sqlite3
 import sys
 from variableexpander import VariableExpander
 from wordhandler import WordHandler
+import pdb
+import logging
 
 class Command:
 
@@ -30,8 +32,30 @@ class Command:
         Command.database.close()
 
     def giveItem(self):
-        """Execute the give command"""
-        Command.items.append(self.parsedCommand[0])
+
+        # Check the number of items and set up variables
+        Command.databaseCursor.execute('SELECT count(*) FROM items')
+        numItems = Command.databaseCursor.fetchone()[0]
+        itemToDelete = None
+        itemToInsert = self.parsedCommand[0]
+        if numItems > 15:
+            Command.databaseCursor.execute('SELECT item FROM items ORDER BY RANDOM() LIMIT 1')
+            itemToDelete = Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
+            Command.databaseCursor.execute('DELETE FROM items WHERE item = "{0}"'.format(itemToDelete))
+            Command.database.commit()
+
+        # Check for duplicates
+        Command.databaseCursor.execute('SELECT item FROM items WHERE item = "{0}"'.format(itemToInsert))
+        if Command.databaseCursor.fetchone():
+            return ( "Already Have it", )
+        Command.databaseCursor.execute('INSERT INTO items VALUES ( "{0}" )'.format(itemToInsert))
+        Command.database.commit()
+
+        # Handle the returns
+        if itemToDelete:
+            return ( itemToDelete, itemToInsert )
+        else:
+            return ( itemToInsert, )
 
     def getResponse(self, msg):
         """grab a response from the database where the query they provided
@@ -59,6 +83,9 @@ class Command:
         if args[0] == "random" and len(args) == 3:
             self.parsedCommand = args
             return True
+        elif args[0] == "drop":
+            self.parsedCommand = args
+            return True
 	elif WordHandler(args[0], args[1:]).isValidCommand():
 	    self.parsedCommand = args
 	    return True
@@ -75,6 +102,11 @@ class Command:
                     '''.format(self.parsedCommand[0], self.parsedCommand[1]))
             Command.database.commit()
             return "Added: {0} -> {1}".format(self.parsedCommand[0], self.parsedCommand[1])
+        elif self.parsedCommand[0] == "drop":
+            item = " ".join(self.parsedCommand[1:])
+            Command.databaseCursor.execute('DELETE FROM items WHERE item = "{0}"'.format(item))
+            Command.database.commit()
+            return "/me dropped {0}".format(item)
         else:
             return WordHandler(self.parsedCommand[0], self.parsedCommand[1:]).writeChanges()
 
@@ -94,7 +126,7 @@ class Command:
 
     def itemsInBucket(self, msg):
         """Print out all of the items in the bucket"""
-        msg.Chat.SendMessage("I'm holding: ") 
-        for item in Command.items:
-            msg.Chat.SendMessage(" - " + item)
+        Command.databaseCursor.execute('SELECT item FROM items')
+        for item in Command.databaseCursor.execute('SELECT item FROM items'):
+            msg.Chat.SendMessage(" - " + item[0].encode('ascii', 'ignore'))
 

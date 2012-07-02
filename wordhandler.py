@@ -7,7 +7,8 @@ class WordHandler:
 			"verbs+",     "verbs-",
 			"noun+",      "noun-",
 			"nouns+",     "nouns-",
-			"adjective+", "adjective-"
+			"adjective+", "adjective-",
+            "place+", "place-",
 	]
 
 	def __init__(self, parsedcommand, listOfTerms):
@@ -63,6 +64,12 @@ class WordHandler:
 							   '''.format(' '.join(self.listOfTerms)))
 			elif self.parsedcommand == "adjective-":
 				command.Command.databaseCursor.execute('''DELETE FROM adjectives WHERE adjective = "{0}"
+							   '''.format(' '.join(self.listOfTerms)))
+                        elif self.parsedcommand == "place+":
+				command.Command.databaseCursor.execute('''INSERT INTO places VALUES ("{0}")
+							   '''.format(' '.join(self.listOfTerms)))
+                        elif self.parsedCommand == "place-":
+                                command.Command.databaseCursor.execute('''DELETE FROM places WHERE place = "{0}"
 							   '''.format(' '.join(self.listOfTerms)))
 
 			command.Command.database.commit()
