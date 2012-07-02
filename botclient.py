@@ -32,8 +32,8 @@ def simpleHandler(msg, event):
     """SimpleHandler: Used to handle incoming messages. When a
     message is received via skype, this method is executed"""
 
-    if event == u"RECEIVED" or event == u"SENT":
-        logger.info("Received Message - {0}: {1}".format(msg.FromDisplayName, msg.Body))
+    if event == u"RECEIVED":
+        logger.debug("Received Message - {0}: {1}".format(msg.FromDisplayName, msg.Body))
         if msg.Body == "bucket, remember that":
             rememberHandler(msg)
         elif msg.Body == "bucket, forget that":
@@ -141,7 +141,8 @@ class Bot:
         try:
             s.Attach()
         except:
-            logger.ERROR("Could not connect to skype!\n")
+            logger.error("Could not connect to skype!")
+            logger.error("Verify that skype is launched and that the program is allowing us to connect")
             sys.exit(1)
         else:
             s.OnMessageStatus = handler
@@ -151,8 +152,10 @@ class Bot:
             except KeyboardInterrupt:
                 c = Command(None)
                 c.closeDB()
+                logger.info("Terminating program...")
                 sys.exit(0)
 
 b = Bot()
 initDB(DATABASE_NAME)
+logger.info("Beginning main execution")
 b.connectAndListen(simpleHandler)

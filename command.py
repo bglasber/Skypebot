@@ -3,7 +3,6 @@ import sqlite3
 import sys
 from variableexpander import VariableExpander
 from wordhandler import WordHandler
-import pdb
 import logging
 
 class Command:
@@ -18,17 +17,20 @@ class Command:
         """Construct the required command instance"""
         self.cmd = cmd
         self.parsedCommand = None
+        self.logger = logging.getLogger('command')
         if optArg3:
             self.parsedCommand = [ optArg3, optArg4 ]
 
     def connectToDB(self, dbName):
         """Connect to the database if we aren't already connected"""
         if not Command.database:
+            self.logger.debug("Connecting to the database...")
             Command.database = sqlite3.connect(dbName, check_same_thread=False)
             Command.databaseCursor = Command.database.cursor()
 
     def closeDB(self):
         """Close the database when we are done with it"""
+        self.logger.debug("Closing connection to the database")
         Command.database.close()
 
     def giveItem(self):
@@ -38,18 +40,22 @@ class Command:
         numItems = Command.databaseCursor.fetchone()[0]
         itemToDelete = None
         itemToInsert = self.parsedCommand[0]
+        
+        Command.databaseCursor.execute('SELECT item FROM items WHERE item = "{0}"'.format(itemToInsert))
+        if Command.databaseCursor.fetchone():
+            self.logger.info("Item {0} already in the database, not inserting again.".format(itemToInsert))
+            return ( "Already Have it", )
+
         if numItems > 15:
             Command.databaseCursor.execute('SELECT item FROM items ORDER BY RANDOM() LIMIT 1')
             itemToDelete = Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
             Command.databaseCursor.execute('DELETE FROM items WHERE item = "{0}"'.format(itemToDelete))
             Command.database.commit()
+            self.logger.info("Found more than 15 items in the items table, dropping {0}".format(itemToDelete))
 
-        # Check for duplicates
-        Command.databaseCursor.execute('SELECT item FROM items WHERE item = "{0}"'.format(itemToInsert))
-        if Command.databaseCursor.fetchone():
-            return ( "Already Have it", )
         Command.databaseCursor.execute('INSERT INTO items VALUES ( "{0}" )'.format(itemToInsert))
         Command.database.commit()
+        self.logger.info("Inserted {0} into the items table".format(itemToInsert))
 
         # Handle the returns
         if itemToDelete:
@@ -75,10 +81,13 @@ class Command:
             return None
 
     def getWhatWasThat(self):
+        self.logger.debug("Got what was that message - handling")
         return Command.previousMessage
+
 
     def isValid(self):
         """Determine if the command is valid or not"""
+        self.logger.debug("Determining if command is valid or not")
         args = self.cmd.split(" ")
         if args[0] == "random" and len(args) == 3:
             self.parsedCommand = args
@@ -95,6 +104,7 @@ class Command:
     def execute(self):
         """Execute the parsed command and return the output"""
         
+        self.logger.debug("Executing random/drop/wordAdd command")
         if self.parsedCommand[0] == "random":
             return str(random.randint(int(self.parsedCommand[1]), int(self.parsedCommand[2])))
         elif self.cmd == "add":
@@ -112,6 +122,7 @@ class Command:
 
     def remember(self):
         """Insert the quote into the quotes database and commit it"""
+        self.logger.info("Remembering quote.")
         Command.databaseCursor.execute('''INSERT INTO quotes VALUES ( '{0}', '{1}' )'''.format(
                                        self.parsedCommand[0], self.parsedCommand[1]))
         Command.database.commit()
@@ -120,12 +131,14 @@ class Command:
         # Forget the response put into the response database
         # This should work on its own skype instance, we just need to strip off the BUCKETBOT::
         # Again, change the name to the bots public name, probably bucket
+        self.logger.info("Got forget that command - deleting previous response")
         Command.databaseCursor.execute('''DELETE FROM responses WHERE "{0}" LIKE "%" || query || "%" AND responses = "{1}"
                                        '''.format(Command.previousMessage[0], Command.previousMessage[1]))
         Command.database.commit()
 
     def itemsInBucket(self, msg):
         """Print out all of the items in the bucket"""
+        self.logger.info("Got inventory command - listing all items")
         Command.databaseCursor.execute('SELECT item FROM items')
         for item in Command.databaseCursor.execute('SELECT item FROM items'):
             msg.Chat.SendMessage(" - " + item[0].encode('ascii', 'ignore'))
