@@ -68,7 +68,8 @@ def createTablesIfNecessary(database):
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='quotes'")
     if not c.fetchone():
         logger.info("Creating the quotes table...")
-        c.execute("CREATE TABLE quotes ( username, quote )")
+        c.execute("CREATE TABLE quotes ( username text collate nocase, quote )")
+        c.execute("CREATE INDEX quotes_index ON quotes ( quote collate nocase )")
     c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='nouns'")
     if not c.fetchone():
         logger.info("Creating the nouns table...")

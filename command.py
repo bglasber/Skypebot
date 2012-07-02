@@ -97,6 +97,9 @@ class Command:
         elif args[0] == "drop":
             self.parsedCommand = args
             return True
+        elif args[0] == "quote":
+            self.parsedCommand = args
+            return True
 	elif WordHandler(args[0], args[1:]).isValidCommand():
 	    self.parsedCommand = args
 	    return True
@@ -114,6 +117,20 @@ class Command:
                     '''.format(self.parsedCommand[0], self.parsedCommand[1]))
             Command.database.commit()
             return "Added: {0} -> {1}".format(self.parsedCommand[0], self.parsedCommand[1])
+        elif self.parsedCommand[0] == "quote":
+            self.logger.debug("Got quote command - checking for quotes for user {0}".format(self.parsedCommand[1]))
+            quote = None
+            Command.databaseCursor.execute('''SELECT quote FROM quotes 
+                                           WHERE username LIKE "%" || "{0}" || "%"'''.format(
+                                            self.parsedCommand[1]))
+            quote = Command.databaseCursor.fetchone()
+            if quote:
+                quote = quote[0].encode('ascii', 'ignore')
+                return "{0}: {1}".format(self.parsedCommand[1], quote)
+            else:
+                return "{0} has no quotes.".format(self.parsedCommand[1])
+            
+
         elif self.parsedCommand[0] == "drop":
             item = " ".join(self.parsedCommand[1:])
             Command.databaseCursor.execute('DELETE FROM items WHERE item = "{0}"'.format(item))
