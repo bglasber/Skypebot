@@ -121,7 +121,8 @@ class Command:
             self.logger.debug("Got quote command - checking for quotes for user {0}".format(self.parsedCommand[1]))
             quote = None
             Command.databaseCursor.execute('''SELECT quote FROM quotes 
-                                           WHERE username LIKE "%" || "{0}" || "%"'''.format(
+                                           WHERE username LIKE "%" || "{0}" || "%"
+                                           ORDER BY RANDOM() LIMIT 1'''.format(
                                             self.parsedCommand[1]))
             quote = Command.databaseCursor.fetchone()
             if quote:

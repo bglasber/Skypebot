@@ -44,9 +44,9 @@ def simpleHandler(msg, event):
 
     if event == u"RECEIVED":
         logger.debug("Received Message - {0}: {1}".format(msg.FromDisplayName, msg.Body))
-#        if msg.Body == "bucket, remember that":
-#            rememberHandler(msg)
-        if msg.Body == "bucket, forget that":
+        if msg.Body == "bucket, remember that":
+            rememberHandler(msg)
+        elif msg.Body == "bucket, forget that":
             forgetHandler(msg)
         elif msg.Body == "bucket, what was that":
             whatHandler(msg)

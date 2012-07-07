@@ -89,14 +89,19 @@ class VariableExpander:
             command.Command.databaseCursor.execute('SELECT noun FROM nouns ORDER BY RANDOM() LIMIT 1')
             item = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
             numItems = command.Command.databaseCursor.execute('SELECT count(*) FROM items')
-            numItems = command.Command.databaseCursor.fetchone()
+            numItems = command.Command.databaseCursor.fetchone()[0]
+            self.logger.debug("Found {0} items in bucket.".format(numItems))
             command.Command.databaseCursor.execute('SELECT item FROM items WHERE item = "{0}"'.format(item))
             if command.Command.databaseCursor.fetchone():
+                self.logger.debug("Item is already in bucket, not reinserting")
                 continue
             elif numItems >= 15:
+                self.logger.debug("More than 15 items found")
                 command.Command.databaseCursor.execute('SELECT item FROM items ORDER BY RANDOM() LIMIT 1')
                 itemToDrop = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
+                self.logger.debug("Dropping item: {0}".format(itemToDrop))
                 command.Command.databaseCursor.execute('DELETE FROM items WHERE item = "{0}"'.format(itemToDrop))
+            self.logger.debug("Inserting {0} into bucket".format(item))
             command.Command.databaseCursor.execute('INSERT INTO items VALUES ( "{0}" )'.format(item))
             command.Command.database.commit()
             self.resp = re.sub(r"\$newitem", item, self.resp, 1)

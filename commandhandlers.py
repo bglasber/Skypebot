@@ -5,7 +5,6 @@ import logging.config
 from command import Command
 
 logger = logging.getLogger('handlers')
-#logging.config.fileConfig('logger.cfg')
 
 
 def findPreviousChatMessage(messageId, chat):
@@ -13,10 +12,12 @@ def findPreviousChatMessage(messageId, chat):
     one who is right before the messageID we are searching for.
     Used for the "remember that" command"""
 
-    for i in xrange(len(chat.RecentMessages)):
-        if chat.RecentMessages[i].Id == messageId:
-            if i != 0:
-                return chat.RecentMessages[i-1]
+    logger.debug("Iterating through {0} messages to find ID".format(len(chat.RecentMessages)))
+    reverseMessages = chat.RecentMessages[::-1]
+    for i in xrange(len(reverseMessages)):
+        if reverseMessages[i].Id == messageId:
+            if i != len(reverseMessages):
+                return reverseMessages[i+1]
             else: 
                 return None 
     return None
@@ -54,7 +55,7 @@ def addHandler(msg):
 
 def arbitraryCommandHandler(msg):
     """Handle the arbitrary execution of commands, most new commands wil be executed through
-    this handler"""
+    this handler. Passes the command into the command class - begins execution and does stuff"""
 
     c = Command(msg.Body[8:])
 
@@ -98,6 +99,9 @@ def tlaHandler(msg):
 
         if returnResponse:
             returnResponse = returnResponse[0].encode('ascii', 'ignore')
+            logger.debug("Got TLA Letter expansion: {0}".format(returnResponse))
+        else:
+            logger.debug("Couldn't get the TLA expansion for letter: " + letter)
         return returnResponse
 
     response = ""
@@ -113,6 +117,7 @@ def tlaHandler(msg):
         return
     word = getAcronymLetter("nouns", "noun", msg.Body[2])
     if word:
+        logger.debug("The full expansion was constructed - Inserting into table...")
         response += word
         Command.databaseCursor.execute('SELECT name FROM band_names WHERE name = "{0}"'.format(
                                        response)
@@ -122,12 +127,8 @@ def tlaHandler(msg):
                                            response)
             )
             Command.database.commit()
+        else:
+            logger.debug("The bandname was already in the table. Not inserting again.")
         msg.Chat.SendMessage(response)
     else:
         return
-
-
-
-
-
-
