@@ -1,8 +1,8 @@
 import random
 import sqlite3
 import sys
-from variableexpander import VariableExpander
-from wordhandler import WordHandler
+from variableExpander import VariableExpander
+from wordHandler import WordHandler
 import logging
 
 class Command:

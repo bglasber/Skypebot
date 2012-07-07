@@ -8,14 +8,14 @@ import logging
 import logging.config
 from schemaConstructor import SchemaConstructor
 from command import Command
-from commandhandlers import rememberHandler
-from commandhandlers import forgetHandler
-from commandhandlers import addHandler
-from commandhandlers import arbitraryCommandHandler
-from commandhandlers import responseHandler
-from commandhandlers import whatHandler
-from commandhandlers import itemHandler
-from commandhandlers import tlaHandler
+from commandHandlers import rememberHandler
+from commandHandlers import forgetHandler
+from commandHandlers import addHandler
+from commandHandlers import arbitraryCommandHandler
+from commandHandlers import responseHandler
+from commandHandlers import whatHandler
+from commandHandlers import itemHandler
+from commandHandlers import tlaHandler
 
 ######################## CONFIGURE THESE ##############################
 # Bot Display Name

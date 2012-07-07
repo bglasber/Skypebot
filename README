@@ -1,0 +1,40 @@
+==========================
+Skypebot 0.1
+==========================
+
+* Designed to emulate the xkcd bucket bot
+* For usage instructions, check out skypebot
+  on github
+
+
+INSTALLATION
+------------
+
+1) Run:
+# python setup.py install
+to extract all of the files and pull
+down dependencies.
+
+2) Install Skype if you haven't already
+
+3) Get python development headers
+
+4) Set up a user for Bucket, and set his name
+to be Bucket. (This is configurable, but in 0.1
+you are going to have to edit code to make it work)
+
+5) Launch bucket with $ python botclient.py
+
+TODO:
+-----
+
+1) Change schema to support aliasing
+2) Add regex search table
+3) Add init scripts to ease installation
+   and launch
+
+----- CHANGE LOG -------
+0.1 :
+    - Initial full push of source
+------------------------
+
