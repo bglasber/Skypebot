@@ -32,6 +32,8 @@ class Command:
         """Close the database when we are done with it"""
         self.logger.debug("Closing connection to the database")
         Command.database.close()
+        Command.databaseCursor = None
+        Command.database = None
 
     def giveItem(self):
 

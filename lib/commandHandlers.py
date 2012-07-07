@@ -50,8 +50,12 @@ def addHandler(msg):
     
     parsedLine = re.sub(r'bucket, add "([^"]+)" "([^"]+)"', 
                                 r'\1|\2', msg.Body).split("|")
-    c = Command("add", parsedLine[0], parsedLine[1])
-    msg.Chat.SendMessage(c.execute())
+    # Catch broken add syntax
+    try:
+        c = Command("add", parsedLine[0], parsedLine[1])
+        msg.Chat.SendMessage(c.execute())
+    except IndexError:
+        pass
 
 def arbitraryCommandHandler(msg):
     """Handle the arbitrary execution of commands, most new commands wil be executed through
