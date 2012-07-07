@@ -83,3 +83,51 @@ def itemHandler(msg):
     else:
         msg.Chat.SendMessage("/me is now holding {0}".format(*returnedOutput))
 
+def tlaHandler(msg):
+    """Find three random things in the database that begin with the appropriate letters"""
+
+    # Define Local function for datbase handling
+    def getAcronymLetter(tableName, tableField, letter):
+
+        Command.databaseCursor.execute('''SELECT {0} FROM {1} 
+                                       WHERE {0} LIKE "{2}" || "%" 
+                                       ORDER BY RANDOM() LIMIT 1'''.format(
+                                       tableField, tableName, letter)
+        )
+        returnResponse = Command.databaseCursor.fetchone()
+
+        if returnResponse:
+            returnResponse = returnResponse[0].encode('ascii', 'ignore')
+        return returnResponse
+
+    response = ""
+    word = getAcronymLetter("adjectives", "adjective", msg.Body[0])
+    if word:
+        response += word + " "
+    else:
+        return
+    word = getAcronymLetter("adjectives", "adjective", msg.Body[1])
+    if word:
+        response += word + " "
+    else:
+        return
+    word = getAcronymLetter("nouns", "noun", msg.Body[2])
+    if word:
+        response += word
+        Command.databaseCursor.execute('SELECT name FROM band_names WHERE name = "{0}"'.format(
+                                       response)
+        )
+        if not Command.databaseCursor.fetchone():
+            Command.databaseCursor.execute('INSERT INTO band_names VALUES ( "{0}" )'.format(
+                                           response)
+            )
+            Command.database.commit()
+        msg.Chat.SendMessage(response)
+    else:
+        return
+
+
+
+
+
+

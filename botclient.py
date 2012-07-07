@@ -6,6 +6,7 @@ import sqlite3
 import re
 import logging
 import logging.config
+from schemaConstructor import SchemaConstructor
 from command import Command
 from commandhandlers import rememberHandler
 from commandhandlers import forgetHandler
@@ -14,6 +15,7 @@ from commandhandlers import arbitraryCommandHandler
 from commandhandlers import responseHandler
 from commandhandlers import whatHandler
 from commandhandlers import itemHandler
+from commandhandlers import tlaHandler
 
 ######################## CONFIGURE THESE ##############################
 # Bot Display Name
@@ -28,15 +30,23 @@ logger = logging.getLogger('MainClient')
 logging.config.fileConfig('logger.cfg', None, False)
 #######################################################################
 
+def isBandName(bandName):
+    if not "\"" in bandName:
+        Command.databaseCursor.execute('SELECT name FROM band_names WHERE "{0}" LIKE "%" || name || "%"'.format(
+                                   bandName)
+        )
+        return Command.databaseCursor.fetchone()
+    return False
+
 def simpleHandler(msg, event):
     """SimpleHandler: Used to handle incoming messages. When a
     message is received via skype, this method is executed"""
 
     if event == u"RECEIVED":
         logger.debug("Received Message - {0}: {1}".format(msg.FromDisplayName, msg.Body))
-        if msg.Body == "bucket, remember that":
-            rememberHandler(msg)
-        elif msg.Body == "bucket, forget that":
+#        if msg.Body == "bucket, remember that":
+#            rememberHandler(msg)
+        if msg.Body == "bucket, forget that":
             forgetHandler(msg)
         elif msg.Body == "bucket, what was that":
             whatHandler(msg)
@@ -45,8 +55,12 @@ def simpleHandler(msg, event):
         elif msg.Body.startswith("bucket, inventory"):
             c = Command(None)
             c.itemsInBucket(msg)
+        elif re.search(r"^[A-Z]{3}\??$", msg.Body):
+            tlaHandler(msg);
         elif "gives bucket" in msg.Body:
             itemHandler(msg)
+        elif isBandName(msg.Body):
+            msg.Chat.SendMessage("That would be a good name for a band")
         else: 
 	    wasCommand = False
 	    if msg.Body.startswith("bucket, "):
@@ -57,67 +71,9 @@ def simpleHandler(msg, event):
 			
 def createTablesIfNecessary(database):
     """Create the required tables in the database if they don't already exist"""
-    db = sqlite3.connect(database)
-    c = db.cursor()
-    logger.debug("Creating tables that don't exists")
-    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='responses'")
-    if not c.fetchone():
-        logger.info("Creating the responses tablex...")
-        c.execute("CREATE TABLE responses ( query text collate nocase, responses )")
-        c.execute("CREATE INDEX responses_index ON responses ( query collate nocase )")
-    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='quotes'")
-    if not c.fetchone():
-        logger.info("Creating the quotes table...")
-        c.execute("CREATE TABLE quotes ( username text collate nocase, quote )")
-        c.execute("CREATE INDEX quotes_index ON quotes ( quote collate nocase )")
-    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='nouns'")
-    if not c.fetchone():
-        logger.info("Creating the nouns table...")
-        c.execute("CREATE TABLE nouns ( noun text collate nocase )")
-        c.execute("CREATE INDEX nouns_index ON nouns ( noun collate nocase )")
-    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='verbs'")
-    if not c.fetchone():
-        logger.info("Creating the verbs table...")
-        c.execute("CREATE TABLE verbs ( verb text collate nocase )")
-        c.execute("CREATE INDEX verbs_index ON verbs ( verb collate nocase )")
-    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='presentVerbs'")
-    if not c.fetchone():
-        logger.info("Creating the presentVerbs table...")
-        c.execute("CREATE TABLE presentVerbs ( verb text collate nocase )")
-        c.execute("CREATE INDEX presentVerbs_index ON presentVerbs ( verb collate nocase )")
-    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='pastVerbs'")
-    if not c.fetchone():
-        logger.info("Creating the pastVerbs table...")
-        c.execute("CREATE TABLE pastVerbs ( verb text collate nocase )")
-        c.execute("CREATE INDEX pastVerbs_index ON pastVerbs ( verb collate nocase )")
-    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='ingVerbs'")
-    if not c.fetchone():
-        logger.info("Creating the ingVerbs table...")
-        c.execute("CREATE TABLE ingVerbs ( verb text collate nocase )")
-        c.execute("CREATE INDEX ingVerbs_index ON ingVerbs ( verb collate nocase )")
-    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='adjectives'")
-    if not c.fetchone():
-        logger.info("Creating the adjectives table...")
-        c.execute("CREATE TABLE adjectives ( adjective text collate nocase )")
-        c.execute("CREATE INDEX adjectives_index ON adjectives( adjective collate nocase )")
-    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='pluralNouns'")
-    if not c.fetchone():
-        logger.info("Creating the pluralNouns table...")
-        c.execute("CREATE TABLE pluralNouns ( noun text collate nocase )")
-        c.execute("CREATE INDEX pluralNouns_index ON pluralNouns ( noun collate nocase )")
-    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='places'")
-    if not c.fetchone():
-        logger.info("Creating the places table...")
-        c.execute("CREATE TABLE places ( place text collate nocase )")
-        c.execute("CREATE INDEX places_index ON places ( place collate nocase )")
-    c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='items'")
-    if not c.fetchone():
-        logger.info("Creating the items table...")
-        c.execute("CREATE TABLE items ( item text collate nocase )")
-        c.execute("CREATE INDEX items_index ON items ( item collate nocase )")
-
-    logger.debug("Finished checking for tables")
-    db.close()
+    constructor = SchemaConstructor(database) 
+    constructor.constructSchema()
+    constructor.close()
 
 def initDB(database):
     """Create the tables if they don't exist, and set up the connection for
