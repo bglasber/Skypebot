@@ -21,7 +21,7 @@ At this point, simply run skype, set the display name to Bucket, and run:
 $ python botclient.py
 
 It will prompt you to allow it access. Click ok, and remember it.
-Your good to go!
+You're good to go!
 
 
 # Communicating with Bucket #
