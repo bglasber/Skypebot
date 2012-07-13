@@ -1,3 +1,4 @@
 include logger.cfg
 include botclient.py
 include lib/*.py
+include tests/*.py
