@@ -19,5 +19,5 @@ setup(name='Skypebot',
       author_email="bglasber@gmail.com",
       tests_require=["pytest"],
       cmdclass = {"test": PyTest},
-      requires=['Skype4Py'],
+      requires=['Skype4Py', 'feedparser'],
 )
