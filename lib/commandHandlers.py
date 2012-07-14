@@ -144,13 +144,16 @@ def rssHandler(msg):
     Command.databaseCursor.execute('SELECT * FROM rss WHERE feed = "{0}"'.format(
                                    parsedLine[1]))
     if not Command.databaseCursor.fetchone():
+	logger.debug("Inserting rss feed into table")
         Command.databaseCursor.execute('INSERT INTO rss VALUES ( null, "{0}" )'.format(
                                    parsedLine[1]))
-        Command.databaseCursor.commit()
+        Command.database.commit()
         Command.databaseCursor.execute('SELECT rssId FROM rss WHERE feed = "{0}"'.format(
                                        parsedLine[1]))
         Id = Command.databaseCursor.fetchone()[0]
+	logger.debug("Got rss feed id: {0}".format(Id))
+	logger.debug("Inserting into responses table: {0} -> {1}".format(*parsedLine))
         Command.databaseCursor.execute('INSERT INTO responses VALUES ( "{0}", NULL, "{1}" )'.format(
-                                       *parseLine))
-        Command.databaseCursor.commit()
+                                       parsedLine[0], Id))
+        Command.database.commit()
                                      

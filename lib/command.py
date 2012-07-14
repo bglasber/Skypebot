@@ -80,10 +80,12 @@ class Command:
         if resp:
             if resp[1]:
                 self.logger.debug("Found a rss get message - handling")
+		self.logger.debug("rssId = {0}".format(resp[1]))
                 Command.databaseCursor.execute('SELECT feed FROM rss WHERE rssId = "{0}"'.format(
                                                resp[1]))
-                rssURL = Command.databaseCursor.fetchone()
+                rssURL = Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
                 feed = feedparser.parse(rssURL)
+		self.logger.debug("Got rssURL: {0}".format(rssURL))
                 randomResult = random.choice(feed['items'])['summary']
                 return randomResult
             else:
@@ -126,7 +128,7 @@ class Command:
         if self.parsedCommand[0] == "random":
             return str(random.randint(int(self.parsedCommand[1]), int(self.parsedCommand[2])))
         elif self.cmd == "add":
-            Command.databaseCursor.execute('''INSERT INTO responses VALUES ( "{0}", "{1}")
+            Command.databaseCursor.execute('''INSERT INTO responses VALUES ( "{0}", "{1}", null)
                     '''.format(self.parsedCommand[0], self.parsedCommand[1]))
             Command.database.commit()
             return "Added: {0} -> {1}".format(self.parsedCommand[0], self.parsedCommand[1])
