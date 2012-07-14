@@ -9,17 +9,10 @@ class SchemaConstructor:
         self.c = self.db.cursor()
         self.logger = logging.getLogger('SchemaConstructor')
         
-
-    def constructSchema(self):
-        """constructSchema: construct the schema."""
-
+    def constructSchema(self): 
+        """constructSchema: construct the schema.""" 
         c = self.db.cursor()
         self.logger.debug("Creating tables that don't exist")
-        c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='responses'")
-        if not c.fetchone():
-            self.logger.info("Creating the responses tablex...")
-            c.execute("CREATE TABLE responses ( query text collate nocase, responses )")
-            c.execute("CREATE INDEX responses_index ON responses ( query collate nocase )")
         c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='quotes'")
         if not c.fetchone():
             self.logger.info("Creating the quotes table...")
@@ -75,9 +68,20 @@ class SchemaConstructor:
             self.logger.info("Creating the band table...")
             c.execute("CREATE TABLE band_names ( name text collate nocase )")
             c.execute("CREATE INDEX band_names_index ON band_names ( name collate nocase )")
+        c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='rss'")
+        if not c.fetchone():
+            self.logger.info("Creating the rss table...")
+            c.execute("CREATE TABLE rss ( rssId INTEGER PRIMARY KEY AUTOINCREMENT, feed text )")
+            c.execute("CREATE INDEX rss_index ON rss ( rssId )")
+        c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='responses'")
+        if not c.fetchone():
+            self.logger.info("Creating the responses tablex...")
+            c.execute("CREATE TABLE responses ( query text collate nocase, responses text, rssId DEFAULT VALUE NULL, FOREIGN KEY (rssId) REFERENCES rss(rssId))")
+            c.execute("CREATE INDEX responses_index ON responses ( query collate nocase )")
+        c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='quotes'")
+
         self.logger.debug("Finished checking for tables")
         self.db.commit()
-
 
     def close(self):
         """close the db connection after constructing the schema"""

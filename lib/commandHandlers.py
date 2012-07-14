@@ -136,3 +136,21 @@ def tlaHandler(msg):
         msg.Chat.SendMessage(response)
     else:
         return
+
+def rssHandler(msg):
+    """Insert the feed into the rss table and put the rssId into the responses table"""
+    parsedLine = re.sub(r'bucket, rss "([^"]+)" "([^"]+)"', 
+                                r'\1|\2', msg.Body).split("|")
+    Command.databaseCursor.execute('SELECT * FROM rss WHERE feed = "{0}"'.format(
+                                   parsedLine[1]))
+    if not Command.databaseCursor.fetchone():
+        Command.databaseCursor.execute('INSERT INTO rss VALUES ( null, "{0}" )'.format(
+                                   parsedLine[1]))
+        Command.databaseCursor.commit()
+        Command.databaseCursor.execute('SELECT rssId FROM rss WHERE feed = "{0}"'.format(
+                                       parsedLine[1]))
+        Id = Command.databaseCursor.fetchone()[0]
+        Command.databaseCursor.execute('INSERT INTO responses VALUES ( "{0}", NULL, "{1}" )'.format(
+                                       *parseLine))
+        Command.databaseCursor.commit()
+                                     

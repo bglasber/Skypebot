@@ -16,7 +16,7 @@ from lib.commandHandlers import responseHandler
 from lib.commandHandlers import whatHandler
 from lib.commandHandlers import itemHandler
 from lib.commandHandlers import tlaHandler
-
+from lib.commandHandlers import rssHandler
 ######################## CONFIGURE THESE ##############################
 # Bot Display Name
 BOT_DISPLAY_NAME = "Bucket"
@@ -52,6 +52,8 @@ def simpleHandler(msg, event):
             whatHandler(msg)
         elif msg.Body.startswith("bucket, add"):
             addHandler(msg)
+        elif msg.Body.startswith("bucket, rss"):
+            rssHandler(msg)
         elif msg.Body.startswith("bucket, inventory"):
             c = Command(None)
             c.itemsInBucket(msg)

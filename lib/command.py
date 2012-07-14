@@ -1,6 +1,7 @@
 import random
 import sqlite3
 import sys
+import feedparser
 from variableExpander import VariableExpander
 from wordHandler import WordHandler
 import logging
@@ -71,16 +72,26 @@ class Command:
         Only Grab one response, and ensure that it is random"""
         resp = None
         if not '"' in  self.cmd:
-            Command.databaseCursor.execute('''SELECT responses FROM responses 
+            Command.databaseCursor.execute('''SELECT responses,rssId FROM responses 
                                            WHERE "{0}" LIKE "%" || query || "%" 
                                            ORDER BY RANDOM() LIMIT 1
                                            '''.format(self.cmd))
             resp = Command.databaseCursor.fetchone()
         if resp:
-            resp = resp[0].encode('ascii', 'ignore')
-            Command.previousMessage = [ self.cmd, resp ]
-            ex = VariableExpander(resp,msg)
-            return ex.expandVariables()
+            if resp[1]:
+                self.logger.debug("Found a rss get message - handling")
+                Command.databaseCursor.execute('SELECT feed FROM rss WHERE rssId = "{0}"'.format(
+                                               resp[1]))
+                rssURL = Command.databaseCursor.fetchone()
+                feed = feedparser.parse(rssURL)
+                randomResult = random.choice(feed['items'])['summary']
+                return randomResult
+            else:
+                self.logger.debug("Standard incoming message - handling")
+                resp = resp[0].encode('ascii', 'ignore')
+                Command.previousMessage = [ self.cmd, resp ]
+                ex = VariableExpander(resp,msg)
+                return ex.expandVariables()
         else:
             return None
 
@@ -111,7 +122,7 @@ class Command:
     def execute(self):
         """Execute the parsed command and return the output"""
         
-        self.logger.debug("Executing random/drop/wordAdd command")
+        self.logger.debug("Executing random/drop/quote/rss/wordAdd command")
         if self.parsedCommand[0] == "random":
             return str(random.randint(int(self.parsedCommand[1]), int(self.parsedCommand[2])))
         elif self.cmd == "add":
@@ -148,6 +159,7 @@ class Command:
         Command.databaseCursor.execute('''INSERT INTO quotes VALUES ( '{0}', '{1}' )'''.format(
                                        self.parsedCommand[0], self.parsedCommand[1]))
         Command.database.commit()
+
     def forgetThat(self):
         """Find the quote in the appropriate table, and delete it"""
         # Forget the response put into the response database
