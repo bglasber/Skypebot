@@ -91,48 +91,23 @@ def itemHandler(msg):
 def tlaHandler(msg):
     """Find three random things in the database that begin with the appropriate letters"""
 
-    # Define Local function for datbase handling
-    def getAcronymLetter(tableName, tableField, letter):
-
-        Command.databaseCursor.execute('''SELECT {0} FROM {1} 
-                                       WHERE {0} LIKE "{2}" || "%" 
-                                       ORDER BY RANDOM() LIMIT 1'''.format(
-                                       tableField, tableName, letter)
-        )
-        returnResponse = Command.databaseCursor.fetchone()
-
-        if returnResponse:
-            returnResponse = returnResponse[0].encode('ascii', 'ignore')
-            logger.debug("Got TLA Letter expansion: {0}".format(returnResponse))
-        else:
-            logger.debug("Couldn't get the TLA expansion for letter: " + letter)
-        return returnResponse
-
+    c = Command(None)
     response = ""
-    word = getAcronymLetter("adjectives", "adjective", msg.Body[0])
+    word = c.getAcronymLetter("adjectives", "adjective", msg.Body[0])
     if word:
         response += word + " "
     else:
         return
-    word = getAcronymLetter("adjectives", "adjective", msg.Body[1])
+    word = c.getAcronymLetter("adjectives", "adjective", msg.Body[1])
     if word:
         response += word + " "
     else:
         return
-    word = getAcronymLetter("nouns", "noun", msg.Body[2])
+    word = c.getAcronymLetter("nouns", "noun", msg.Body[2])
     if word:
         logger.debug("The full expansion was constructed - Inserting into table...")
         response += word
-        Command.databaseCursor.execute('SELECT name FROM band_names WHERE name = "{0}"'.format(
-                                       response)
-        )
-        if not Command.databaseCursor.fetchone():
-            Command.databaseCursor.execute('INSERT INTO band_names VALUES ( "{0}" )'.format(
-                                           response)
-            )
-            Command.database.commit()
-        else:
-            logger.debug("The bandname was already in the table. Not inserting again.")
+        c.insertBandName(response)
         msg.Chat.SendMessage(response)
     else:
         return
@@ -141,19 +116,5 @@ def rssHandler(msg):
     """Insert the feed into the rss table and put the rssId into the responses table"""
     parsedLine = re.sub(r'bucket, rss "([^"]+)" "([^"]+)"', 
                                 r'\1|\2', msg.Body).split("|")
-    Command.databaseCursor.execute('SELECT * FROM rss WHERE feed = "{0}"'.format(
-                                   parsedLine[1]))
-    if not Command.databaseCursor.fetchone():
-	logger.debug("Inserting rss feed into table")
-        Command.databaseCursor.execute('INSERT INTO rss VALUES ( null, "{0}" )'.format(
-                                   parsedLine[1]))
-        Command.database.commit()
-        Command.databaseCursor.execute('SELECT rssId FROM rss WHERE feed = "{0}"'.format(
-                                       parsedLine[1]))
-        Id = Command.databaseCursor.fetchone()[0]
-	logger.debug("Got rss feed id: {0}".format(Id))
-	logger.debug("Inserting into responses table: {0} -> {1}".format(*parsedLine))
-        Command.databaseCursor.execute('INSERT INTO responses VALUES ( "{0}", NULL, "{1}" )'.format(
-                                       parsedLine[0], Id))
-        Command.database.commit()
-                                     
+    c = Command(None) 
+    c.createRssFeedResponse(parsedLine)
