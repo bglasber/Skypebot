@@ -192,12 +192,12 @@ class Command:
 
         if returnResponse:
             returnResponse = returnResponse[0].encode('ascii', 'ignore')
-            logger.debug("Got TLA Letter expansion: {0}".format(returnResponse))
+            self.logger.debug("Got TLA Letter expansion: {0}".format(returnResponse))
         else:
-            logger.debug("Couldn't get the TLA expansion for letter: " + letter)
+            self.logger.debug("Couldn't get the TLA expansion for letter: " + letter)
         return returnResponse
     
-    def insertBandName(self, bandName)
+    def insertBandName(self, bandName):
         """Inserts the bandName into the band_names table if its
         not already in it"""
 
@@ -217,15 +217,15 @@ class Command:
         Command.databaseCursor.execute('SELECT * FROM rss WHERE feed = "{0}"'.format(
                                    parsedLine[1]))
         if not Command.databaseCursor.fetchone():
-            logger.debug("Inserting rss feed into table")
+            self.logger.debug("Inserting rss feed into table")
             Command.databaseCursor.execute('INSERT INTO rss VALUES ( null, "{0}" )'.format(
                                        parsedLine[1]))
             Command.database.commit()
             Command.databaseCursor.execute('SELECT rssId FROM rss WHERE feed = "{0}"'.format(
                                            parsedLine[1]))
             Id = Command.databaseCursor.fetchone()[0]
-            logger.debug("Got rss feed id: {0}".format(Id))
-            logger.debug("Inserting into responses table: {0} -> {1}".format(*parsedLine))
+            self.logger.debug("Got rss feed id: {0}".format(Id))
+            self.logger.debug("Inserting into responses table: {0} -> {1}".format(*parsedLine))
             Command.databaseCursor.execute('INSERT INTO responses VALUES ( "{0}", NULL, "{1}" )'.format(
                                            parsedLine[0], Id))
             Command.database.commit()
