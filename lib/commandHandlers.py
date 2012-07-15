@@ -116,5 +116,9 @@ def rssHandler(msg):
     """Insert the feed into the rss table and put the rssId into the responses table"""
     parsedLine = re.sub(r'bucket, rss "([^"]+)" "([^"]+)"', 
                                 r'\1|\2', msg.Body).split("|")
-    c = Command(None) 
-    c.createRssFeedResponse(parsedLine)
+    try:
+        c = Command(None) 
+	c.createRssFeedResponse(parsedLine)
+	msg.Chat.SendMessage("added rss feed sucessfully")
+    except:
+	msg.Chat.SendMessage("Failed to add rss feed!")
