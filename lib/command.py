@@ -4,6 +4,7 @@ import sys
 import feedparser
 from variableExpander import VariableExpander
 from wordHandler import WordHandler
+from mlStripper import MLStripper
 import logging
 
 class Command:
@@ -87,7 +88,9 @@ class Command:
                 feed = feedparser.parse(rssURL)
 		self.logger.debug("Got rssURL: {0}".format(rssURL))
                 randomResult = random.choice(feed['items'])['summary']
-                return randomResult
+                stripper = MLStripper()
+                stripper.feed(randomResult)
+                return stripper.get_fed_data() 
             else:
                 self.logger.debug("Standard incoming message - handling")
                 resp = resp[0].encode('ascii', 'ignore')
