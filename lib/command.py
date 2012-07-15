@@ -179,3 +179,54 @@ class Command:
         for item in Command.databaseCursor.execute('SELECT item FROM items'):
             msg.Chat.SendMessage(" - " + item[0].encode('ascii', 'ignore'))
 
+    def getAcronymLetter(self, tableName, tableField, letter):
+        """Get a word for the acronym form the table in tableField, 
+        ensuring that it begins with letter. Used For TLA Expansion"""
+
+        Command.databaseCursor.execute('''SELECT {0} FROM {1} 
+                                       WHERE {0} LIKE "{2}" || "%" 
+                                       ORDER BY RANDOM() LIMIT 1'''.format(
+                                       tableField, tableName, letter)
+        )
+        returnResponse = Command.databaseCursor.fetchone()
+
+        if returnResponse:
+            returnResponse = returnResponse[0].encode('ascii', 'ignore')
+            self.logger.debug("Got TLA Letter expansion: {0}".format(returnResponse))
+        else:
+            self.logger.debug("Couldn't get the TLA expansion for letter: " + letter)
+        return returnResponse
+    
+    def insertBandName(self, bandName):
+        """Inserts the bandName into the band_names table if its
+        not already in it"""
+
+        Command.databaseCursor.execute('SELECT name FROM band_names WHERE name = "{0}"'.format(
+                                       bandName)
+        )
+        if not Command.databaseCursor.fetchone():
+            Command.databaseCursor.execute('INSERT INTO band_names VALUES ( "{0}" )'.format(
+                                           bandName)
+            )
+            Command.database.commit()
+
+    def createRssFeedResponse(self, parsedLine):
+        """Given a line split into the query and rss Feed, (parsedLine[0],[1] respectively,
+        add the feed to the feeds table, and then insert a response option into the responses
+        table. Of course, this only happens if the rss Feed is not already in the table"""
+        Command.databaseCursor.execute('SELECT * FROM rss WHERE feed = "{0}"'.format(
+                                   parsedLine[1]))
+        if not Command.databaseCursor.fetchone():
+            self.logger.debug("Inserting rss feed into table")
+            Command.databaseCursor.execute('INSERT INTO rss VALUES ( null, "{0}" )'.format(
+                                       parsedLine[1]))
+            Command.database.commit()
+            Command.databaseCursor.execute('SELECT rssId FROM rss WHERE feed = "{0}"'.format(
+                                           parsedLine[1]))
+            Id = Command.databaseCursor.fetchone()[0]
+            self.logger.debug("Got rss feed id: {0}".format(Id))
+            self.logger.debug("Inserting into responses table: {0} -> {1}".format(*parsedLine))
+            Command.databaseCursor.execute('INSERT INTO responses VALUES ( "{0}", NULL, "{1}" )'.format(
+                                           parsedLine[0], Id))
+            Command.database.commit()
+
