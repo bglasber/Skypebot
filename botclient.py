@@ -54,7 +54,7 @@ def simpleHandler(msg, event):
             addHandler(msg)
         elif msg.Body.startswith("bucket, rss"):
             rssHandler(msg)
-        elif msg.Body.startswith("bucket, inventory"):
+        elif msg.Body.startswith("bucket, inv"):  # INVENTORY
             c = Command(None)
             c.itemsInBucket(msg)
         elif re.search(r"^[A-Z]{3}\??$", msg.Body):
