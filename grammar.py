@@ -14,9 +14,6 @@ def pluralize(word):
     elif word == "moose"
         word = "moose"
 
-    elif word == "fungus"
-        word = "fungi"
-
     elif word == "man"
         word = "men"
 
@@ -38,6 +35,9 @@ def pluralize(word):
 
         if word.endswith("fe"):
             word = word[:-2] + "ves"
+            
+        if word.endswith("us"):
+            word = word[:-2] + "i"
             
         else:
             word += "s"
