@@ -8,11 +8,23 @@ def pluralize(word):
     elif word == "mouse":
         word = "mice"
 
-    elif word == "knife"
-        word = "knives"
+    elif word == "sheep"
+        word = "sheep"
 
-    elif word == "wolf"
-        word = "wolves"
+    elif word == "moose"
+        word = "moose"
+
+    elif word == "fungus"
+        word = "fungi"
+
+    elif word == "man"
+        word = "men"
+
+    elif word == "woman"
+        word = "women"
+
+    elif word == "person"
+        word = "people"
         
     else:
         if word.endswith("y"):
@@ -20,6 +32,12 @@ def pluralize(word):
 
         if word.endswith("s"):
             word = word[:-1] + "es"
+            
+        if word.endswith("f"):
+            word = word[:-1] + "ves"
+
+        if word.endswith("fe"):
+            word = word[:-2] + "ves"
             
         else:
             word += "s"
