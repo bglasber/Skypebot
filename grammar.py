@@ -1,7 +1,8 @@
+# noun contexts
 def pluralize(word):
     word = word.strip()
 
-    #irregular cases
+    # irregular cases
     if word == "goose":
         word = "geese"
 
@@ -42,4 +43,26 @@ def pluralize(word):
         else:
             word += "s"
         
+    return word
+    
+
+
+# verb contexts
+def ing(word):
+    word = word.strip()
+    
+    # irregular cases
+    if word = "":
+        word = ""
+        
+    else:
+        if word.endswith("ie"):
+            word = word[:-2] + "ying"
+        
+        if word.endswith("ot"):
+            word = word[:-2] + "eting"
+            
+        else:
+            word += "ing"
+    
     return word
