@@ -188,6 +188,9 @@ class Command:
         Command.databaseCursor.execute('SELECT video FROM links')
         vid = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
         msg.Chat.SendMessage(vid)
+        
+    def saveVideoURL(self, msg):
+    	
 
     def getAcronymLetter(self, tableName, tableField, letter):
         """Get a word for the acronym form the table in tableField, 
