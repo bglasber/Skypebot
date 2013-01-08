@@ -62,8 +62,9 @@ def simpleHandler(msg, event):
         elif msg.Body.lower().startswith("bucket, video"):
 	    c = Command(None)
             c.videosInBucket(msg)
-        elif msg.Body.lower().startswith("http://www.youtube.com/"):
-            
+        elif "http://www.youtube.com/" in msg.Body.lower():
+            c = Command(None)
+            c.saveVideoURL(msg)
         elif re.search(r"^[A-Z]{3}\??$", msg.Body):
             tlaHandler(msg);
         elif "gives bucket" in msg.Body.lower():
