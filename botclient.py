@@ -58,6 +58,9 @@ def simpleHandler(msg, event):
         elif msg.Body.startswith("bucket, inv"):  # INVENTORY
             c = Command(None)
             c.itemsInBucket(msg)
+        elif msg.Body.startswith("bucket, video"):
+	    c = Command(None)
+            c.videosInBucket(msg)
         elif re.search(r"^[A-Z]{3}\??$", msg.Body):
             tlaHandler(msg);
         elif "gives bucket" in msg.Body:
