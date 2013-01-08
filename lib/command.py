@@ -183,7 +183,7 @@ class Command:
             msg.Chat.SendMessage(" - " + item[0].encode('ascii', 'ignore'))
             
     def videosInBucket(self, msg):
-    """Print out a random video url"""
+    	"""Print out a random video url"""
         self.logger.info("Got video command - displaying random video hyperlink")
         Command.databaseCursor.execute('SELECT video FROM links')
         vid = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
