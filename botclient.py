@@ -44,26 +44,27 @@ def simpleHandler(msg, event):
     message is received via skype, this method is executed"""
 
     if event == u"RECEIVED":
+    	msg.Body = msg.Body.strip()
         logger.debug("Received Message - {0}: {1}".format(msg.FromDisplayName, msg.Body))
-        if msg.Body == "bucket, remember that":
+        if msg.Body.lower() == "bucket, remember that":
             rememberHandler(msg)
-        elif msg.Body == "bucket, forget that":
+        elif msg.Body.lower() == "bucket, forget that":
             forgetHandler(msg)
-        elif msg.Body == "bucket, what was that":
+        elif msg.Body.lower() == "bucket, what was that":
             whatHandler(msg)
-        elif msg.Body.startswith("bucket, add"):
+        elif msg.Body.lower().startswith("bucket, add"):
             addHandler(msg)
-        elif msg.Body.startswith("bucket, rss"):
+        elif msg.Body.lower().startswith("bucket, rss"):
             rssHandler(msg)
-        elif msg.Body.startswith("bucket, inv"):  # INVENTORY
+        elif msg.Body.lower().startswith("bucket, inv"):  # INVENTORY
             c = Command(None)
             c.itemsInBucket(msg)
-        elif msg.Body.startswith("bucket, video"):
+        elif msg.Body..lower()startswith("bucket, video"):
 	    c = Command(None)
             c.videosInBucket(msg)
         elif re.search(r"^[A-Z]{3}\??$", msg.Body):
             tlaHandler(msg);
-        elif "gives bucket" in msg.Body:
+        elif "gives bucket" in msg.Body.lower():
             itemHandler(msg)
         elif isBandName(msg.Body):
             msg.Chat.SendMessage("That would be a good name for a band")
