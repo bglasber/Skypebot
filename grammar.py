@@ -5,41 +5,41 @@ class Grammar:
         word = word.strip()
     
         # irregular cases
-        if word == "goose":
+        if word.lower() == "goose":
             word = "geese"
     
-        elif word == "mouse":
+        elif word.lower() == "mouse":
             word = "mice"
     
-        elif word == "sheep"
+        elif word.lower() == "sheep"
             word = "sheep"
     
-        elif word == "moose"
+        elif word.lower() == "moose"
             word = "moose"
     
-        elif word == "man"
+        elif word.lower() == "man"
             word = "men"
     
-        elif word == "woman"
+        elif word.lower() == "woman"
             word = "women"
     
-        elif word == "person"
+        elif word.lower() == "person"
             word = "people"
             
         else:
-            if word.endswith("y"):
+            if word.lower().endswith("y"):
                 word = word[:-1] + "ies"
     
-            if word.endswith("s"):
+            if word.lower().endswith("s"):
                 word = word[:-1] + "es"
                 
-            if word.endswith("f"):
+            if word.lower().endswith("f"):
                 word = word[:-1] + "ves"
     
-            if word.endswith("fe"):
+            if word.lower().endswith("fe"):
                 word = word[:-2] + "ves"
                 
-            if word.endswith("us"):
+            if word.lower().endswith("us"):
                 word = word[:-2] + "i"
                 
             else:
@@ -54,14 +54,14 @@ class Grammar:
         word = word.strip()
         
         # irregular cases
-        if word = "":
-            word = ""
+        #if word.lower() = "":
+            #word = ""
             
         else:
-            if word.endswith("ie"):
+            if word.lower().endswith("ie"):
                 word = word[:-2] + "ying"
             
-            if word.endswith("ot"):
+            if word.lower().endswith("ot"):
                 word = word[:-2] + "eting"
                 
             else:
