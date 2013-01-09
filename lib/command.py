@@ -172,12 +172,10 @@ class Command:
                                        '''.format(Command.previousMessage[0], Command.previousMessage[1]))
         Command.database.commit()
 
-    def itemsInBucket(self, msg):
+    def itemsInBucket(self):
         """Print out all of the items in the bucket"""
         self.logger.info("Got inventory command - listing all items")
-        Command.databaseCursor.execute('SELECT item FROM items')
-        for item in Command.databaseCursor.execute('SELECT item FROM items'):
-            msg.Chat.SendMessage(" - " + item[0].encode('ascii', 'ignore'))
+        return Command.databaseCursor.execute('SELECT item FROM items')
 
     def getAcronymLetter(self, tableName, tableField, letter):
         """Get a word for the acronym form the table in tableField, 
