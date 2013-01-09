@@ -91,7 +91,8 @@ def itemHandler(msg):
 def inventoryHandler(msg):
     """Display the items in the inventory"""
     c = Command(None)
-    c.itemsInBucket(msg)
+    for item in c.itemsInBucket():
+    	msg.Chat.SendMessage("-" + item[0].encode('ascii','ignore'))
     
 def videoURLHandler(msg):
     """Add a video URL to the database"""
@@ -112,7 +113,7 @@ def videoURLHandler(msg):
 def randomVideoHandler(msg):
     """Display a random youtube video URL"""
     c = Command(None)
-    c.getVideoURL(msg)
+    msg.Chat.SendMessage(c.searchForLinks("VIDEO", None)[2].encode('ascii', 'ignore'))
 
 def tlaHandler(msg):
     """Find three random things in the database that begin with the appropriate letters"""
