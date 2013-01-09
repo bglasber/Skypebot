@@ -12,6 +12,7 @@ from lib.commandHandlers import whatHandler
 from lib.commandHandlers import itemHandler 
 from lib.commandHandlers import tlaHandler
 from lib.commandHandlers import rssHandler
+from lib.commandHandlers import inventoryHandler
 BOT_DISPLAY_NAME="Bucket"
 
 def isBandName(bandName):
@@ -38,8 +39,7 @@ def simpleHandler(msg, event):
         elif msg.Body.startswith("bucket, rss"):
             rssHandler(msg)
         elif msg.Body.startswith("bucket, inventory"):
-            c = Command(None)
-            c.itemsInBucket(msg)
+            inventoryHandler(msg)
         elif re.search(r"^[A-Z]{3}\??$", msg.Body):
             tlaHandler(msg);
         elif "gives bucket" in msg.Body:

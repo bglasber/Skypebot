@@ -92,7 +92,7 @@ def inventoryHandler(msg):
     """Display the items in the inventory"""
     c = Command(None)
     for item in c.itemsInBucket():
-    	msg.Chat.SendMessage("-" + item[0].encode('ascii','ignore'))
+    	msg.Chat.SendMessage(" - " + item[0].encode('ascii','ignore'))
     
 def videoURLHandler(msg):
     """Add a video URL to the database"""
