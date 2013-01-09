@@ -60,7 +60,7 @@ def simpleHandler(msg, event):
             inventoryHandler(msg)
         elif msg.Body.lower().startswith("bucket, video"):
             randomVideoHandler(msg)
-        elif "http://www.youtube.com/" in msg.Body.lower():
+        elif "http://www.youtube.com/" in msg.Body.lower() or "http://youtu.be/" in msg.Body.lower():
             videoURLHandler(msg)
         elif re.search(r"^[A-Z]{3}\??$", msg.Body):
             tlaHandler(msg);
