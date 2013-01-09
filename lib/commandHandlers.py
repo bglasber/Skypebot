@@ -107,7 +107,7 @@ def videoURLHandler(msg):
         x += 1
     
     c = Command(None)
-    c.saveVideoURL(url,msg.FromDisplayName)
+    c.insertLink(msg.FromDisplayName, url, "VIDEO")
             
 def randomVideoHandler(msg):
     """Display a random youtube video URL"""
