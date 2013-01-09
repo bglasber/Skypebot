@@ -175,12 +175,10 @@ class Command:
                                        '''.format(Command.previousMessage[0], Command.previousMessage[1]))
         Command.database.commit()
 
-    def itemsInBucket(self, msg):
+    def itemsInBucket(self):
         """Print out all of the items in the bucket"""
         self.logger.info("Got inventory command - listing all items")
-        Command.databaseCursor.execute('SELECT item FROM items')
-        for item in Command.databaseCursor.execute('SELECT item FROM items'):
-            msg.Chat.SendMessage(" - " + item[0].encode('ascii', 'ignore'))
+        return Command.databaseCursor.execute('SELECT item FROM items')
 
     def getAcronymLetter(self, tableName, tableField, letter):
         """Get a word for the acronym form the table in tableField, 
@@ -212,6 +210,16 @@ class Command:
                                            bandName)
             )
             Command.database.commit()
+            
+    def insertLink(self, username, link, typeOfLink):
+        """Inserts the link into the links table. NOTE: does not check for
+        pre-existing links because links may correspond to multiple types"""
+        Command.databaseCursor.execute('INSERT INTO links VALUES ( "{0}", "{1}", "{2}")'.format(
+                                        username, link, typeOfLink)
+        )
+        Command.database.commit()
+        
+        
 
     def insertLink(self, username, link, typeOfLink):
         """Inserts the link into the links table. NOTE: does not check for
@@ -221,7 +229,31 @@ class Command:
         )
         Command.database.commit()
         
+    def searchForLinks(self, typeOfLink, username):
+        """Searches for a link in the link table based on the search criteria provided. If you do not wish
+        to search by the parameter, pass in none [ i.e searchForLinks(None, "Brad") ]
+        """
+        if not typeOfLink and not username:
+            # Should we throw an exception?
+            self.logger.info("Searched for a link with no criteria...")
+            return None
+        else:
+            baseQuery = 'SELECT username, link, type FROM links WHERE '
+            if typeOfLink and username:
+                baseQuery += 'type = "{0}" AND username = "{1}"'.format(typeOfLink, username)
+            elif typeOfLink:
+                baseQuery += 'type = "{0}"'.format(typeOfLink)
+            elif username:
+                baseQuery += 'username = "{0}"'.format(username)
+            baseQuery += " ORDER BY RANDOM() LIMIT 1"
 
+        Command.databaseCursor.execute(baseQuery)
+        response = Command.databaseCursor.fetchone()
+        if response:
+            self.logger.debug('Found link results with criteria: type = {0} username = {1}'.format(typeOfLink, username))
+        else:
+            self.logger.debug('Could not find link results with criteria: type = {0} username = {1}'.format(typeOfLink, username))
+        return response
 
     def createRssFeedResponse(self, parsedLine):
         """Given a line split into the query and rss Feed, (parsedLine[0],[1] respectively,

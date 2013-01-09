@@ -88,6 +88,36 @@ def itemHandler(msg):
     else:
         msg.Chat.SendMessage("/me is now holding {0}".format(*returnedOutput))
 
+def inventoryHandler(msg):
+    """Display the items in the inventory"""
+    c = Command(None)
+    for item in c.itemsInBucket():
+    	msg.Chat.SendMessage(" - " + item[0].encode('ascii','ignore'))
+    
+def videoURLHandler(msg):
+    """Add a video URL to the database"""
+    urlStart = msg.Body.lower().find("http://")
+    url = ""
+
+    urlFound = False
+    x = urlStart
+    while(not urlFound):
+        if msg.Body[x:x+1] == " " or msg.Body[x:x+1] == "":
+            url = msg.Body[urlStart:x]
+            urlFound = True
+        x += 1
+    
+    c = Command(None)
+    logger.info("Inserting video url into links table: {0}".format(url))
+    c.insertLink(msg.FromDisplayName, url, "VIDEO")
+            
+def randomVideoHandler(msg):
+    """Display a random youtube video URL"""
+    c = Command(None)
+    videoLink = c.searchForLinks("VIDEO", None)[1].encode('ascii', 'ignore')
+    logger.info('Responding with video message {0}'.format(videoLink))
+    msg.Chat.SendMessage(videoLink)
+
 def tlaHandler(msg):
     """Find three random things in the database that begin with the appropriate letters"""
 

@@ -8,6 +8,7 @@ import logging
 import logging.config
 from lib.schemaConstructor import SchemaConstructor
 from lib.command import Command
+from lib.grammar import Grammar
 from lib.commandHandlers import rememberHandler
 from lib.commandHandlers import forgetHandler
 from lib.commandHandlers import addHandler
@@ -17,6 +18,9 @@ from lib.commandHandlers import whatHandler
 from lib.commandHandlers import itemHandler
 from lib.commandHandlers import tlaHandler
 from lib.commandHandlers import rssHandler
+from lib.commandHandlers import inventoryHandler
+from lib.commandHandlers import videoURLHandler 
+from lib.commandHandlers import randomVideoHandler 
 ######################## CONFIGURE THESE ##############################
 # Bot Display Name
 BOT_DISPLAY_NAME = "Bucket"
@@ -44,22 +48,25 @@ def simpleHandler(msg, event):
 
     if event == u"RECEIVED":
         logger.debug("Received Message - {0}: {1}".format(msg.FromDisplayName, msg.Body))
-        if msg.Body == "bucket, remember that":
+        if msg.Body.lower() == "bucket, remember that":
             rememberHandler(msg)
-        elif msg.Body == "bucket, forget that":
+        elif msg.Body.lower() == "bucket, forget that":
             forgetHandler(msg)
-        elif msg.Body == "bucket, what was that":
+        elif msg.Body.lower() == "bucket, what was that":
             whatHandler(msg)
-        elif msg.Body.startswith("bucket, add"):
+        elif msg.Body.lower().startswith("bucket, add"):
             addHandler(msg)
-        elif msg.Body.startswith("bucket, rss"):
+        elif msg.Body.lower().startswith("bucket, rss"):
             rssHandler(msg)
-        elif msg.Body.startswith("bucket, inventory"):
-            c = Command(None)
-            c.itemsInBucket(msg)
+        elif msg.Body.lower().startswith("bucket, inv"):  # INVENTORY
+            inventoryHandler(msg)
+        elif msg.Body.lower().startswith("bucket, video"):
+            randomVideoHandler(msg)
+        elif "http://www.youtube.com/" in msg.Body.lower() or "http://youtu.be/" in msg.Body.lower():
+            videoURLHandler(msg)
         elif re.search(r"^[A-Z]{3}\??$", msg.Body):
             tlaHandler(msg);
-        elif "gives bucket" in msg.Body:
+        elif "gives bucket" in msg.Body.lower():
             itemHandler(msg)
         elif isBandName(msg.Body):
             msg.Chat.SendMessage("That would be a good name for a band")
