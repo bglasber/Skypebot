@@ -95,8 +95,19 @@ def inventoryHandler(msg):
     
 def videoURLHandler(msg):
     """Add a video URL to the database"""
+    urlStart = msg.find("http://www.youtube.com/")
+    url = ""
+
+    urlFound = 0
+    x = urlStart
+    while(not urlFound):
+        if msg[x:x+1] == " " or msg[x:x+1] == "":
+            url = msg[urlStart:x]
+            urlFound = 1
+        x += 1
+    
     c = Command(None)
-    c.saveVideoURL(msg)
+    c.saveVideoURL(url)
             
 def randomVideoHandler(msg):
     """Display a random youtube video URL"""
