@@ -181,16 +181,6 @@ class Command:
         Command.databaseCursor.execute('SELECT item FROM items')
         for item in Command.databaseCursor.execute('SELECT item FROM items'):
             msg.Chat.SendMessage(" - " + item[0].encode('ascii', 'ignore'))
-    
-    def saveVideoURL(self, url):
-    	"""Save a youtube video URL to the database"""
-    
-    def getVideoURL(self, msg):
-    	"""Print out a random video url"""
-        self.logger.info("Got video command - displaying random video hyperlink")
-        Command.databaseCursor.execute('SELECT video FROM links')
-        vid = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
-        msg.Chat.SendMessage(vid)
 
     def getAcronymLetter(self, tableName, tableField, letter):
         """Get a word for the acronym form the table in tableField, 
@@ -222,6 +212,16 @@ class Command:
                                            bandName)
             )
             Command.database.commit()
+            
+    def insertLink(self, username, link, typeOfLink):
+        """Inserts the link into the links table. NOTE: does not check for
+        pre-existing links because links may correspond to multiple types"""
+        Command.databaseCursor.execute('INSERT INTO links VALUES ( "{0}", "{1}", "{2}")'.format(
+                                        username, link, typeOfLink)
+        )
+        Command.database.commit()
+        
+        
 
     def createRssFeedResponse(self, parsedLine):
         """Given a line split into the query and rss Feed, (parsedLine[0],[1] respectively,
