@@ -218,7 +218,32 @@ class Command:
         )
         Command.database.commit()
         
+    def searchForLinks(self, typeOfLink, username):
+        """Searches for a link in the link table based on the search criteria provided. If you do not wish
+        to search by the parameter, pass in none [ i.e searchForLinks(None, "Brad") ]
+        """
+        if not typeOflink and not username:
+            # Should we throw an exception?
+            self.logger.info("Searched for a link with no criteria...")
+            return None
+        else:
+            baseQuery = 'SELECT username, link, typeOfLink FROM links WHERE '
+            if typeOfLink and username:
+                baseQuery += 'type = "{0}" AND username = "{1}"'.format(typeOfLink, username)
+            elif typeOfLink:
+                baseQuery += 'type = "{0}"'.format(typeOfLink)
+            elif username:
+                baseQuery += 'username = "{0}"'.format(username)
+            baseQuery += " ORDER BY RANDOM() LIMIT 1"
 
+        Command.databaseCursor.execute(baseQuery)
+        response = Command.databaseCursor.fetchone()
+        if response:
+            response = response[0].encode('ascii', 'ignore')
+            self.logger.debug('Found link results with criteria: type = {0} username = {1}'.format(typeOfLink, username))
+        else:
+            self.logger.debug('Could not find link results with criteria: type = {0} username = {1}'.format(typeOfLink, username))
+        return response
 
     def createRssFeedResponse(self, parsedLine):
         """Given a line split into the query and rss Feed, (parsedLine[0],[1] respectively,
