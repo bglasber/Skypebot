@@ -6,9 +6,9 @@ import sqlite3
 import re
 import logging
 import logging.config
-import grammar
 from lib.schemaConstructor import SchemaConstructor
 from lib.command import Command
+from lib.grammar import Grammar
 from lib.commandHandlers import rememberHandler
 from lib.commandHandlers import forgetHandler
 from lib.commandHandlers import addHandler
