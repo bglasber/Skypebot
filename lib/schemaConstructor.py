@@ -75,9 +75,10 @@ class SchemaConstructor:
             c.execute("CREATE INDEX rss_index ON rss ( rssId )")
         c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='responses'")
         if not c.fetchone():
-            self.logger.info("Creating the responses tablex...")
+            self.logger.info("Creating the responses table...")
             c.execute("CREATE TABLE responses ( query text collate nocase, responses text, rssId DEFAULT VALUE NULL, FOREIGN KEY (rssId) REFERENCES rss(rssId))")
             c.execute("CREATE INDEX responses_index ON responses ( query collate nocase )")
+
         c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='links'")
         if not c.fetchone():
             self.logger.info("Creating the links tables...")

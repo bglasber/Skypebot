@@ -88,6 +88,33 @@ def itemHandler(msg):
     else:
         msg.Chat.SendMessage("/me is now holding {0}".format(*returnedOutput))
 
+def inventoryHandler(msg):
+    """Display the items in the inventory"""
+    c = Command(None)
+    for item in c.itemsInBucket():
+    	msg.Chat.SendMessage("-" + item[0].encode('ascii','ignore'))
+    
+def videoURLHandler(msg):
+    """Add a video URL to the database"""
+    urlStart = msg.Body.lower().find("http://")
+    url = ""
+
+    urlFound = False
+    x = urlStart
+    while(not urlFound):
+        if msg[x:x+1] == " " or msg[x:x+1] == "":
+            url = msg[urlStart:x]
+            urlFound = True
+        x += 1
+    
+    c = Command(None)
+    c.insertLink(msg.FromDisplayName, url, "VIDEO")
+            
+def randomVideoHandler(msg):
+    """Display a random youtube video URL"""
+    c = Command(None)
+    msg.Chat.SendMessage(c.searchForLinks("VIDEO", None)[2].encode('ascii', 'ignore'))
+
 def tlaHandler(msg):
     """Find three random things in the database that begin with the appropriate letters"""
 
@@ -116,5 +143,9 @@ def rssHandler(msg):
     """Insert the feed into the rss table and put the rssId into the responses table"""
     parsedLine = re.sub(r'bucket, rss "([^"]+)" "([^"]+)"', 
                                 r'\1|\2', msg.Body).split("|")
-    c = Command(None) 
-    c.createRssFeedResponse(parsedLine)
+    try:
+        c = Command(None) 
+	c.createRssFeedResponse(parsedLine)
+	msg.Chat.SendMessage("added rss feed sucessfully")
+    except:
+	msg.Chat.SendMessage("Failed to add rss feed!")

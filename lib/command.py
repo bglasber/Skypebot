@@ -4,6 +4,7 @@ import sys
 import feedparser
 from variableExpander import VariableExpander
 from wordHandler import WordHandler
+from mlStripper import MLStripper
 import logging
 
 class Command:
@@ -87,7 +88,9 @@ class Command:
                 feed = feedparser.parse(rssURL)
 		self.logger.debug("Got rssURL: {0}".format(rssURL))
                 randomResult = random.choice(feed['items'])['summary']
-                return randomResult
+                stripper = MLStripper()
+                stripper.feed(randomResult)
+                return stripper.get_fed_data() 
             else:
                 self.logger.debug("Standard incoming message - handling")
                 resp = resp[0].encode('ascii', 'ignore')
@@ -207,6 +210,16 @@ class Command:
                                            bandName)
             )
             Command.database.commit()
+            
+    def insertLink(self, username, link, typeOfLink):
+        """Inserts the link into the links table. NOTE: does not check for
+        pre-existing links because links may correspond to multiple types"""
+        Command.databaseCursor.execute('INSERT INTO links VALUES ( "{0}", "{1}", "{2}")'.format(
+                                        username, link, typeOfLink)
+        )
+        Command.database.commit()
+        
+        
 
     def insertLink(self, username, link, typeOfLink):
         """Inserts the link into the links table. NOTE: does not check for
