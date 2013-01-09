@@ -239,7 +239,6 @@ class Command:
         Command.databaseCursor.execute(baseQuery)
         response = Command.databaseCursor.fetchone()
         if response:
-            response = response[0].encode('ascii', 'ignore')
             self.logger.debug('Found link results with criteria: type = {0} username = {1}'.format(typeOfLink, username))
         else:
             self.logger.debug('Could not find link results with criteria: type = {0} username = {1}'.format(typeOfLink, username))
