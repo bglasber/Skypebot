@@ -88,6 +88,21 @@ def itemHandler(msg):
     else:
         msg.Chat.SendMessage("/me is now holding {0}".format(*returnedOutput))
 
+def inventoryHandler(msg):
+    """Display the items in the inventory"""
+    c = Command(None)
+    c.itemsInBucket(msg)
+    
+def videoHandler(msg):
+    """Add a video URL to the database"""
+    c = Command(None)
+    c.saveVideoURL(msg)
+            
+def videoListHandler(msg):
+    """Display the the youtube videos list"""
+    c = Command(None)
+    c.getVideoURL(msg)
+
 def tlaHandler(msg):
     """Find three random things in the database that begin with the appropriate letters"""
 
