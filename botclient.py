@@ -18,6 +18,9 @@ from lib.commandHandlers import whatHandler
 from lib.commandHandlers import itemHandler
 from lib.commandHandlers import tlaHandler
 from lib.commandHandlers import rssHandler
+from lib.commandHandlers import inventoryHandler
+from lib.commandHandlers import videoURLHandler 
+from lib.commandHandlers import randomVideoHandler 
 ######################## CONFIGURE THESE ##############################
 # Bot Display Name
 BOT_DISPLAY_NAME = "Bucket"
@@ -44,7 +47,6 @@ def simpleHandler(msg, event):
     message is received via skype, this method is executed"""
 
     if event == u"RECEIVED":
-    	msg.Body = msg.Body.strip()
         logger.debug("Received Message - {0}: {1}".format(msg.FromDisplayName, msg.Body))
         if msg.Body.lower() == "bucket, remember that":
             rememberHandler(msg)

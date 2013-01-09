@@ -102,18 +102,21 @@ def videoURLHandler(msg):
     urlFound = False
     x = urlStart
     while(not urlFound):
-        if msg[x:x+1] == " " or msg[x:x+1] == "":
-            url = msg[urlStart:x]
+        if msg.Body[x:x+1] == " " or msg.Body[x:x+1] == "":
+            url = msg.Body[urlStart:x]
             urlFound = True
         x += 1
     
     c = Command(None)
+    logger.info("Inserting video url into links table: {0}".format(url))
     c.insertLink(msg.FromDisplayName, url, "VIDEO")
             
 def randomVideoHandler(msg):
     """Display a random youtube video URL"""
     c = Command(None)
-    msg.Chat.SendMessage(c.searchForLinks("VIDEO", None)[2].encode('ascii', 'ignore'))
+    videoLink = c.searchForLinks("VIDEO", None)[1].encode('ascii', 'ignore')
+    logger.info('Responding with video message {0}'.format(videoLink))
+    msg.Chat.SendMessage(videoLink)
 
 def tlaHandler(msg):
     """Find three random things in the database that begin with the appropriate letters"""

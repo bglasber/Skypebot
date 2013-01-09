@@ -233,12 +233,12 @@ class Command:
         """Searches for a link in the link table based on the search criteria provided. If you do not wish
         to search by the parameter, pass in none [ i.e searchForLinks(None, "Brad") ]
         """
-        if not typeOflink and not username:
+        if not typeOfLink and not username:
             # Should we throw an exception?
             self.logger.info("Searched for a link with no criteria...")
             return None
         else:
-            baseQuery = 'SELECT username, link, typeOfLink FROM links WHERE '
+            baseQuery = 'SELECT username, link, type FROM links WHERE '
             if typeOfLink and username:
                 baseQuery += 'type = "{0}" AND username = "{1}"'.format(typeOfLink, username)
             elif typeOfLink:
