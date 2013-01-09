@@ -98,12 +98,12 @@ def videoURLHandler(msg):
     urlStart = msg.find("http://www.youtube.com/")
     url = ""
 
-    urlFound = 0
+    urlFound = False
     x = urlStart
     while(not urlFound):
         if msg[x:x+1] == " " or msg[x:x+1] == "":
             url = msg[urlStart:x]
-            urlFound = 1
+            urlFound = True
         x += 1
     
     c = Command(None)
