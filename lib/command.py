@@ -213,6 +213,16 @@ class Command:
             )
             Command.database.commit()
 
+    def insertLink(self, username, link, typeOfLink):
+        """Inserts the link into the links table. NOTE: does not check for
+        pre-existing links because links may correspond to multiple types"""
+        Command.databaseCursor.execute('INSERT INTO links VALUES ( "{0}", "{1}", "{2}")'.format(
+                                        username, link, typeOfLink)
+        )
+        Command.database.commit()
+        
+
+
     def createRssFeedResponse(self, parsedLine):
         """Given a line split into the query and rss Feed, (parsedLine[0],[1] respectively,
         add the feed to the feeds table, and then insert a response option into the responses

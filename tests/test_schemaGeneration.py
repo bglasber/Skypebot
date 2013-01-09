@@ -49,6 +49,7 @@ class TestSchema:
                                 'verbs',
                                 'adjectives',
                                 'places',
+                                'links'
              ]
         )
     ])         

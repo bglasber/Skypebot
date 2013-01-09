@@ -78,7 +78,12 @@ class SchemaConstructor:
             self.logger.info("Creating the responses tablex...")
             c.execute("CREATE TABLE responses ( query text collate nocase, responses text, rssId DEFAULT VALUE NULL, FOREIGN KEY (rssId) REFERENCES rss(rssId))")
             c.execute("CREATE INDEX responses_index ON responses ( query collate nocase )")
-        c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='quotes'")
+        c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='links'")
+        if not c.fetchone():
+            self.logger.info("Creating the links tables...")
+            c.execute("CREATE TABLE links ( username text collate nocase, link, type text collate nocase)")
+            c.execute("CREATE INDEX links_index ON links ( type collate nocase )")
+
 
         self.logger.debug("Finished checking for tables")
         self.db.commit()
