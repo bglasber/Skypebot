@@ -98,8 +98,8 @@ def videoHandler(msg):
     c = Command(None)
     c.saveVideoURL(msg)
             
-def videoListHandler(msg):
-    """Display the the youtube videos list"""
+def randomVideoHandler(msg):
+    """Display a random youtube video URL"""
     c = Command(None)
     c.getVideoURL(msg)
 
