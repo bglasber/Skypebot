@@ -93,7 +93,7 @@ def inventoryHandler(msg):
     c = Command(None)
     c.itemsInBucket(msg)
     
-def videoHandler(msg):
+def videoURLHandler(msg):
     """Add a video URL to the database"""
     c = Command(None)
     c.saveVideoURL(msg)
