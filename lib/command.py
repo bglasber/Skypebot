@@ -181,16 +181,16 @@ class Command:
         Command.databaseCursor.execute('SELECT item FROM items')
         for item in Command.databaseCursor.execute('SELECT item FROM items'):
             msg.Chat.SendMessage(" - " + item[0].encode('ascii', 'ignore'))
-            
-    def videosInBucket(self, msg):
+    
+    def saveVideoURL(self, msg):
+    	"""Save a youtube video URL to the database"""
+    
+    def getVideoURL(self, msg):
     	"""Print out a random video url"""
         self.logger.info("Got video command - displaying random video hyperlink")
         Command.databaseCursor.execute('SELECT video FROM links')
         vid = command.Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
         msg.Chat.SendMessage(vid)
-        
-    def saveVideoURL(self, msg):
-    	
 
     def getAcronymLetter(self, tableName, tableField, letter):
         """Get a word for the acronym form the table in tableField, 
