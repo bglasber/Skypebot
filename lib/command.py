@@ -182,7 +182,7 @@ class Command:
         for item in Command.databaseCursor.execute('SELECT item FROM items'):
             msg.Chat.SendMessage(" - " + item[0].encode('ascii', 'ignore'))
     
-    def saveVideoURL(self, msg):
+    def saveVideoURL(self, url):
     	"""Save a youtube video URL to the database"""
     
     def getVideoURL(self, msg):
