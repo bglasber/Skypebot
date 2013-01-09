@@ -95,7 +95,7 @@ def inventoryHandler(msg):
     
 def videoURLHandler(msg):
     """Add a video URL to the database"""
-    urlStart = msg.find("http://www.youtube.com/")
+    urlStart = msg.Body.lower().find("http://www.youtube.com/")
     url = ""
 
     urlFound = False
