@@ -85,9 +85,15 @@ class Command:
                 Command.databaseCursor.execute('SELECT feed FROM rss WHERE rssId = "{0}"'.format(
                                                resp[1]))
                 rssURL = Command.databaseCursor.fetchone()[0].encode('ascii', 'ignore')
+                Command.previousMessage = [ self.cmd, resp[1].encode('ascii', 'ignore')]
                 feed = feedparser.parse(rssURL)
 		self.logger.debug("Got rssURL: {0}".format(rssURL))
-                randomResult = random.choice(feed['items'])['summary']
+                try:
+                    randomResult = random.choice(feed['items'])['summary']
+                except:
+                    msg.Chat.SendMessage("Invalid Feed URL!")
+                    self.logger.info("The feed URL for the given query is invalid - Aborting!")
+                    return
                 stripper = MLStripper()
                 stripper.feed(randomResult)
                 return stripper.get_fed_data() 
@@ -167,13 +173,27 @@ class Command:
 
     def forgetThat(self):
         """Find the quote in the appropriate table, and delete it"""
-        # Forget the response put into the response database
-        # This should work on its own skype instance, we just need to strip off the BUCKETBOT::
-        # Again, change the name to the bots public name, probably bucket
         self.logger.info("Got forget that command - deleting previous response")
+        sqlQuery = '''SELECT rssId FROM responses WHERE rssId = "{0}"'''.format(Command.previousMessage[1])
+        Command.databaseCursor.execute(sqlQuery)
+        rssId = Command.databaseCursor.fetchone()
+        if rssId:
+            rssId = rssId[0].encode('ascii', 'ignore')
+
+        cascadingDelete = False
+        self.logger.debug("Got rssId to delete: {0}".format(rssId))
+        if rssId:
+            Command.databaseCursor.execute('''SELECT count(*) FROM responses WHERE rssId = "{0}"'''.format(rssId))
+            if Command.databaseCursor.fetchone()[0] == 1:
+                cascadingDelete = True
+        self.logger.debug("Deleting from the main responses table...")
         Command.databaseCursor.execute('''DELETE FROM responses WHERE "{0}" LIKE "%" || query || "%" AND responses = "{1}"
                                        '''.format(Command.previousMessage[0], Command.previousMessage[1]))
+        if cascadingDelete:
+            self.logger.debug("Cascading to the rss table...")
+            Command.databaseCursor.execute('''DELETE FROM rss WHERE rssId = "{0}"'''.format(rssId))
         Command.database.commit()
+        self.logger.debug("Done!")
 
     def itemsInBucket(self):
         """Print out all of the items in the bucket"""
