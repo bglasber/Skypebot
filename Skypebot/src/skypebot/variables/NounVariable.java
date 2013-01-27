@@ -1,8 +1,6 @@
 package skypebot.variables;
 
 import org.tmatesoft.sqljet.core.SqlJetException;
-
-import com.skype.ChatMessage;
 import com.skype.SkypeException;
 
 import skypebot.db.DbManager;

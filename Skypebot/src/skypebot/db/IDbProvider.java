@@ -16,4 +16,8 @@ public interface IDbProvider {
 		throws SqlJetException;
 	
 	public void insertInto(String tableName, Map<String,Object> fieldsToAdd) throws SqlJetException;
+
+	public void createTable(String string);
+
+	public void createIndex(String string);
 }

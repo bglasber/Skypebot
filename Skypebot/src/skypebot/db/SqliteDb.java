@@ -79,5 +79,30 @@ public class SqliteDb implements IDbProvider {
 		db.commit();
 		
 	}
+
+	@Override
+	public void createTable(String string) {
+		try {
+			db.beginTransaction(SqlJetTransactionMode.WRITE);
+			db.createTable(string);
+			db.commit();
+		}
+		catch(SqlJetException e){
+			//Table already exists
+		}
+	}
+
+	@Override
+	public void createIndex(String string) {
+		try {
+			db.beginTransaction(SqlJetTransactionMode.WRITE);
+			db.createIndex(string);
+			db.commit();
+		}
+		catch(SqlJetException e){
+			//Index already exists
+		}
+		
+	}
 	
 }

@@ -18,14 +18,11 @@ import com.skype.SkypeException;
 /**
  * @author Brad Glasbergen
  * @since 2013
-f *
+ *
  */
 public class Skypebot {
 
-	/**
-	 * @param args
-	 * @throws SkypeException 
-	 */
+
 	public static void main(String[] args) throws SkypeException {
 		
 		
@@ -33,7 +30,8 @@ public class Skypebot {
 				new AddHandler(),
 				new ResponseHandler()
 		};
-		final DbManager dbManager = configureDBManager(new Schema());
+		Schema s = new Schema();
+		final DbManager dbManager = configureDBManager(s);
 		
 		Skype.setDaemon(false);
 		Skype.addChatMessageListener(new ChatMessageAdapter(){
@@ -61,6 +59,7 @@ public class Skypebot {
 		try {
 			dbProvider = new SqliteDb("responses.db");
 			dbManager.setProvider(dbProvider);
+			dbManager.constructSchema();
 		} catch (SqlJetException e) {
 			//Could not open db, dump the stack
 			e.printStackTrace();

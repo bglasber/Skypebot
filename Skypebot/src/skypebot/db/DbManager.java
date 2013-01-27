@@ -2,13 +2,12 @@ package skypebot.db;
 
 import java.util.List;
 import java.util.Map;
-
 import org.tmatesoft.sqljet.core.SqlJetException;
-
 import skypebot.db.schema.Schema;
+import skypebot.db.schema.SchemaConstructorString;
+import skypebot.db.schema.SchemaConstructorType;
 import skypebot.db.schema.Table;
 
-import com.skype.ChatMessage;
 import com.skype.SkypeException;
 
 public class DbManager {
@@ -23,6 +22,17 @@ public class DbManager {
 		this.provider = provider;
 	}
 	
+	public void constructSchema(){
+		for(SchemaConstructorString schemaConstructor : schema.getSchemaConstructionStrings()){
+			if(schemaConstructor.getType() == SchemaConstructorType.TABLECONSTRUCTOR){
+				provider.createTable(schemaConstructor.getString());
+			}
+			else if(schemaConstructor.getType() == SchemaConstructorType.INDEXCONSTRUCTOR){
+				provider.createIndex(schemaConstructor.getString());
+				
+			}
+		}
+	}
 	public Schema getSchema(){
 		return schema;
 	}
