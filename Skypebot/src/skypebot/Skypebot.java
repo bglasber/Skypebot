@@ -41,7 +41,7 @@ public class Skypebot {
 					for(IHandler h : handlersInOrder){
 						if(h.canHandle(messageReceived)){
 							h.setManager(dbManager);
-							h.respond(messageReceived);
+							h.handle(messageReceived);
 							break;
 						}
 					}

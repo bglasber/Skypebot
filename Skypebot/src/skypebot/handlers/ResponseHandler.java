@@ -18,7 +18,7 @@ public class ResponseHandler implements IHandler {
 	}
 
 	@Override
-	public void respond(ChatMessage m) {
+	public void handle(ChatMessage m) {
 		// Get Response From DB
 		Table table = dbManager.getSchema().getResponseTable();
 		try {

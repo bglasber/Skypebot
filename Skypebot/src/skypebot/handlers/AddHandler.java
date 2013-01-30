@@ -31,7 +31,7 @@ public class AddHandler implements IHandler {
 	}
 
 	@Override
-	public void respond(ChatMessage m) {
+	public void handle(ChatMessage m) {
 		//We assume that 'canHandle' it
 		try {
 			String message = m.getContent();
