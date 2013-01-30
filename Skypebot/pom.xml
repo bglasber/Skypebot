@@ -35,6 +35,23 @@
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+            	<groupId>org.codehaus.mojo</groupId>
+            	<artifactId>exec-maven-plugin</artifactId>
+            	<executions>
+            		<execution>
+            			<id>Execute Skypebot</id>
+            			<phase>generate-source</phase>
+            			<goals>
+            				<goal>exec</goal>
+            			</goals>
+            		</execution>
+            	</executions>
+            	<configuration>
+            		<executable>${basedir}/scripts/exec.sh</executable>
+            	</configuration>
+            </plugin>
+            	
         </plugins>
     </build>
 
