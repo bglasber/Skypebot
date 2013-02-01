@@ -10,11 +10,13 @@ import skypebot.db.DbManager;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 
+import java.util.List;
 import java.util.ArrayList;
 
-public class VideoHandler implements IHandler {
+public class AddVideoHandler implements IHandler {
 
 	private DbManager dbManager;
+	public static final String ANSI_BLUE = "\u001B[34m";
 
 	private String[] videoSites = {
 		"http://www.youtube.com/watch", "http://youtu.be.com/",
@@ -23,11 +25,12 @@ public class VideoHandler implements IHandler {
 	};
 
 
+	
 	@Override
 	public boolean canHandle(ChatMessage m) {
 		try {
-			return scanForVideoUrl(m.getContent().toLowerCase());
-		} catch(SkypeException e) {
+			return scanForVideoUrl(m.getContent());
+		} catch (SkypeException e) {
 			//Something weird happened, just drop the message
 			return false;
 		}
@@ -45,19 +48,20 @@ public class VideoHandler implements IHandler {
 	@Override
 	public void handle(ChatMessage m) {
 		try {
-			String chatText = m.getContent().toLowerCase();
-			ArrayList urls = generateVideoUrlList(chatText);
+			String chatText = m.getContent();
+			List<String> urls = generateVideoUrlList(chatText);
 			urls = removeDuplicates(urls);
-			addVideos(urls);
-		} catch(Exception e) {
-			System.out.println("Exc");
+			addVideos(urls,m.getSenderDisplayName());
+			tester(urls);
+		} catch (Exception e) {
+			System.err.println(e);
 		}
 	}
 
 
 
-	private ArrayList generateVideoUrlList(String message) {
-		ArrayList urls = new ArrayList();
+	private List<String> generateVideoUrlList(String message) {
+		List<String> urls = new ArrayList<String>();
 		int urlIndex;
 		int pointer = 0;
 		String url;
@@ -85,16 +89,9 @@ public class VideoHandler implements IHandler {
 
 
 
-	// adds urls to the database
-	private void addVideos(ArrayList urls) {
-
-	}
-
-
-
-	//rebuilds a list of urls, removing duplicate entries
-	private ArrayList removeDuplicates(ArrayList l) {
-		ArrayList newList = new ArrayList();
+	// rebuilds a list of urls, removing duplicate entries
+	private List<String> removeDuplicates(List<String> l) {
+		List<String> newList = new ArrayList<String>();
 		boolean isDuplicate;
 
 		for(int x=0; x<l.size(); x++) {
@@ -107,7 +104,7 @@ public class VideoHandler implements IHandler {
 			}
 
 			if(!isDuplicate){
-				newList.add(x);
+				newList.add(l.get(x));
 			}
 		}
 
@@ -121,9 +118,13 @@ public class VideoHandler implements IHandler {
 		int x = 0;
 		
 		while(true){
-			if (subMessage.substring(x, x+1).equals(" ") || subMessage.substring(x, x+1).equals(""))
+			try {
+				if (subMessage.substring(x, x+1).equals(" "))
+					break;
+				x++;
+			} catch (StringIndexOutOfBoundsException e) {
 				break;
-			x++;
+			}
 		}
 		return subMessage.substring(0, x);
 	}
@@ -142,12 +143,29 @@ public class VideoHandler implements IHandler {
 
 
 
-	//unused chat responder
-	/*private void respond(ChatMessage m, String url) {
-		try {
-			m.getChat().send("Added video: " + url);
-		} catch(Exception e) {
+	//  DATABASE INTERFACING
 
+	// adds urls to the database
+	private void addVideos(List<String> urls, String user) {
+		try {
+			Map<String, String> fieldsToInsert = new HashMap<String, String>();
+			for (String link : urls) {
+				fieldsToInsert.put("username",user);
+				fieldsToInsert.put("url",link);
+				boolean wasSuccessful = dbManager.insertFieldsIntoTable(dbManager.getSchema().getVideosTable(), fieldsToInsert);
+				if (!wasSuccessful) {
+					System.err.println("Error occurred while adding video link to db.");
+				} else {
+					System.out.println("Added Videos: " + urls.toString());
+				}
+			}
+		} catch (SqlJetException e){
+			e.printStackTrace();
 		}
-	}*/
+	}
+
+
+	private void tester(List<String> l) {
+		System.err.println(l.toString());
+	}
 }

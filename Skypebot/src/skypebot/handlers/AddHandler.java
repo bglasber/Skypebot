@@ -16,7 +16,6 @@ public class AddHandler implements IHandler {
 	private DbManager dbManager;
 	@Override
 	public boolean canHandle(ChatMessage m) {
-		
 		try {
 			return m.getContent().matches("bucket, add '[^']*' '[^']*'");
 		} catch (SkypeException e) {
@@ -39,8 +38,8 @@ public class AddHandler implements IHandler {
 			Map<String, String> fieldsToInsert = new HashMap<String, String>();
 			fieldsToInsert.put("query", splitMessage[0]);
 			fieldsToInsert.put("response", splitMessage[1]);
-			boolean wasSucessful = dbManager.insertFieldsIntoTable(dbManager.getSchema().getResponseTable(), fieldsToInsert);
-			if(wasSucessful){
+			boolean wasSuccessful = dbManager.insertFieldsIntoTable(dbManager.getSchema().getResponseTable(), fieldsToInsert);
+			if(wasSuccessful){
 				m.getChat().send("Inserted " + splitMessage[0] + " -> " + splitMessage[1]);
 			}
 		} catch (SkypeException e) {

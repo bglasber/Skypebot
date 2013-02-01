@@ -7,9 +7,7 @@ import skypebot.db.DbManager;
 import skypebot.db.IDbProvider;
 import skypebot.db.SqliteDb;
 import skypebot.db.schema.Schema;
-import skypebot.handlers.AddHandler;
-import skypebot.handlers.IHandler;
-import skypebot.handlers.ResponseHandler;
+import skypebot.handlers.*;
 
 import com.skype.ChatMessage;
 import com.skype.ChatMessageAdapter;
@@ -27,6 +25,8 @@ public class Skypebot {
 		
 		
 		final IHandler[] handlersInOrder = new IHandler[]{
+				new AddVideoHandler(),
+				new GetVideoHandler(),
 				new AddHandler(),
 				new ResponseHandler()
 		};
