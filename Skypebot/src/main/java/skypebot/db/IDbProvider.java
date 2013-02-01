@@ -1,23 +1,22 @@
 package skypebot.db;
 
-import org.tmatesoft.sqljet.core.SqlJetException;
-import java.util.List;
-import java.util.Map;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public interface IDbProvider {
 
-	public void open() throws SqlJetException;
+	public void open() throws SQLException;
 	
-	public void close() throws SqlJetException;
+	public void close() throws SQLException;
 	
-	public List<DbResult> getResultQuery(String tableName, String[] fieldsToGet) throws SqlJetException;
+	public ResultSet getResultQuery(String tableName, String[] fieldsToGet) throws SQLException;
 	
-	public List<DbResult> getResultLookup(String tableName, String[] fieldsToGet, String fieldToCheck, String FieldValue)
-		throws SqlJetException;
-	
-	public void insertInto(String tableName, Map<String,Object> fieldsToAdd) throws SqlJetException;
+	public ResultSet getResultLookup(String tableName, String[] fieldsToGet, String fieldToCheck, String FieldValue) throws SQLException;
 
-	public void createTable(String string);
+	public void createTable(String string) throws SQLException;
 
-	public void createIndex(String string);
+	public void createIndex(String string) throws SQLException;
+
+	void insertInto(String tableName, String[] fieldsToAdd) throws SQLException;
 }

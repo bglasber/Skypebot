@@ -9,4 +9,4 @@ echo
 echo
 mvn package
 cp target/skypebot-0.1-SNAPSHOT.jar ./
-java -jar skypebot-0.1-SNAPSHOT.jar
+exec java -jar skypebot-0.1-SNAPSHOT.jar

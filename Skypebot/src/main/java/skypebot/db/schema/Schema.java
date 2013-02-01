@@ -51,7 +51,7 @@ public class Schema {
 			Table t = null;
 			try {
 				t = (Table) f.get(t);
-				String constructTableString = "CREATE TABLE " + t.getTableName() + " ( ";
+				String constructTableString = "CREATE TABLE IF NOT EXISTS " + t.getTableName() + " ( ";
 				for(String tableField : t.getTableFields()){
 					constructTableString += tableField + " TEXT, ";
 				}
@@ -59,7 +59,7 @@ public class Schema {
 				constructTableString = constructTableString.substring(0, constructTableString.length() - 2); 
 				constructTableString += ");";
 				schemaStrings.add(new SchemaConstructorString(constructTableString, SchemaConstructorType.TABLECONSTRUCTOR));
-				String constructIndexString = "CREATE INDEX " + t.getTableIndex() + " ON " + t.getTableName() + " ( ";
+				String constructIndexString = "CREATE INDEX IF NOT EXISTS " + t.getTableIndex() + " ON " + t.getTableName() + " ( ";
 				constructIndexString += t.getIndexField() + " );";
 				schemaStrings.add(new SchemaConstructorString(constructIndexString, SchemaConstructorType.INDEXCONSTRUCTOR));
 			}

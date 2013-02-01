@@ -1,7 +1,7 @@
 
 package skypebot;
 
-import org.tmatesoft.sqljet.core.SqlJetException;
+import java.sql.SQLException;
 
 import skypebot.db.DbManager;
 import skypebot.db.IDbProvider;
@@ -60,7 +60,7 @@ public class Skypebot {
 			dbProvider = new SqliteDb("responses.db");
 			dbManager.setProvider(dbProvider);
 			dbManager.constructSchema();
-		} catch (SqlJetException e) {
+		} catch (SQLException e) {
 			//Could not open db, dump the stack
 			e.printStackTrace();
 		}

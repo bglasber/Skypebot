@@ -1,12 +1,7 @@
 package skypebot.handlers;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.tmatesoft.sqljet.core.SqlJetException;
-
+import java.sql.SQLException;
 import skypebot.db.DbManager;
-
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 
@@ -52,7 +47,7 @@ public class GetVideoHandler implements IHandler {
 			m.getChat().send(dbManager.getSingleFromDb(dbManager.getSchema().getVideosTable(), "url"));
 		} catch (SkypeException e) {
 			return;
-		} catch (SqlJetException e){
+		} catch (SQLException e){
 			e.printStackTrace();
 		}
 	}

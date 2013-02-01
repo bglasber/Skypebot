@@ -1,8 +1,9 @@
 package skypebot.db;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import org.tmatesoft.sqljet.core.SqlJetException;
 import skypebot.db.schema.Schema;
 import skypebot.db.schema.SchemaConstructorString;
 import skypebot.db.schema.SchemaConstructorType;
@@ -22,7 +23,7 @@ public class DbManager {
 		this.provider = provider;
 	}
 	
-	public void constructSchema(){
+	public void constructSchema() throws SQLException{
 		for(SchemaConstructorString schemaConstructor : schema.getSchemaConstructionStrings()){
 			if(schemaConstructor.getType() == SchemaConstructorType.TABLECONSTRUCTOR){
 				provider.createTable(schemaConstructor.getString());
@@ -37,19 +38,30 @@ public class DbManager {
 		return schema;
 	}
 	
-	public String getSingleFromDb(Table table, String fieldNameToReturn, String m) throws SqlJetException, SkypeException{
+	public String getSingleFromDb(Table table, String fieldNameToReturn, String messageToMatch) throws SQLException, SkypeException{
 		
-		List<DbResult> resultList = provider.getResultLookup(table.getTableName(), table.getTableFields(), table.getTableIndex(), 
-				m);
+		ResultSet resultSet = provider.getResultLookup(table.getTableName(), table.getTableFields(), table.getTableIndex(), 
+				messageToMatch);
+		List<String> resultList = new ArrayList<String>();
+		while(resultSet.next()){
+			resultList.add(resultSet.getString(fieldNameToReturn));
+		}
 		return getRandomResult(fieldNameToReturn, resultList);
 	}
 
+	public String getSingleFromDb(Table table, String fieldNameToReturn) throws SQLException {
+		ResultSet resultSet = provider.getResultQuery(table.getTableName(), new String[]{ fieldNameToReturn });
+		List<String> resultList = new ArrayList<String>();
+		while(resultSet.next()){
+			resultList.add(resultSet.getString(fieldNameToReturn));
+		}
+		return getRandomResult(fieldNameToReturn, resultList);
+	}
 	private String getRandomResult(String fieldNameToReturn,
-			List<DbResult> resultList) {
+			List<String> resultList) {
 		try {
 			String result =  resultList.get(
-					(int)(Math.random() * (resultList.size()))
-					).get(fieldNameToReturn);
+					(int)(Math.random() * (resultList.size())));
 			return result;
 		}
 		catch(IndexOutOfBoundsException e){
@@ -58,19 +70,13 @@ public class DbManager {
 		}
 	}
 	
-	public String getSingleFromDb(Table table, String fieldNameToReturn) throws SqlJetException, SkypeException {
-		List<DbResult> resultList = provider.getResultQuery(table.getTableName(), new String[]{ fieldNameToReturn });
-		return getRandomResult(fieldNameToReturn, resultList);
-	}
 	
-	public boolean insertFieldsIntoTable(Table table, Map<String, String> fieldsToInsert) throws SqlJetException{
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		Map<String,Object> fields = (Map)fieldsToInsert;
+	public boolean insertFieldsIntoTable(Table table, String[] fieldsToInsert) throws SQLException{
 		try {
-			provider.insertInto(table.getTableName(), fields);
+			provider.insertInto(table.getTableName(), fieldsToInsert);
 			return true;
 		}
-		catch(SqlJetException e){
+		catch(SQLException e){
 			e.printStackTrace();
 			return false;
 		}

@@ -1,10 +1,6 @@
 package skypebot.handlers;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.tmatesoft.sqljet.core.SqlJetException;
-
+import java.sql.SQLException;
 import skypebot.db.DbManager;
 
 import com.skype.ChatMessage;
@@ -52,9 +48,8 @@ public class AddVideoHandler implements IHandler {
 			List<String> urls = generateVideoUrlList(chatText);
 			urls = removeDuplicates(urls);
 			addVideos(urls,m.getSenderDisplayName());
-			tester(urls);
 		} catch (Exception e) {
-			System.err.println(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -148,24 +143,20 @@ public class AddVideoHandler implements IHandler {
 	// adds urls to the database
 	private void addVideos(List<String> urls, String user) {
 		try {
-			Map<String, String> fieldsToInsert = new HashMap<String, String>();
 			for (String link : urls) {
-				fieldsToInsert.put("username",user);
-				fieldsToInsert.put("url",link);
-				boolean wasSuccessful = dbManager.insertFieldsIntoTable(dbManager.getSchema().getVideosTable(), fieldsToInsert);
+				
+				boolean wasSuccessful = dbManager.insertFieldsIntoTable(
+						dbManager.getSchema().getVideosTable(),
+						new String[]{ user, link });
 				if (!wasSuccessful) {
 					System.err.println("Error occurred while adding video link to db.");
 				} else {
 					System.out.println("Added Videos: " + urls.toString());
 				}
 			}
-		} catch (SqlJetException e){
+		} catch (SQLException e){
 			e.printStackTrace();
 		}
 	}
 
-
-	private void tester(List<String> l) {
-		System.err.println(l.toString());
-	}
 }

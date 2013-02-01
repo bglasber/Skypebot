@@ -71,9 +71,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.tmatesoft.sqljet</groupId>
-            <artifactId>sqljet</artifactId>
-            <version>1.1.6</version>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.7.2</version>
         </dependency>
         <dependency>
             <groupId>skype4java</groupId>

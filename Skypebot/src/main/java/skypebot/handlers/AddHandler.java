@@ -1,9 +1,6 @@
 package skypebot.handlers;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.tmatesoft.sqljet.core.SqlJetException;
+import java.sql.SQLException;
 
 import skypebot.db.DbManager;
 
@@ -35,10 +32,9 @@ public class AddHandler implements IHandler {
 		try {
 			String message = m.getContent();
 			String[] splitMessage = message.replaceAll("^.*'([^']*)' '([^']*)'$", "$1@$2").split("@");
-			Map<String, String> fieldsToInsert = new HashMap<String, String>();
-			fieldsToInsert.put("query", splitMessage[0]);
-			fieldsToInsert.put("response", splitMessage[1]);
-			boolean wasSuccessful = dbManager.insertFieldsIntoTable(dbManager.getSchema().getResponseTable(), fieldsToInsert);
+			boolean wasSuccessful = dbManager.insertFieldsIntoTable(
+					dbManager.getSchema().getResponseTable(), 
+					splitMessage);
 			if(wasSuccessful){
 				m.getChat().send("Inserted " + splitMessage[0] + " -> " + splitMessage[1]);
 			}
@@ -46,7 +42,7 @@ public class AddHandler implements IHandler {
 			//just drop it
 			return;
 		}
-		catch (SqlJetException e){
+		catch (SQLException e){
 			e.printStackTrace();
 		}
 		

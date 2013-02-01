@@ -1,6 +1,6 @@
 package skypebot.handlers;
 
-import org.tmatesoft.sqljet.core.SqlJetException;
+import java.sql.SQLException;
 
 import skypebot.db.DbManager;
 import skypebot.db.schema.Table;
@@ -29,7 +29,7 @@ public class ResponseHandler implements IHandler {
 		} catch (SkypeException e) {
 			return;
 		}
-		catch (SqlJetException e) {
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		

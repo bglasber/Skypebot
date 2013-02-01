@@ -1,6 +1,6 @@
 package skypebot.variables;
 
-import org.tmatesoft.sqljet.core.SqlJetException;
+import java.sql.SQLException;
 import com.skype.SkypeException;
 
 import skypebot.db.DbManager;
@@ -23,9 +23,9 @@ public class NounVariable implements IVariable {
 		//Do Db stuff to expand the variable
 		
 		try {
-			String noun = dbManager.getSingleFromDb(dbManager.getSchema().getNounTable(), "noun");
+			String noun = dbManager.getSingleFromDb(dbManager.getSchema().getNounTable(), "noun", message);
 			return message.replaceFirst("$noun", noun);
-		} catch (SqlJetException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SkypeException e) {
