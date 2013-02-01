@@ -10,20 +10,25 @@ public class Schema {
 	public static class Tables {
 		
 		public static Table ResponseTable =
-				new Table("responses", new String[]{
-						  "query", "response"},
-						  "responsesIndex",
-						  "query",
-						  TableType.RESPONSE);
+				new Table("responses",
+						new String[]{"query", "response"},
+						"responsesIndex",
+						"query",
+						TableType.RESPONSE);
 		
 		public static Table NounTable =
-				new Table("noun", new String[]{
-						"noun"},
+				new Table("noun",
+						new String[]{"noun"},
 						"nounIndex",
 						"noun",
 						TableType.NOUN);
 		
-				
+		public static Table VideoTable =
+				new Table("videos",
+						new String[]{"username","url"},
+						"videosIndex",
+						"username",
+						TableType.VIDEOS);
 	}
 	
 	public Table getResponseTable(){
@@ -32,6 +37,10 @@ public class Schema {
 	
 	public Table getNounTable(){
 		return Tables.NounTable;
+	}
+
+	public Table getVideosTable(){
+		return Tables.VideoTable;
 	}
 	
 	public List<SchemaConstructorString> getSchemaConstructionStrings() {

@@ -18,7 +18,7 @@ public class ResponseHandler implements IHandler {
 	}
 
 	@Override
-	public void respond(ChatMessage m) {
+	public void handle(ChatMessage m) {
 		// Get Response From DB
 		Table table = dbManager.getSchema().getResponseTable();
 		try {
@@ -26,8 +26,10 @@ public class ResponseHandler implements IHandler {
 			if(response != null) {
 				m.getChat().send(response);
 			}
-		} catch (SqlJetException | SkypeException e) {
-			// TODO Auto-generated catch block
+		} catch (SkypeException e) {
+			return;
+		}
+		catch (SqlJetException e) {
 			e.printStackTrace();
 		}
 		
