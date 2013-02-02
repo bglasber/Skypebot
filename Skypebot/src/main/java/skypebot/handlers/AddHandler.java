@@ -2,6 +2,8 @@ package skypebot.handlers;
 
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
+
 import skypebot.db.DbManager;
 
 import com.skype.ChatMessage;
@@ -11,10 +13,15 @@ public class AddHandler implements IHandler {
 
 	
 	private DbManager dbManager;
+	private Logger logger = Logger.getLogger(this.getClass().getCanonicalName()); 
 	@Override
 	public boolean canHandle(ChatMessage m) {
 		try {
-			return m.getContent().matches("bucket, add '[^']*' '[^']*'");
+			boolean willHandle = m.getContent().matches("bucket, add '[^']*' '[^']*'");
+			if(willHandle){
+				logger.debug("AddHandler will handle message...");
+			}
+			return willHandle;
 		} catch (SkypeException e) {
 			//Something weird happened, just drop the message
 			return false;
@@ -37,12 +44,16 @@ public class AddHandler implements IHandler {
 					splitMessage);
 			if(wasSuccessful){
 				m.getChat().send("Inserted " + splitMessage[0] + " -> " + splitMessage[1]);
+				logger.info("Inserted"  + splitMessage[0] + " -> " + splitMessage[1]);
 			}
 		} catch (SkypeException e) {
 			//just drop it
+			logger.error("AddHandler could not handle message - could not get message content");
 			return;
 		}
 		catch (SQLException e){
+			logger.error("Could not insert message into the table.");
+			logger.error(e);
 			e.printStackTrace();
 		}
 		

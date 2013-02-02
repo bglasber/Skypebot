@@ -22,7 +22,7 @@ public class ResponseHandler implements IHandler {
 		// Get Response From DB
 		Table table = dbManager.getSchema().getResponseTable();
 		try {
-			String response = dbManager.getSingleFromDb(table, "response", m.getContent());
+			String response = dbManager.getSingleFromDb(table, "query", "response", m.getContent());
 			if(response != null) {
 				m.getChat().send(response);
 			}

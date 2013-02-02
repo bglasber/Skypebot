@@ -2,6 +2,8 @@
 package skypebot;
 
 import java.sql.SQLException;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 
 import skypebot.db.DbManager;
 import skypebot.db.IDbProvider;
@@ -21,9 +23,13 @@ import com.skype.SkypeException;
 public class Skypebot {
 
 
+	private static Logger logger = Logger.getLogger(Skypebot.class.getCanonicalName());
+	
 	public static void main(String[] args) throws SkypeException {
 		
+		DOMConfigurator.configure("log4j.xml");
 		
+		logger.debug("Adding handlers...");
 		final IHandler[] handlersInOrder = new IHandler[]{
 				new AddVideoHandler(),
 				new GetVideoHandler(),
@@ -37,6 +43,7 @@ public class Skypebot {
 		Skype.addChatMessageListener(new ChatMessageAdapter(){
 			public void chatMessageReceived(ChatMessage messageReceived) throws SkypeException{
 				
+				logger.debug("Message Received: " + messageReceived.getContent());
 				if(messageReceived.getType().equals(ChatMessage.Type.SAID)){
 					for(IHandler h : handlersInOrder){
 						if(h.canHandle(messageReceived)){
@@ -59,11 +66,15 @@ public class Skypebot {
 		try {
 			dbProvider = new SqliteDb("responses.db");
 			dbManager.setProvider(dbProvider);
+			logger.debug("Checking Schema...");
 			dbManager.constructSchema();
 		} catch (SQLException e) {
 			//Could not open db, dump the stack
 			e.printStackTrace();
+			logger.error("Could not construct the schema...");
+			logger.error(e);
 		}
+		logger.debug("Successfully constructed the schema");
 		return dbManager;
 	}
 

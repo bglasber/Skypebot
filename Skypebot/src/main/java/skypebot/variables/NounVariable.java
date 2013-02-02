@@ -23,12 +23,9 @@ public class NounVariable implements IVariable {
 		//Do Db stuff to expand the variable
 		
 		try {
-			String noun = dbManager.getSingleFromDb(dbManager.getSchema().getNounTable(), "noun", message);
+			String noun = dbManager.getSingleFromDb(dbManager.getSchema().getNounTable(), "noun");
 			return message.replaceFirst("$noun", noun);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SkypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

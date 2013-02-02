@@ -9,6 +9,8 @@ import com.skype.SkypeException;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 public class AddVideoHandler implements IHandler {
 
 	private DbManager dbManager;
@@ -19,13 +21,19 @@ public class AddVideoHandler implements IHandler {
 		"http://www.metacafe.com/watch",
 		"http://www.cracked.com/video"
 	};
+	
+	private Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
 
 
 	
 	@Override
 	public boolean canHandle(ChatMessage m) {
 		try {
-			return scanForVideoUrl(m.getContent());
+			boolean willHandle = scanForVideoUrl(m.getContent());
+			if(willHandle){
+				logger.debug("AddVideoHandler will handle message");
+			}
+			return willHandle;
 		} catch (SkypeException e) {
 			//Something weird happened, just drop the message
 			return false;
@@ -47,6 +55,8 @@ public class AddVideoHandler implements IHandler {
 			String chatText = m.getContent();
 			List<String> urls = generateVideoUrlList(chatText);
 			urls = removeDuplicates(urls);
+			logger.debug("Got Urls to insert: ");
+			logger.debug(urls);
 			addVideos(urls,m.getSenderDisplayName());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -149,9 +159,9 @@ public class AddVideoHandler implements IHandler {
 						dbManager.getSchema().getVideosTable(),
 						new String[]{ user, link });
 				if (!wasSuccessful) {
-					System.err.println("Error occurred while adding video link to db.");
+					logger.error("Error occurred while adding video link to db.");
 				} else {
-					System.out.println("Added Videos: " + urls.toString());
+					logger.info("Added Videos: " + urls.toString());
 				}
 			}
 		} catch (SQLException e){

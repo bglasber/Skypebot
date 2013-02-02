@@ -6,10 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
+
 public class SqliteDb implements IDbProvider {
 
 	private String dbName;
 	private Connection conn;
+	private Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
 	
 	public SqliteDb(String dbName) throws SQLException {
 		this.dbName = dbName;
@@ -37,6 +40,7 @@ public class SqliteDb implements IDbProvider {
 	public ResultSet getResultQuery(String tableName, String[] fieldsToGet) throws SQLException {
 		Statement s = conn.createStatement();
 		String sql = constructSelectStatementWithFields(tableName, fieldsToGet);
+		logger.trace("Executing query: " + sql);
 		return s.executeQuery(sql);
 		
 	}
@@ -46,8 +50,9 @@ public class SqliteDb implements IDbProvider {
 		String sql = "SELECT ";
 		if(fieldsToGet.length > 0){
 			for(String field: fieldsToGet){
-				sql += field + " ";
+				sql += field + ", ";
 			}
+			sql = sql.substring(0, sql.length() - 2) + " ";
 		}
 		else {
 			sql += "* ";
@@ -61,7 +66,8 @@ public class SqliteDb implements IDbProvider {
 			String[] fieldsToGet, String fieldToCheck, String fieldValue) throws SQLException {
 		Statement s = conn.createStatement();
 		String sql = constructSelectStatementWithFields(tableName, fieldsToGet);
-		sql += " WHERE " + fieldToCheck + " = " + fieldValue;
+		sql += " WHERE " + fieldToCheck + " = \"" + fieldValue + "\"";
+		logger.trace("Executing query: " + sql);
 		return s.executeQuery(sql);
 		
 	}
@@ -71,10 +77,15 @@ public class SqliteDb implements IDbProvider {
 		Statement s = conn.createStatement();
 		String sql = "INSERT INTO " + tableName;
 		sql += " VALUES( ";
-		for(String field : fieldsToAdd){
-			sql += field + " ";
+		if(fieldsToAdd.length == 0){
+			throw new SQLException("Can't insert no fields into table: " + tableName);
 		}
+		for(String field : fieldsToAdd){
+			sql += "\"" + field + "\", ";
+		}
+		sql = sql.substring(0, sql.length() - 2);
 		sql += ")";
+		logger.trace("Executing query: " + sql);
 		s.executeUpdate(sql);
 		
 	}
@@ -82,12 +93,14 @@ public class SqliteDb implements IDbProvider {
 	@Override
 	public void createTable(String sqlConstructorString) throws SQLException {
 		Statement s = conn.createStatement();
+		logger.trace("Executing query: " + sqlConstructorString);
 		s.execute(sqlConstructorString);
 	}
 
 	@Override
 	public void createIndex(String sqlIndexCreationString) throws SQLException {
 		Statement s = conn.createStatement();
+		logger.trace("Executing query: " + sqlIndexCreationString);
 		s.execute(sqlIndexCreationString);
 	}
 }
