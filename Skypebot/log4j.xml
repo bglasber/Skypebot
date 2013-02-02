@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="Target" value="System.out" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-5p %c{1} - %m%n" />
+        </layout>
+    </appender>
+
+    
+    <!-- Logger Config -->
+    <logger name="Skypebot">
+        <level value="debug" />
+    </logger>
+
+    <!-- Handlers -->
+    <logger name="AddHandler">
+        <level value="debug" />
+    </logger>
+    <logger name="AddVideoHandler">
+        <level value="debug" />
+    </logger>
+    <logger name="GetVideoHandler">
+        <level value="debug" />
+    </logger>
+    <logger name="ResponseHandler">
+        <level value="debug" />
+    </logger>
+
+
+    <!-- Db -->
+    <logger name="DbManager">
+        <level value="debug" />
+    </logger>
+    <logger name="SqliteDb">
+        <level value="debug" />
+    </logger>
+    <logger name="Skypebot">
+        <level value="debug" />
+    </logger>
+
+
+    <!-- root -->
+    <root>
+        <priority value="debug" />
+        <appender-ref ref="console" />
+    </root>
+
+
+</log4j:configuration>
+
