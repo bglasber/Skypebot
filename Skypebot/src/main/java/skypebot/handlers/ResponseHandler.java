@@ -1,42 +1,47 @@
 package skypebot.handlers;
 
-import java.sql.SQLException;
-
+import com.skype.ChatMessage;
+import com.skype.SkypeException;
 import skypebot.db.DbManager;
 import skypebot.db.schema.Table;
 
-import com.skype.ChatMessage;
-import com.skype.SkypeException;
+import java.sql.SQLException;
 
 public class ResponseHandler implements IHandler {
 
-	private DbManager dbManager;
-	@Override
-	public boolean canHandle(ChatMessage m) {
-		//The response handler handles everything that comes in if it doesn't match anything else.
-		return true;
-	}
+    private DbManager dbManager;
 
-	@Override
-	public void handle(ChatMessage m) {
-		// Get Response From DB
-		Table table = dbManager.getSchema().getResponseTable();
-		try {
-			String response = dbManager.getSingleFromDb(table, "query", "response", m.getContent());
-			if(response != null) {
-				m.getChat().send(response);
-			}
-		} catch (SkypeException e) {
-			return;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	@Override
-	public void setManager(DbManager m){
-		dbManager = m;
-	}
+    @Override
+    public boolean canHandle( ChatMessage m ) {
+        //The response handler handles everything that comes in if it doesn't match anything else.
+        return true;
+    }
+
+    @Override
+    public void handle( ChatMessage m ) {
+        // Get Response From DB
+        Table table = dbManager.getSchema().getResponseTable();
+        try {
+            String response = dbManager.getSingleFromDbThatContains(
+                table,
+                "query",
+                "response",
+                m.getContent()
+            );
+            if( response != null ) {
+                m.getChat().send( response );
+            }
+        } catch( SkypeException e ) {
+            return;
+        } catch( SQLException e ) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void setManager( DbManager m ) {
+        dbManager = m;
+    }
 
 }
