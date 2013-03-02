@@ -16,7 +16,7 @@ public class SchemaConstructorString implements ISqlString {
 
     }
 
-    public String getString() {
+    public String toString() {
         return string;
     }
 
