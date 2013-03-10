@@ -48,7 +48,7 @@ public class Skypebot {
         Skype.addChatMessageListener(
             new ChatMessageAdapter() {
                 public void chatMessageReceived( ChatMessage messageReceived ) throws SkypeException {
-
+                    messageReceived.setContent( sanitize( messageReceived.getContent() ));
                     logger.debug( "Message Received: " + messageReceived.getContent() );
                     if( messageReceived.getType().equals( ChatMessage.Type.SAID ) ) {
                         for( IHandler h : handlersInOrder ) {
@@ -65,6 +65,13 @@ public class Skypebot {
         );
     }
 
+    private static String sanitize( String messageToSanitize ){
+
+        messageToSanitize = messageToSanitize.replaceAll( "\"", "" );
+        messageToSanitize = messageToSanitize.replaceAll( "-", "" );
+        return messageToSanitize;
+
+    }
     private static DbManager createDbManager() {
         Schema s = new Schema();
         return configureDBManager( s );

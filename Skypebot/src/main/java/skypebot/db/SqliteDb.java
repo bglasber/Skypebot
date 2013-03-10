@@ -129,7 +129,7 @@ public class SqliteDb implements IDbProvider {
         String sql = "INSERT INTO " + tableName;
         sql += " VALUES( ";
         if( fieldsToAdd.length == 0 ) {
-            throw new SQLException( "Can't insert no fields into table: " + tableName );
+            throw new SQLException( "Can't insert fields into table: " + tableName );
         }
         for( String field : fieldsToAdd ) {
             sql += "\"" + field + "\", ";
