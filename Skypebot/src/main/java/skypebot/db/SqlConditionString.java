@@ -44,7 +44,7 @@ public class SqlConditionString implements ISqlString {
     }
 
     @Override
-    public String toString() {
+    public String getString() {
         return sqlString;
     }
 }

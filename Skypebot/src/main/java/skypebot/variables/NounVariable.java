@@ -13,12 +13,12 @@ public class NounVariable implements IVariable {
     }
 
     @Override
-    public boolean containsVariable( String message ) {
+    public boolean isContainedInString( String message ) {
         return message.contains( "$noun" );
     }
 
     @Override
-    public String expandVariable( String message ) {
+    public String expandVariableInString( String message ) {
         //Do Db stuff to expand the variable
 
         try {

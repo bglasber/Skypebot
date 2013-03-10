@@ -11,7 +11,9 @@ import skypebot.db.IDbProvider;
 import skypebot.db.SqliteDb;
 import skypebot.db.schema.Schema;
 import skypebot.handlers.*;
+import skypebot.variables.VariableExpander;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
 /**
@@ -27,16 +29,21 @@ public class Skypebot {
 
         DOMConfigurator.configure( "log4j.xml" );
 
-        logger.debug( "Adding handlers..." );
-        final IHandler[] handlersInOrder = new IHandler[]{
-            new AddVideoHandler(),
-            new GetVideoHandler(),
-            new AddHandler(),
-            new ResponseHandler()
-        };
-        Schema s = new Schema();
-        final DbManager dbManager = configureDBManager( s );
+        final IHandler[] handlersInOrder = initializeIHandlersOrDie();
+        final DbManager dbManager = createDbManager();
+        attachToSkype(
+            handlersInOrder,
+            dbManager
+        );
 
+
+    }
+
+    private static void attachToSkype(
+        final IHandler[] handlersInOrder,
+        final DbManager dbManager
+    ) throws SkypeException {
+        logger.debug( "Attaching to skype..." );
         Skype.setDaemon( false );
         Skype.addChatMessageListener(
             new ChatMessageAdapter() {
@@ -56,8 +63,54 @@ public class Skypebot {
                 }
             }
         );
+    }
 
+    private static DbManager createDbManager() {
+        Schema s = new Schema();
+        return configureDBManager( s );
+    }
 
+    private static IHandler[] initializeIHandlersOrDie() {
+        logger.debug( "Adding handlers..." );
+        final IHandler[] handlersInOrder = CreateHandlers();
+        if( handlersInOrder.length == 0 ) {
+            logger.error( "No handlers were created... terminating" );
+            System.exit( 1 );
+        }
+        return handlersInOrder;
+    }
+
+    private static IHandler[] CreateHandlers() {
+        return new IHandler[]{
+            new AddVideoHandler(),
+            new GetVideoHandler(),
+            new AddHandler(),
+            getResponseHandler()
+        };
+    }
+
+    private static ResponseHandler getResponseHandler() {
+        try {
+            return new ResponseHandler( new VariableExpander() );
+        } catch( IllegalAccessException e ) {
+            logger.error( "Could not access IVariable implementation!" );
+            logger.error( e.getMessage() );
+            logger.error( e.getStackTrace() );
+        } catch( InstantiationException e ) {
+            logger.error( "IVariable implementation could not be instantiated!" );
+            logger.error( e.getMessage() );
+            logger.error( e.getStackTrace() );
+        } catch( NoSuchMethodException e ) {
+            logger.error( "IVariable implementation has no constructor!" );
+            logger.error( e.getMessage() );
+            logger.error( e.getStackTrace() );
+        } catch( InvocationTargetException e ) {
+            logger.error( "IVariable target is invalid!" );
+            logger.error( e.getMessage() );
+            logger.error( e.getStackTrace() );
+        }
+        System.exit( 1 );
+        return null;
     }
 
     private static DbManager configureDBManager( Schema s ) {

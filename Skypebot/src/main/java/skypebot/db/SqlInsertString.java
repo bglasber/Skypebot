@@ -17,7 +17,7 @@ public class SqlInsertString implements ISqlString {
         sqlString = sql;
     }
 
-    public String toString() {
+    public String getString() {
         return sqlString;
     }
 }

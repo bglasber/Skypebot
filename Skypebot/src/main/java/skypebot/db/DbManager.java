@@ -60,8 +60,8 @@ public class DbManager {
             fieldNameToReturn,
             resultSet
         );
-        logger.debug( "Got results from db query: " );
-        logger.debug( resultList );
+        logger.trace( "Got results from db query: " );
+        logger.trace( resultList );
         return getRandomResult(
             resultList
         );
@@ -85,8 +85,8 @@ public class DbManager {
             fieldNameToReturn,
             resultSet
         );
-        logger.debug( "Got results from db query: " );
-        logger.debug( resultList );
+        logger.trace( "Got results from db query: " );
+        logger.trace( resultList );
         return getRandomResult(
             resultList
         );

@@ -42,7 +42,7 @@ public class SqliteDb implements IDbProvider {
             fieldsToGet
         );
         logger.trace( "Executing query: " + sql );
-        return s.executeQuery( sql.toString() );
+        return s.executeQuery( sql.getString() );
 
     }
 
@@ -84,7 +84,7 @@ public class SqliteDb implements IDbProvider {
             fieldValue
         );
         logger.trace( "Executing query: " + sql );
-        return s.executeQuery( sql.toString() );
+        return s.executeQuery( sql.getString() );
     }
 
     public ResultSet getResultsByContains(
@@ -103,7 +103,7 @@ public class SqliteDb implements IDbProvider {
             fieldValue
         );
         logger.trace( "Executing query: " + sql );
-        return s.executeQuery( sql.toString() );
+        return s.executeQuery( sql.getString() );
 
     }
 
@@ -118,7 +118,7 @@ public class SqliteDb implements IDbProvider {
             fieldsToAdd
         );
         logger.trace( "Executing query: " + sql );
-        s.executeUpdate( sql.toString() );
+        s.executeUpdate( sql.getString() );
 
     }
 
@@ -145,15 +145,15 @@ public class SqliteDb implements IDbProvider {
     @Override
     public void createTable( ISqlString sqlConstructorString ) throws SQLException {
         Statement s = conn.createStatement();
-        logger.trace( "Executing query: " + sqlConstructorString.toString() );
-        s.execute( sqlConstructorString.toString() );
+        logger.trace( "Executing query: " + sqlConstructorString.getString() );
+        s.execute( sqlConstructorString.getString() );
     }
 
     @Override
     public void createIndex( ISqlString sqlIndexCreationString ) throws SQLException {
         Statement s = conn.createStatement();
-        logger.trace( "Executing query: " + sqlIndexCreationString );
-        s.execute( sqlIndexCreationString.toString() );
+        logger.trace( "Executing query: " + sqlIndexCreationString.getString() );
+        s.execute( sqlIndexCreationString.getString() );
     }
 }
 

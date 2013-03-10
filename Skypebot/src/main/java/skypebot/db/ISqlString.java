@@ -9,6 +9,6 @@ package skypebot.db;
  */
 public interface ISqlString {
 
-    public String toString();
+    public String getString();
 
 }

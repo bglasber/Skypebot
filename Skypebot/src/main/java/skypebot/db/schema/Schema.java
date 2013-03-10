@@ -66,7 +66,7 @@ public class Schema {
                     0,
                     constructTableString.length() - 2
                 );
-                constructTableString += ");";
+                constructTableString += " );";
                 schemaStrings.add(
                     new SchemaConstructorString(
                         constructTableString,

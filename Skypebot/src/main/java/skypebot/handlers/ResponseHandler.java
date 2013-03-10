@@ -4,12 +4,19 @@ import com.skype.ChatMessage;
 import com.skype.SkypeException;
 import skypebot.db.DbManager;
 import skypebot.db.schema.Table;
+import skypebot.variables.VariableExpander;
 
 import java.sql.SQLException;
 
 public class ResponseHandler implements IHandler {
 
     private DbManager dbManager;
+    private VariableExpander variableExpander;
+
+
+    public ResponseHandler( VariableExpander expander ) {
+        variableExpander = expander;
+    }
 
     @Override
     public boolean canHandle( ChatMessage m ) {
@@ -29,6 +36,7 @@ public class ResponseHandler implements IHandler {
                 m.getContent()
             );
             if( response != null ) {
+                variableExpander.expandVariables( response );
                 m.getChat().send( response );
             }
         } catch( SkypeException e ) {
