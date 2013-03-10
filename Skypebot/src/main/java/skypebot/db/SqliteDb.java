@@ -41,7 +41,7 @@ public class SqliteDb implements IDbProvider {
             tableName,
             fieldsToGet
         );
-        logger.trace( "Executing query: " + sql );
+        logger.trace( "Executing query: " + sql.getString() );
         return s.executeQuery( sql.getString() );
 
     }
@@ -83,7 +83,7 @@ public class SqliteDb implements IDbProvider {
             fieldToCheck,
             fieldValue
         );
-        logger.trace( "Executing query: " + sql );
+        logger.trace( "Executing query: " + sql.getString() );
         return s.executeQuery( sql.getString() );
     }
 
@@ -102,7 +102,7 @@ public class SqliteDb implements IDbProvider {
             fieldToCheck,
             fieldValue
         );
-        logger.trace( "Executing query: " + sql );
+        logger.trace( "Executing query: " + sql.getString() );
         return s.executeQuery( sql.getString() );
 
     }
@@ -117,7 +117,7 @@ public class SqliteDb implements IDbProvider {
             tableName,
             fieldsToAdd
         );
-        logger.trace( "Executing query: " + sql );
+        logger.trace( "Executing query: " + sql.getString() );
         s.executeUpdate( sql.getString() );
 
     }

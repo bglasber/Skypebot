@@ -22,7 +22,7 @@ public class SqlConditionString implements ISqlString {
 
     private void addWhereIfNeccessary() {
         if( !hasWhere ) {
-            sqlString += "WHERE ";
+            sqlString += " WHERE ";
             hasWhere = true;
         }
     }
