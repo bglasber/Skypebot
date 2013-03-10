@@ -8,8 +8,8 @@ public class NounVariable implements IVariable {
 
     private DbManager dbManager;
 
-    public NounVariable() {
-        //null constructor
+    public NounVariable( DbManager manager ) {
+        dbManager = manager;
     }
 
     @Override
@@ -35,11 +35,6 @@ public class NounVariable implements IVariable {
             e.printStackTrace();
         }
         return message;
-    }
-
-    @Override
-    public void setDbManager( DbManager m ) {
-        dbManager = m;
     }
 
 }

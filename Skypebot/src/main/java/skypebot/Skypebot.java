@@ -30,8 +30,8 @@ public class Skypebot {
 
         DOMConfigurator.configure( "log4j.xml" );
 
-        final IHandler[] handlersInOrder = initializeIHandlersOrDie();
         final DbManager dbManager = createDbManager();
+        final IHandler[] handlersInOrder = initializeIHandlersOrDie( dbManager );
         attachToSkype(
             handlersInOrder,
             dbManager
@@ -65,21 +65,28 @@ public class Skypebot {
         );
     }
 
-    private static String sanitize( String messageToSanitize ){
+    private static String sanitize( String messageToSanitize ) {
 
-        messageToSanitize = messageToSanitize.replaceAll( "\"", "" );
-        messageToSanitize = messageToSanitize.replaceAll( "-", "" );
+        messageToSanitize = messageToSanitize.replaceAll(
+            "\"",
+            ""
+        );
+        messageToSanitize = messageToSanitize.replaceAll(
+            "-",
+            ""
+        );
         return messageToSanitize;
 
     }
+
     private static DbManager createDbManager() {
         Schema s = new Schema();
         return configureDBManager( s );
     }
 
-    private static IHandler[] initializeIHandlersOrDie() {
+    private static IHandler[] initializeIHandlersOrDie( DbManager m ) {
         logger.debug( "Adding handlers..." );
-        final IHandler[] handlersInOrder = CreateHandlers();
+        final IHandler[] handlersInOrder = CreateHandlers( m );
         if( handlersInOrder.length == 0 ) {
             logger.error( "No handlers were created... terminating" );
             System.exit( 1 );
@@ -87,19 +94,19 @@ public class Skypebot {
         return handlersInOrder;
     }
 
-    private static IHandler[] CreateHandlers() {
+    private static IHandler[] CreateHandlers( DbManager m ) {
         return new IHandler[]{
             new AddVideoHandler(),
             new GetVideoHandler(),
             new AddHandler(),
             new AddNounHandler(),
-            getResponseHandler()
+            getResponseHandler( m )
         };
     }
 
-    private static ResponseHandler getResponseHandler() {
+    private static ResponseHandler getResponseHandler( DbManager m ) {
         try {
-            return new ResponseHandler( new VariableExpander() );
+            return new ResponseHandler( new VariableExpander( m ) );
         } catch( IllegalAccessException e ) {
             logger.error( "Could not access IVariable implementation!" );
             logger.error( e.getMessage() );

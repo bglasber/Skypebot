@@ -5,8 +5,6 @@ import com.skype.SkypeException;
 import org.apache.log4j.Logger;
 import skypebot.db.DbManager;
 
-import java.sql.SQLException;
-
 public class AddHandler implements IHandler {
 
 
