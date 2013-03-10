@@ -5,7 +5,6 @@ import com.skype.SkypeException;
 import org.apache.log4j.Logger;
 import skypebot.db.DbManager;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -158,22 +157,18 @@ public class AddVideoHandler implements IHandler {
         List<String> urls,
         String user
     ) {
-        try {
-            for( String link : urls ) {
+        for( String link : urls ) {
 
-                boolean wasSuccessful = dbManager.insertFieldsIntoTable(
-                    dbManager.getSchema().getVideosTable(),
-                    new String[]{ user, link }
-                );
-                if( !wasSuccessful ) {
-                    logger.error( "Error occurred while adding video link to db." );
-                }
-                else {
-                    logger.info( "Added Videos: " + urls.toString() );
-                }
+            boolean wasSuccessful = dbManager.insertFieldsIntoTable(
+                dbManager.getSchema().getVideosTable(),
+                new String[]{ user, link }
+            );
+            if( !wasSuccessful ) {
+                logger.error( "Error occurred while adding video link to db." );
             }
-        } catch( SQLException e ) {
-            e.printStackTrace();
+            else {
+                logger.info( "Added Videos: " + urls.toString() );
+            }
         }
     }
 

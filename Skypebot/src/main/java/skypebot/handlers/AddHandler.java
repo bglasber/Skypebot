@@ -52,10 +52,6 @@ public class AddHandler implements IHandler {
         } catch( SkypeException e ) {
             //just drop it
             logger.error( "AddHandler could not handle message - could not get message content" );
-        } catch( SQLException e ) {
-            logger.error( "Could not insert message into the table." );
-            logger.error( e );
-            e.printStackTrace();
         }
 
     }

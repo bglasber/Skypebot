@@ -139,7 +139,7 @@ public class DbManager {
     public boolean insertFieldsIntoTable(
         Table table,
         String[] fieldsToInsert
-    ) throws SQLException {
+    ) {
         String tableName = table.getTableName();
         try {
             provider.insertInto(
