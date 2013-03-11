@@ -36,8 +36,7 @@ public class ResponseHandler implements IHandler {
                 m.getContent()
             );
             if( response != null ) {
-                variableExpander.expandVariables( response );
-                m.getChat().send( response );
+                m.getChat().send( variableExpander.expandVariables( response ) );
             }
         } catch( SkypeException e ) {
             return;

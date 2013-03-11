@@ -1,5 +1,6 @@
 package skypebot.variables;
 
+import org.apache.log4j.Logger;
 import skypebot.db.DbManager;
 
 import java.sql.SQLException;
@@ -7,6 +8,7 @@ import java.sql.SQLException;
 public class NounVariable implements IVariable {
 
     private DbManager dbManager;
+    private Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
 
     public NounVariable( DbManager manager ) {
         dbManager = manager;
@@ -26,8 +28,9 @@ public class NounVariable implements IVariable {
                 dbManager.getSchema().getNounTable(),
                 "noun"
             );
+            logger.trace( "trying to replace \"" + message + "\" with " + noun );
             return message.replaceFirst(
-                "$noun",
+                "\\$noun",
                 noun
             );
         } catch( SQLException e ) {
