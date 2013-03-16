@@ -45,6 +45,7 @@ public class AddNounHandler implements IHandler {
                 logger.error( "Could not insert noun into nouns table!" );
             }
             else {
+                m.getChat().send( "Success inserted " + nounToAdd );
                 logger.info( "Successfully inserted " + nounToAdd + " into nouns table" );
             }
 

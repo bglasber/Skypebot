@@ -1,5 +1,6 @@
 package skypebot.variables;
 
+import com.skype.Chat;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import skypebot.db.DbManager;
@@ -32,10 +33,18 @@ public class VariableExpander {
         return reflections.getSubTypesOf( IVariable.class );
     }
 
-    public String expandVariables( String messageToExpand ) {
+    public String expandVariables(
+        String displayNameThatSentMessage,
+        Chat chatContext,
+        String messageToExpand
+    ) {
         for( IVariable var : variablesToExpand ) {
             if( var.isContainedInString( messageToExpand ) ) {
-                messageToExpand = var.expandVariableInString( messageToExpand );
+                messageToExpand = var.expandVariableInString(
+                    displayNameThatSentMessage,
+                    chatContext,
+                    messageToExpand
+                );
             }
         }
         return messageToExpand;

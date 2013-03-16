@@ -1,5 +1,6 @@
 package skypebot.variables;
 
+import com.skype.Chat;
 import org.apache.log4j.Logger;
 import skypebot.db.DbManager;
 
@@ -20,7 +21,11 @@ public class NounVariable implements IVariable {
     }
 
     @Override
-    public String expandVariableInString( String message ) {
+    public String expandVariableInString(
+        String displayNameThatSentMessage,
+        Chat chatContext,
+        String message
+    ) {
         //Do Db stuff to expand the variable
 
         try {
