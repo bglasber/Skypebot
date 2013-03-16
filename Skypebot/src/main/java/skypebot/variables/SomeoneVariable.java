@@ -42,7 +42,7 @@ public class SomeoneVariable implements IVariable {
             User[] activeUsers = chatContext.getAllActiveMembers();
             String randomDisplayName = activeUsers[
                 ( int ) ( Math.random() * activeUsers.length )
-                ].getDisplayName();
+                ].getFullName().split( " " )[0];
             return randomDisplayName;
         } catch( SkypeException e ) {
             //just use our username

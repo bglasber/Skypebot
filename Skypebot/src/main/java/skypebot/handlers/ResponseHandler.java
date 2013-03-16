@@ -38,7 +38,7 @@ public class ResponseHandler implements IHandler {
             if( response != null ) {
                 m.getChat().send(
                     variableExpander.expandVariables(
-                        m.getSender().getDisplayName(),
+                        m.getSender().getFullName().split( " " )[0],
                         m.getChat(),
                         response
                     )
