@@ -3,15 +3,16 @@ package skypebot.variables;
 import com.skype.Chat;
 import org.apache.log4j.Logger;
 import skypebot.db.DbManager;
+import skypebot.db.IDbManager;
 
 import java.sql.SQLException;
 
 public class NounVariable implements IVariable {
 
-    private DbManager dbManager;
+    private IDbManager dbManager;
     private Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
 
-    public NounVariable( DbManager manager ) {
+    public NounVariable( IDbManager manager ) {
         dbManager = manager;
     }
 

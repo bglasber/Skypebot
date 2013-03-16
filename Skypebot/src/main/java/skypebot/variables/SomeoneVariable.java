@@ -4,6 +4,7 @@ import com.skype.Chat;
 import com.skype.SkypeException;
 import com.skype.User;
 import skypebot.db.DbManager;
+import skypebot.db.IDbManager;
 
 /**
  * User: brad
@@ -12,9 +13,9 @@ import skypebot.db.DbManager;
  */
 public class SomeoneVariable implements IVariable {
 
-    private DbManager manager;
+    private IDbManager manager;
 
-    public SomeoneVariable( DbManager m ){
+    public SomeoneVariable( IDbManager m ) {
         manager = m;
     }
 
@@ -42,7 +43,7 @@ public class SomeoneVariable implements IVariable {
             User[] activeUsers = chatContext.getAllActiveMembers();
             String randomDisplayName = activeUsers[
                 ( int ) ( Math.random() * activeUsers.length )
-                ].getFullName().split( " " )[0];
+                ].getFullName().split( " " )[ 0 ];
             return randomDisplayName;
         } catch( SkypeException e ) {
             //just use our username

@@ -1,9 +1,6 @@
 package skypebot;
 
-import com.skype.ChatMessage;
-import com.skype.ChatMessageAdapter;
-import com.skype.Skype;
-import com.skype.SkypeException;
+import com.skype.*;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import skypebot.db.DbManager;
@@ -29,7 +26,6 @@ public class Skypebot {
     public static void main( String[] args ) throws SkypeException {
 
         DOMConfigurator.configure( "log4j.xml" );
-
         final DbManager dbManager = createDbManager();
         final IHandler[] handlersInOrder = initializeIHandlersOrDie( dbManager );
         attachToSkype(

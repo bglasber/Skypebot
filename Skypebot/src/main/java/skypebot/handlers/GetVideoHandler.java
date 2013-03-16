@@ -3,12 +3,13 @@ package skypebot.handlers;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 import skypebot.db.DbManager;
+import skypebot.db.IDbManager;
 
 import java.sql.SQLException;
 
 public class GetVideoHandler implements IHandler {
 
-    private DbManager dbManager;
+    private IDbManager dbManager;
 
 
     @Override
@@ -23,7 +24,7 @@ public class GetVideoHandler implements IHandler {
 
 
     @Override
-    public void setManager( DbManager m ) {
+    public void setManager( IDbManager m ) {
         dbManager = m;
     }
 

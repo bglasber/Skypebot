@@ -4,6 +4,7 @@ import com.skype.ChatMessage;
 import com.skype.SkypeException;
 import org.apache.log4j.Logger;
 import skypebot.db.DbManager;
+import skypebot.db.IDbManager;
 import skypebot.handlers.IHandler;
 
 /**
@@ -13,7 +14,7 @@ import skypebot.handlers.IHandler;
  */
 public class AddNounHandler implements IHandler {
     private Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
-    private DbManager manager;
+    private IDbManager manager;
 
     @Override
     public boolean canHandle( ChatMessage m ) {
@@ -26,7 +27,7 @@ public class AddNounHandler implements IHandler {
     }
 
     @Override
-    public void setManager( DbManager m ) {
+    public void setManager( IDbManager m ) {
         manager = m;
     }
 

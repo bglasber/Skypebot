@@ -3,6 +3,7 @@ package skypebot.handlers;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 import skypebot.db.DbManager;
+import skypebot.db.IDbManager;
 import skypebot.db.schema.Table;
 import skypebot.variables.VariableExpander;
 
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 
 public class ResponseHandler implements IHandler {
 
-    private DbManager dbManager;
+    private IDbManager dbManager;
     private VariableExpander variableExpander;
 
 
@@ -38,7 +39,7 @@ public class ResponseHandler implements IHandler {
             if( response != null ) {
                 m.getChat().send(
                     variableExpander.expandVariables(
-                        m.getSender().getFullName().split( " " )[0],
+                        m.getSender().getFullName().split( " " )[ 0 ],
                         m.getChat(),
                         response
                     )
@@ -53,7 +54,7 @@ public class ResponseHandler implements IHandler {
     }
 
     @Override
-    public void setManager( DbManager m ) {
+    public void setManager( IDbManager m ) {
         dbManager = m;
     }
 

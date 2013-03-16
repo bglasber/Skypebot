@@ -4,6 +4,7 @@ import com.skype.Chat;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import skypebot.db.DbManager;
+import skypebot.db.IDbManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
@@ -20,11 +21,11 @@ public class VariableExpander {
     Set<IVariable> variablesToExpand = new HashSet<IVariable>();
     Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
 
-    public VariableExpander( DbManager manager ) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public VariableExpander( IDbManager manager ) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         classesToInitialize = getIVariableImplementations();
         for( Class<? extends IVariable> c : classesToInitialize ) {
             logger.trace( "Found IHandler Implementation: " + c.toString() );
-            variablesToExpand.add( ( IVariable ) c.getConstructor( DbManager.class ).newInstance( manager ) );
+            variablesToExpand.add( ( IVariable ) c.getConstructor( IDbManager.class ).newInstance( manager ) );
         }
     }
 
@@ -39,7 +40,7 @@ public class VariableExpander {
         String messageToExpand
     ) {
         for( IVariable var : variablesToExpand ) {
-            if( var.isContainedInString( messageToExpand ) ) {
+            while( var.isContainedInString( messageToExpand ) ) {
                 messageToExpand = var.expandVariableInString(
                     displayNameThatSentMessage,
                     chatContext,

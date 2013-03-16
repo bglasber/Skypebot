@@ -4,11 +4,12 @@ import com.skype.ChatMessage;
 import com.skype.SkypeException;
 import org.apache.log4j.Logger;
 import skypebot.db.DbManager;
+import skypebot.db.IDbManager;
 
 public class AddHandler implements IHandler {
 
 
-    private DbManager dbManager;
+    private IDbManager dbManager;
     private Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
 
     @Override
@@ -26,7 +27,7 @@ public class AddHandler implements IHandler {
     }
 
     @Override
-    public void setManager( DbManager m ) {
+    public void setManager( IDbManager m ) {
         dbManager = m;
     }
 

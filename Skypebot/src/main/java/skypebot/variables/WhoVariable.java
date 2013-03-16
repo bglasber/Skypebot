@@ -2,6 +2,7 @@ package skypebot.variables;
 
 import com.skype.Chat;
 import skypebot.db.DbManager;
+import skypebot.db.IDbManager;
 
 /**
  * User: brad
@@ -10,9 +11,9 @@ import skypebot.db.DbManager;
  */
 public class WhoVariable implements IVariable {
 
-    private DbManager manager;
+    private IDbManager manager;
 
-    public WhoVariable( DbManager m ){
+    public WhoVariable( IDbManager m ) {
         manager = m;
     }
 
@@ -27,6 +28,9 @@ public class WhoVariable implements IVariable {
         Chat chatContext,
         String message
     ) {
-        return message.replaceFirst( "\\$who", displayNameThatSentMessage );
+        return message.replaceFirst(
+            "\\$who",
+            displayNameThatSentMessage
+        );
     }
 }

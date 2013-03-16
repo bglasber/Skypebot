@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DbManager {
+public class DbManager implements IDbManager {
 
     private IDbProvider provider;
     private Schema schema;

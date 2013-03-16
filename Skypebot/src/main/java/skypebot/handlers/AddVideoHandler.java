@@ -3,14 +3,14 @@ package skypebot.handlers;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 import org.apache.log4j.Logger;
-import skypebot.db.DbManager;
+import skypebot.db.IDbManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddVideoHandler implements IHandler {
 
-    private DbManager dbManager;
+    private IDbManager dbManager;
     public static final String ANSI_BLUE = "\u001B[34m";
 
     private String[] videoSites = {
@@ -38,7 +38,7 @@ public class AddVideoHandler implements IHandler {
 
 
     @Override
-    public void setManager( DbManager m ) {
+    public void setManager( IDbManager m ) {
         dbManager = m;
     }
 
