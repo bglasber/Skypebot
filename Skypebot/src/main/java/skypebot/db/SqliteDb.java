@@ -113,7 +113,7 @@ public class SqliteDb implements IDbProvider {
         String[] fieldsToAdd
     ) throws SQLException {
         Statement s = conn.createStatement();
-        ISqlString sql = CreateSqlInsertString(
+        ISqlString sql = createSqlInsertString(
             tableName,
             fieldsToAdd
         );
@@ -122,7 +122,34 @@ public class SqliteDb implements IDbProvider {
 
     }
 
-    private ISqlString CreateSqlInsertString(
+    @Override
+    public long getNumberOfEntries( String tableName ) throws SQLException {
+        Statement s = conn.createStatement();
+        ISqlString sql = createSqlCountString( tableName );
+
+        ResultSet rowsReturned = s.executeQuery( sql.getString() );
+        if( rowsReturned.next() ) {
+            return rowsReturned.getLong( 1 );
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean deleteRowFromTable(
+        String tableName,
+        String fieldToCheck,
+        String fieldValueExpected
+    ) throws SQLException {
+        Statement s = conn.createStatement();
+        ISqlString sql = createSqlDeleteString(
+            tableName,
+            fieldToCheck,
+            fieldValueExpected
+        );
+        return s.execute( sql.getString() );
+    }
+
+    private ISqlString createSqlInsertString(
         String tableName,
         String[] fieldsToAdd
     ) throws SQLException {
@@ -154,6 +181,18 @@ public class SqliteDb implements IDbProvider {
         Statement s = conn.createStatement();
         logger.trace( "Executing query: " + sqlIndexCreationString.getString() );
         s.execute( sqlIndexCreationString.getString() );
+    }
+
+    public ISqlString createSqlCountString( String tableName ) {
+        return new SqlCountString( "SELECT COUNT(*) FROM " + tableName );
+    }
+
+    public ISqlString createSqlDeleteString(
+        String tableName,
+        String fieldToCheck,
+        String uniqueIdentifier
+    ) {
+        return new SqlDeleteString( "DELETE FROM " + tableName + " WHERE " + fieldToCheck + " = " + uniqueIdentifier );
     }
 }
 

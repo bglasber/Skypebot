@@ -10,7 +10,9 @@ import skypebot.db.schema.Table;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DbManager implements IDbManager {
 
@@ -154,5 +156,118 @@ public class DbManager implements IDbManager {
             return false;
         }
 
+    }
+
+    public long getDbCount(
+        Table table
+    ) {
+        try {
+            return provider.getNumberOfEntries( table.getTableName() );
+        } catch( SQLException e ) {
+            logger.error( e.getMessage() );
+            logger.error( e.getStackTrace() );
+            return 0;
+        }
+    }
+
+    public boolean deleteRowFromTable(
+        Table table,
+        String fieldToCheck,
+        String fieldValueExpected
+    ) {
+        try {
+            return provider.deleteRowFromTable(
+                table.getTableName(),
+                fieldToCheck,
+                fieldValueExpected
+            );
+        } catch( SQLException e ) {
+            logger.error( e.getMessage() );
+            logger.error( e.getStackTrace() );
+            return false;
+        }
+    }
+
+    public String deleteRandomRowFromTable(
+        Table table,
+        String fieldToCheck,
+        String fieldToReturn
+    ) {
+
+        String[] fieldsToReturn = getFieldsToReturn(
+            fieldToCheck,
+            fieldToReturn
+        );
+        try {
+            ResultSet results = provider.getResultQuery(
+                table.getTableName(),
+                fieldsToReturn
+            );
+            Map<String, String> stringMap = createFieldMap(
+                fieldToCheck,
+                fieldToReturn,
+                results
+            );
+
+            List<String> valuesAsList = new ArrayList<>( stringMap.keySet() );
+            String randomKey = getRandomResult( valuesAsList );
+            String randomValue = stringMap.get( randomKey );
+            provider.deleteRowFromTable(
+                table.getTableName(),
+                fieldToCheck,
+                randomKey
+            );
+            return randomValue;
+        } catch( SQLException e ) {
+            logger.error( e.getMessage() );
+            logger.error( e.getStackTrace() );
+            return null;
+        }
+
+    }
+
+    private Map<String, String> createFieldMap(
+        String fieldToCheck,
+        String fieldToReturn,
+        ResultSet results
+    ) throws SQLException {
+        Map<String, String> stringMap = new HashMap<String, String>();
+        while( results.next() ) {
+            String key = results.getString( fieldToCheck );
+            if( !fieldToCheck.equals( fieldToReturn ) ) {
+                String val = results.getString( fieldToReturn );
+                stringMap.put(
+                    key,
+                    val
+                );
+            }
+            else {
+                stringMap.put(
+                    key,
+                    key
+                );
+            }
+
+        }
+        return stringMap;
+    }
+
+    private String[] getFieldsToReturn(
+        String fieldToCheck,
+        String fieldToReturn
+    ) {
+        String[] fieldsToGet;
+        if( fieldToReturn.equals( fieldToCheck ) ) {
+            fieldsToGet = new String[]{
+                fieldToReturn,
+            };
+        }
+        else {
+            fieldsToGet = new String[]{
+                fieldToCheck,
+                fieldToReturn
+            };
+        }
+        return fieldsToGet;
     }
 }

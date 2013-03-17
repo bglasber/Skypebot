@@ -18,6 +18,15 @@ public class Schema {
                 TableType.RESPONSE
             );
 
+        public static Table ItemTable =
+            new Table(
+                "items",
+                new String[]{ "item" },
+                "itemIndex",
+                "item",
+                TableType.ITEMS
+            );
+
         public static Table NounTable =
             new Table(
                 "noun",
@@ -39,6 +48,10 @@ public class Schema {
 
     public Table getResponseTable() {
         return Tables.ResponseTable;
+    }
+
+    public Table getItemTable() {
+        return Tables.ItemTable;
     }
 
     public Table getNounTable() {

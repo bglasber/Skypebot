@@ -98,6 +98,7 @@ public class Skypebot {
             new AddVideoHandler(),
             new GetVideoHandler(),
             new AddHandler(),
+            new AddItemHandler(),
             new AddNounHandler(),
             getResponseHandler( m )
         };

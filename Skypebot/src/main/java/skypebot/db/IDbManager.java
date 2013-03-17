@@ -42,4 +42,20 @@ public interface IDbManager {
         Table table,
         String[] fieldsToInsert
     );
+
+    public long getDbCount(
+        Table table
+    );
+
+    public boolean deleteRowFromTable(
+        Table table,
+        String fieldToCheck,
+        String fieldValueExpected
+    );
+
+    public String deleteRandomRowFromTable(
+        Table table,
+        String fieldToCheck,
+        String fieldToReturn
+    );
 }

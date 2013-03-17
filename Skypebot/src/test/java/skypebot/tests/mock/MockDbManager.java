@@ -62,4 +62,27 @@ public class MockDbManager implements IDbManager {
     ) {
         return true;
     }
+
+    @Override
+    public long getDbCount( Table table ) {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean deleteRowFromTable(
+        Table table,
+        String fieldToCheck,
+        String fieldValueExpected
+    ) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public String deleteRandomRowFromTable(
+        Table table,
+        String fieldToCheck,
+        String fieldToReturn
+    ) {
+        return "emptyString";  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

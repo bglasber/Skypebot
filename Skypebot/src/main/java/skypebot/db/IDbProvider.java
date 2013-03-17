@@ -37,4 +37,14 @@ public interface IDbProvider {
         String tableName,
         String[] fieldsToAdd
     ) throws SQLException;
+
+    public long getNumberOfEntries(
+        String tableName
+    ) throws SQLException;
+
+    boolean deleteRowFromTable(
+        String tableName,
+        String fieldToCheck,
+        String fieldValueExpected
+    ) throws SQLException;
 }
