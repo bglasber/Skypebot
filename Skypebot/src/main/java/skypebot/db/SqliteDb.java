@@ -192,7 +192,7 @@ public class SqliteDb implements IDbProvider {
         String fieldToCheck,
         String uniqueIdentifier
     ) {
-        return new SqlDeleteString( "DELETE FROM " + tableName + " WHERE " + fieldToCheck + " = " + uniqueIdentifier );
+        return new SqlDeleteString( "DELETE FROM " + tableName + " WHERE " + fieldToCheck + " = \"" + uniqueIdentifier + "\"");
     }
 }
 
