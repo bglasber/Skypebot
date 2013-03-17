@@ -2,7 +2,6 @@ package skypebot.variables;
 
 import com.skype.Chat;
 import org.apache.log4j.Logger;
-import skypebot.db.DbManager;
 import skypebot.db.IDbManager;
 
 import java.sql.SQLException;

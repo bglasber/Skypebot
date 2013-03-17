@@ -3,7 +3,6 @@ package skypebot.handlers;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 import org.apache.log4j.Logger;
-import skypebot.db.DbManager;
 import skypebot.db.IDbManager;
 
 public class AddHandler implements IHandler {
@@ -33,13 +32,9 @@ public class AddHandler implements IHandler {
 
     @Override
     public void handle( ChatMessage m ) {
-        //We assume that 'canHandle' it
+        //We assume that we 'canHandle' it
         try {
-            String message = m.getContent();
-            String[] splitMessage = message.replaceAll(
-                "^.*'([^']*)' '([^']*)'$",
-                "$1@$2"
-            ).split( "@" );
+            String[] splitMessage = getFieldsToInsert( m );
             boolean wasSuccessful = dbManager.insertFieldsIntoTable(
                 dbManager.getSchema().getResponseTable(),
                 splitMessage
@@ -53,6 +48,14 @@ public class AddHandler implements IHandler {
             logger.error( "AddHandler could not handle message - could not get message content" );
         }
 
+    }
+
+    private String[] getFieldsToInsert( ChatMessage m ) throws SkypeException {
+        String message = m.getContent();
+        return message.replaceAll(
+            "^.*'([^']*)' '([^']*)'$",
+            "$1@$2"
+        ).split( "@" );
     }
 
 }

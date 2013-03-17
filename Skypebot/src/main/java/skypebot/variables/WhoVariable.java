@@ -1,7 +1,6 @@
 package skypebot.variables;
 
 import com.skype.Chat;
-import skypebot.db.DbManager;
 import skypebot.db.IDbManager;
 
 /**

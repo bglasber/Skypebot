@@ -2,7 +2,6 @@ package skypebot.handlers;
 
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
-import skypebot.db.DbManager;
 import skypebot.db.IDbManager;
 
 import java.sql.SQLException;

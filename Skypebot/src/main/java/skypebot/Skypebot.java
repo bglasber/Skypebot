@@ -1,6 +1,9 @@
 package skypebot;
 
-import com.skype.*;
+import com.skype.ChatMessage;
+import com.skype.ChatMessageAdapter;
+import com.skype.Skype;
+import com.skype.SkypeException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import skypebot.db.DbManager;

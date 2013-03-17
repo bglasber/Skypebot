@@ -1,10 +1,12 @@
 package skypebot.tests.mock;
 
-import skypebot.db.*;
-import skypebot.db.schema.*;
-import java.sql.SQLException;
 import com.skype.SkypeException;
 import skypebot.db.schema.Schema;
+import skypebot.db.schema.Table;
+import skypebot.db.IDbManager;
+import skypebot.db.IDbProvider;
+
+import java.sql.SQLException;
 
 /**
  * User: brad
@@ -13,7 +15,7 @@ import skypebot.db.schema.Schema;
  */
 public class MockDbManager implements IDbManager {
 
-    public void setProvider(IDbProvider provider){
+    public void setProvider( IDbProvider provider ) {
         return;
     }
 
@@ -48,7 +50,7 @@ public class MockDbManager implements IDbManager {
         String fieldNameToReturn
     ) throws SQLException {
 
-        if(table.equals( new Schema().getNounTable() ) ){
+        if( table.equals( new Schema().getNounTable() ) ) {
             return "nounForTest";
         }
         return null;

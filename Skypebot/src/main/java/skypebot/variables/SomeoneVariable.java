@@ -3,7 +3,6 @@ package skypebot.variables;
 import com.skype.Chat;
 import com.skype.SkypeException;
 import com.skype.User;
-import skypebot.db.DbManager;
 import skypebot.db.IDbManager;
 
 /**
