@@ -14,7 +14,8 @@ public class AddVideoHandler implements IHandler {
     public static final String ANSI_BLUE = "\u001B[34m";
 
     private String[] videoSites = {
-        "http://www.youtube.com/watch", "http://youtu.be.com/",
+        "http://www.youtube.com/watch",
+        "http://youtu.be.com/",
         "http://www.metacafe.com/watch",
         "http://www.cracked.com/video"
     };

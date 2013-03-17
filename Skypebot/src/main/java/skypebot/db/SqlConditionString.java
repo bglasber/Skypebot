@@ -32,7 +32,7 @@ public class SqlConditionString implements ISqlString {
         String tableValue
     ) {
         addWhereIfNeccessary();
-        sqlString += tableColumn + " LIKE \"%" + tableValue + "%\"";
+        sqlString += tableValue + " LIKE \"%\" || table + \"%\"";
     }
 
     public void addEqualsCondition(
