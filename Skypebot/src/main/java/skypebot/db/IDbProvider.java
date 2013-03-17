@@ -47,4 +47,9 @@ public interface IDbProvider {
         String fieldToCheck,
         String fieldValueExpected
     ) throws SQLException;
+
+    ResultSet getEntireTable(
+        String tableName,
+        String fieldToReturn
+    ) throws SQLException;
 }

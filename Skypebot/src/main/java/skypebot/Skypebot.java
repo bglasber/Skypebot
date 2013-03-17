@@ -11,6 +11,7 @@ import skypebot.db.IDbProvider;
 import skypebot.db.SqliteDb;
 import skypebot.db.schema.Schema;
 import skypebot.handlers.*;
+import skypebot.handlers.addVariableHandlers.AddItemHandler;
 import skypebot.handlers.addVariableHandlers.AddNounHandler;
 import skypebot.variables.VariableExpander;
 

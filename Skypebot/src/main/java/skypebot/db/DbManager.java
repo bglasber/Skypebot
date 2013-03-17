@@ -58,7 +58,7 @@ public class DbManager implements IDbManager {
             messageToMatch
         );
 
-        List<String> resultList = CreateResultSet(
+        List<String> resultList = createResultSet(
             fieldNameToReturn,
             resultSet
         );
@@ -83,7 +83,7 @@ public class DbManager implements IDbManager {
             messageToMatch
         );
 
-        List<String> resultList = CreateResultSet(
+        List<String> resultList = createResultSet(
             fieldNameToReturn,
             resultSet
         );
@@ -94,7 +94,7 @@ public class DbManager implements IDbManager {
         );
     }
 
-    private List<String> CreateResultSet(
+    private List<String> createResultSet(
         String fieldNameToReturn,
         ResultSet resultSet
     ) throws SQLException {
@@ -113,7 +113,7 @@ public class DbManager implements IDbManager {
             table.getTableName(),
             new String[]{ fieldNameToReturn }
         );
-        List<String> resultList = CreateResultSet(
+        List<String> resultList = createResultSet(
             fieldNameToReturn,
             resultSet
         );
@@ -209,7 +209,7 @@ public class DbManager implements IDbManager {
                 results
             );
 
-            List<String> valuesAsList = new ArrayList<>( stringMap.keySet() );
+            List<String> valuesAsList = new ArrayList<String>( stringMap.keySet() );
             String randomKey = getRandomResult( valuesAsList );
             String randomValue = stringMap.get( randomKey );
             provider.deleteRowFromTable(
@@ -224,6 +224,27 @@ public class DbManager implements IDbManager {
             return null;
         }
 
+    }
+
+    @Override
+    public List<String> getEntireTable(
+        Table table,
+        String fieldToReturn
+    ) {
+        try {
+            ResultSet results = provider.getEntireTable(
+                table.getTableName(),
+                fieldToReturn
+            );
+            return createResultSet(
+                fieldToReturn,
+                results
+            );
+        } catch( SQLException e ) {
+            logger.error( e.getMessage() );
+            logger.error( e.getStackTrace() );
+        }
+        return new ArrayList<String>();
     }
 
     private Map<String, String> createFieldMap(

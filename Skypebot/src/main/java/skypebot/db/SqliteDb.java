@@ -192,7 +192,20 @@ public class SqliteDb implements IDbProvider {
         String fieldToCheck,
         String uniqueIdentifier
     ) {
-        return new SqlDeleteString( "DELETE FROM " + tableName + " WHERE " + fieldToCheck + " = \"" + uniqueIdentifier + "\"");
+        return new SqlDeleteString( "DELETE FROM " + tableName + " WHERE " + fieldToCheck + " = \"" + uniqueIdentifier + "\"" );
+    }
+
+    public ResultSet getEntireTable(
+        String tableName,
+        String fieldToReturn
+    ) throws SQLException {
+
+        ISqlString sql = constructSelectStatementWithFields(
+            tableName,
+            new String[]{ fieldToReturn }
+        );
+        Statement s = conn.createStatement();
+        return s.executeQuery( sql.getString() );
     }
 }
 

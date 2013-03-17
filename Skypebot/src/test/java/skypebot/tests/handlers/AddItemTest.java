@@ -2,7 +2,6 @@ package skypebot.tests.handlers;
 
 import com.skype.Chat;
 import com.skype.ChatMessage;
-import com.skype.Skype;
 import com.skype.SkypeException;
 import junit.framework.Assert;
 import org.junit.Before;
@@ -11,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import skypebot.handlers.AddItemHandler;
+import skypebot.handlers.addVariableHandlers.AddItemHandler;
 import skypebot.tests.mock.MockDbManager;
 
 import static org.mockito.Mockito.*;

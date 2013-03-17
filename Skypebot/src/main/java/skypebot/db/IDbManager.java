@@ -5,6 +5,7 @@ import skypebot.db.schema.Schema;
 import skypebot.db.schema.Table;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * User: brad
@@ -56,6 +57,11 @@ public interface IDbManager {
     public String deleteRandomRowFromTable(
         Table table,
         String fieldToCheck,
+        String fieldToReturn
+    );
+
+    public List<String> getEntireTable(
+        Table table,
         String fieldToReturn
     );
 }

@@ -1,10 +1,11 @@
-package skypebot.handlers;
+package skypebot.handlers.addVariableHandlers;
 
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 import org.apache.log4j.Logger;
 import skypebot.db.IDbManager;
 import skypebot.db.schema.Table;
+import skypebot.handlers.IHandler;
 
 /**
  * User: brad
