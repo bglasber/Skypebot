@@ -2,6 +2,7 @@ package skypebot.handlers;
 
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
+import org.apache.log4j.Logger;
 import skypebot.db.IDbManager;
 import skypebot.db.schema.Table;
 import skypebot.variables.VariableExpander;
@@ -12,6 +13,8 @@ public class ResponseHandler implements IHandler {
 
     private IDbManager dbManager;
     private VariableExpander variableExpander;
+    private String[] prevResponse = new String[ 2 ];
+    private Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
 
 
     public ResponseHandler( VariableExpander expander ) {
@@ -29,6 +32,11 @@ public class ResponseHandler implements IHandler {
         // Get Response From DB
         Table table = dbManager.getSchema().getResponseTable();
         try {
+            if( m.getContent() == "bucket, forget that" ) {
+                logger.trace( "Got forget that message, can't handle yet" );
+                logger.trace( "Got previous message " + prevResponse[ 0 ] + " - " + prevResponse[ 1 ] );
+                return;
+            }
             String response = dbManager.getSingleFromDbThatContains(
                 table,
                 "query",
@@ -36,10 +44,11 @@ public class ResponseHandler implements IHandler {
                 m.getContent()
             );
             if( response != null ) {
-                String name = m.getSender().getFullName().split( " " )[ 0 ];
-                if( name.isEmpty() ) {
-                    name = m.getSender().getId();
-                }
+                setPreviousResponse(
+                    m,
+                    response
+                );
+                String name = getSenderName( m );
                 m.getChat().send(
                     variableExpander.expandVariables(
                         name,
@@ -54,6 +63,22 @@ public class ResponseHandler implements IHandler {
             e.printStackTrace();
         }
 
+    }
+
+    private String getSenderName( ChatMessage m ) throws SkypeException {
+        String name = m.getSender().getFullName().split( " " )[ 0 ];
+        if( name.isEmpty() ) {
+            name = m.getSender().getId();
+        }
+        return name;
+    }
+
+    private void setPreviousResponse(
+        ChatMessage m,
+        String response
+    ) throws SkypeException {
+        prevResponse[ 0 ] = m.getContent();
+        prevResponse[ 1 ] = response;
     }
 
     @Override
