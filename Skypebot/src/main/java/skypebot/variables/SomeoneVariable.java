@@ -40,10 +40,15 @@ public class SomeoneVariable implements IVariable {
     private String getRandomDisplayName( Chat chatContext ) {
         try {
             User[] activeUsers = chatContext.getAllActiveMembers();
-            String randomDisplayName = activeUsers[
+
+            User u = activeUsers[
                 ( int ) ( Math.random() * activeUsers.length )
-                ].getFullName().split( " " )[ 0 ];
-            return randomDisplayName;
+                ];
+            String name = u.getFullName().split( " " )[ 0 ];
+            if( name.isEmpty() ) {
+                name = u.getId();
+            }
+            return name;
         } catch( SkypeException e ) {
             //just use our username
             return "bucket";
