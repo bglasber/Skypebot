@@ -39,6 +39,7 @@ public class ResponseHandler implements IHandler {
                     new String[]{ "query", "response" },
                     prevResponse
                 );
+                m.getChat().send( "Okay, forgetting '" + prevResponse[ 0 ] + " -> " + prevResponse[ 1 ] );
                 return;
             }
             String response = dbManager.getSingleFromDbThatContains(
