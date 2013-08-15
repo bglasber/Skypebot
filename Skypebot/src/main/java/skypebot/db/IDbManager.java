@@ -50,8 +50,8 @@ public interface IDbManager {
 
     public boolean deleteRowFromTable(
         Table table,
-        String fieldToCheck,
-        String fieldValueExpected
+        String[] fieldToCheck,
+        String[] fieldValueExpected
     );
 
     public String deleteRandomRowFromTable(

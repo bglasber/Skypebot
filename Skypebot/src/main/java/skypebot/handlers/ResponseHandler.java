@@ -32,9 +32,13 @@ public class ResponseHandler implements IHandler {
         // Get Response From DB
         Table table = dbManager.getSchema().getResponseTable();
         try {
-            if( m.getContent() == "bucket, forget that" ) {
-                logger.trace( "Got forget that message, can't handle yet" );
-                logger.trace( "Got previous message " + prevResponse[ 0 ] + " - " + prevResponse[ 1 ] );
+            if( m.getContent().contains( "bucket, forget that" ) ) {
+                logger.trace( "Got forget that message" );
+                dbManager.deleteRowFromTable(
+                    dbManager.getSchema().getResponseTable(),
+                    new String[]{ "query", "response" },
+                    prevResponse
+                );
                 return;
             }
             String response = dbManager.getSingleFromDbThatContains(

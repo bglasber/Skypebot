@@ -19,6 +19,7 @@ public class DbManager implements IDbManager {
     private IDbProvider provider;
     private Schema schema;
     private Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
+    private static String[] prevResult = new String[ 2 ];
 
     public DbManager( Schema s ) {
         schema = s;
@@ -172,14 +173,14 @@ public class DbManager implements IDbManager {
 
     public boolean deleteRowFromTable(
         Table table,
-        String fieldToCheck,
-        String fieldValueExpected
+        String[] fieldsToCheck,
+        String[] fieldValuesExpected
     ) {
         try {
             return provider.deleteRowFromTable(
                 table.getTableName(),
-                fieldToCheck,
-                fieldValueExpected
+                fieldsToCheck,
+                fieldValuesExpected
             );
         } catch( SQLException e ) {
             logger.error( e.getMessage() );
@@ -214,8 +215,8 @@ public class DbManager implements IDbManager {
             String randomValue = stringMap.get( randomKey );
             provider.deleteRowFromTable(
                 table.getTableName(),
-                fieldToCheck,
-                randomKey
+                new String[]{ fieldToCheck },
+                new String[]{ randomKey }
             );
             return randomValue;
         } catch( SQLException e ) {

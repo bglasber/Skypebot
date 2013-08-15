@@ -44,8 +44,8 @@ public interface IDbProvider {
 
     boolean deleteRowFromTable(
         String tableName,
-        String fieldToCheck,
-        String fieldValueExpected
+        String[] fieldsToCheck,
+        String[] fieldValuesExpected
     ) throws SQLException;
 
     ResultSet getEntireTable(

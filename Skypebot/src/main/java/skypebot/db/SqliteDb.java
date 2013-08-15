@@ -137,14 +137,14 @@ public class SqliteDb implements IDbProvider {
     @Override
     public boolean deleteRowFromTable(
         String tableName,
-        String fieldToCheck,
-        String fieldValueExpected
+        String[] fieldsToCheck,
+        String[] fieldValuesExpected
     ) throws SQLException {
         Statement s = conn.createStatement();
         ISqlString sql = createSqlDeleteString(
             tableName,
-            fieldToCheck,
-            fieldValueExpected
+            fieldsToCheck,
+            fieldValuesExpected
         );
         return s.execute( sql.getString() );
     }
@@ -189,10 +189,21 @@ public class SqliteDb implements IDbProvider {
 
     public ISqlString createSqlDeleteString(
         String tableName,
-        String fieldToCheck,
-        String uniqueIdentifier
+        String[] fieldsToCheck,
+        String[] uniqueIdentifiers
     ) {
-        return new SqlDeleteString( "DELETE FROM " + tableName + " WHERE " + fieldToCheck + " = \"" + uniqueIdentifier + "\"" );
+        String delString = "DELETE FROM " + tableName + " WHERE ";
+        for( int i = 0; i < fieldsToCheck.length; i++ ) {
+            delString += fieldsToCheck[ i ] + " = \"" + uniqueIdentifiers[ i ] + "\"" + " AND ";
+        }
+
+        //Strip off the AND.
+        return new SqlDeleteString(
+            delString.substring(
+                0,
+                delString.length() - 5
+            )
+        );
     }
 
     public ResultSet getEntireTable(
