@@ -7,6 +7,7 @@ import skypebot.db.IDbManager;
 import skypebot.db.IDbProvider;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * User: brad
@@ -84,5 +85,13 @@ public class MockDbManager implements IDbManager {
         String fieldToReturn
     ) {
         return "emptyString";  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public List<String> getEntireTable(
+        Table table,
+        String fieldToReturn
+    ) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -20,9 +20,9 @@ import static org.mockito.Mockito.*;
  * Date: 3/17/13
  * Time: 1:34 PM
  */
-@RunWith( PowerMockRunner.class )
-@PrepareForTest( { ChatMessage.class, Chat.class } )
-public class AddItemTest {
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ ChatMessage.class, Chat.class })
+public class AddItemHandlerTest {
 
     private AddItemHandler handler;
     private ChatMessage message;

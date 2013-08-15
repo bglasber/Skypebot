@@ -2,6 +2,7 @@ package skypebot.handlers;
 
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
+import org.apache.log4j.Logger;
 import skypebot.db.IDbManager;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class GetInventoryHandler implements IHandler {
 
     private IDbManager manager;
+    private Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
 
     @Override
     public boolean canHandle( ChatMessage m ) {
@@ -40,6 +42,7 @@ public class GetInventoryHandler implements IHandler {
                 m.getChat().send( item );
             }
         } catch( SkypeException e ) {
+            logger.error( e.getMessage() );
         }
 
     }

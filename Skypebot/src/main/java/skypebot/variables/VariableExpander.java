@@ -23,7 +23,7 @@ public class VariableExpander {
     public VariableExpander( IDbManager manager ) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         classesToInitialize = getIVariableImplementations();
         for( Class<? extends IVariable> c : classesToInitialize ) {
-            logger.trace( "Found IHandler Implementation: " + c.toString() );
+            logger.trace( "Found IVariable Implementation: " + c.toString() );
             variablesToExpand.add( ( IVariable ) c.getConstructor( IDbManager.class ).newInstance( manager ) );
         }
     }
