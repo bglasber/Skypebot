@@ -8,19 +8,19 @@ import skypebot.handlers.IHandler;
 
 /**
  * User: brad
- * Date: 3/10/13
- * Time: 6:56 PM
+ * Date: 8/15/13
+ * Time: 7:01 PM
  */
-public class AddNounHandler implements IHandler {
-    private Logger logger = Logger.getLogger( "AddHandler" );
-    private IDbManager manager;
+public class AddAdjectiveHandler implements IHandler {
+
+    public IDbManager manager;
+    public Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
 
     @Override
     public boolean canHandle( ChatMessage m ) {
         try {
-            return m.getContent().contains( "bucket, noun+" );
+            return m.getContent().contains( "bucket, adjective+" );
         } catch( SkypeException e ) {
-            //something weird happened, drop the message
             return false;
         }
     }
@@ -33,26 +33,25 @@ public class AddNounHandler implements IHandler {
     @Override
     public void handle( ChatMessage m ) {
         try {
-            String nounToAdd = m.getContent().replace(
-                "bucket, noun+ ",
+            String adjectiveToAdd = m.getContent().replace(
+                "bucket, adjective+ ",
                 ""
             );
             boolean wasSuccessful = manager.insertFieldsIntoTable(
-                manager.getSchema().getNounTable(),
-                new String[]{ nounToAdd }
+                manager.getSchema().getAdjectiveTable(),
+                new String[]{ adjectiveToAdd }
             );
             if( !wasSuccessful ) {
-                logger.error( "Could not insert noun into noun table!" );
+                logger.error( "Could not insert adjective into adjective table!" );
             }
             else {
-                m.getChat().send( "Success - inserted " + nounToAdd );
-                logger.info( "Successfully inserted " + nounToAdd + " into noun table" );
+                m.getChat().send( "Success - inserted " + adjectiveToAdd );
+                logger.info( "Successfully inserted " + adjectiveToAdd + " into adjective table" );
             }
 
         } catch( SkypeException e ) {
             //Just drop the message
             return;
         }
-
     }
 }

@@ -8,19 +8,19 @@ import skypebot.handlers.IHandler;
 
 /**
  * User: brad
- * Date: 3/10/13
- * Time: 6:56 PM
+ * Date: 8/15/13
+ * Time: 10:23 PM
  */
-public class AddNounHandler implements IHandler {
-    private Logger logger = Logger.getLogger( "AddHandler" );
+public class AddVerbedHandler implements IHandler {
+
     private IDbManager manager;
+    private Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
 
     @Override
     public boolean canHandle( ChatMessage m ) {
         try {
-            return m.getContent().contains( "bucket, noun+" );
+            return m.getContent().contains( "bucket, verbed+" );
         } catch( SkypeException e ) {
-            //something weird happened, drop the message
             return false;
         }
     }
@@ -33,26 +33,25 @@ public class AddNounHandler implements IHandler {
     @Override
     public void handle( ChatMessage m ) {
         try {
-            String nounToAdd = m.getContent().replace(
-                "bucket, noun+ ",
+            String verbToAdd = m.getContent().replace(
+                "bucket, verbed+ ",
                 ""
             );
             boolean wasSuccessful = manager.insertFieldsIntoTable(
-                manager.getSchema().getNounTable(),
-                new String[]{ nounToAdd }
+                manager.getSchema().getVerbedTable(),
+                new String[]{ verbToAdd }
             );
             if( !wasSuccessful ) {
-                logger.error( "Could not insert noun into noun table!" );
+                logger.error( "Could not insert verb into verbed table!" );
             }
             else {
-                m.getChat().send( "Success - inserted " + nounToAdd );
-                logger.info( "Successfully inserted " + nounToAdd + " into noun table" );
+                m.getChat().send( "Success inserted " + verbToAdd );
+                logger.info( "Successfully inserted " + verbToAdd + " into verbed table" );
             }
 
         } catch( SkypeException e ) {
             //Just drop the message
             return;
         }
-
     }
 }

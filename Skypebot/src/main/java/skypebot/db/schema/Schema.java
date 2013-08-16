@@ -44,6 +44,60 @@ public class Schema {
                 "username",
                 TableType.VIDEOS
             );
+
+        public static Table NounsTable =
+            new Table(
+                "nouns",
+                new String[]{ "nouns" },
+                "nounIndex",
+                "nouns",
+                TableType.NOUNS
+            );
+
+        public static Table VerbTable =
+            new Table(
+                "verb",
+                new String[]{ "verb" },
+                "verbIndex",
+                "verb",
+                TableType.VERB
+            );
+
+        public static Table VerbsTable =
+            new Table(
+                "verbs",
+                new String[]{ "verbs" },
+                "verbsIndex",
+                "verb",
+                TableType.VERBS
+            );
+
+        public static Table VerbedTable =
+            new Table(
+                "verbed",
+                new String[]{ "verbed" },
+                "verbedIndex",
+                "verbed",
+                TableType.VERBED
+            );
+
+        public static Table VerbingTable =
+            new Table(
+                "verbing",
+                new String[]{ "verbing" },
+                "verbingIndex",
+                "verbing",
+                TableType.VERBING
+            );
+
+        public static Table AdjectiveTable =
+            new Table(
+                "adjective",
+                new String[]{ "adjective" },
+                "adjectiveIndex",
+                "adjective",
+                TableType.ADJECTIVE
+            );
     }
 
     public Table getResponseTable() {
@@ -58,8 +112,28 @@ public class Schema {
         return Tables.NounTable;
     }
 
+    public Table getNounsTable() {
+        return Tables.NounsTable;
+    }
+
     public Table getVideosTable() {
         return Tables.VideoTable;
+    }
+
+    public Table getVerbTable() {
+        return Tables.VerbTable;
+    }
+
+    public Table getVerbedTable() {
+        return Tables.VerbedTable;
+    }
+
+    public Table getVerbingTable() {
+        return Tables.VerbingTable;
+    }
+
+    public Table getAdjectiveTable() {
+        return Tables.AdjectiveTable;
     }
 
     public List<SchemaConstructorString> getSchemaConstructionStrings() {

@@ -15,7 +15,7 @@ import skypebot.handlers.IHandler;
 public class AddItemHandler implements IHandler {
 
     private IDbManager manager;
-    private Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
+    private Logger logger = Logger.getLogger( "AddHandler" );
 
     @Override
     public boolean canHandle( ChatMessage m ) {
