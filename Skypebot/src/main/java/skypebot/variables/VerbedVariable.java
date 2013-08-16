@@ -16,6 +16,10 @@ public class VerbedVariable implements IVariable {
     private IDbManager dbManager;
     private Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
 
+    public VerbedVariable( IDbManager m ) {
+        dbManager = m;
+    }
+
     @Override
     public boolean isContainedInString( String message ) {
         return message.contains( "$verbed" );

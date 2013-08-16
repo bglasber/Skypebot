@@ -11,8 +11,7 @@ import skypebot.db.IDbProvider;
 import skypebot.db.SqliteDb;
 import skypebot.db.schema.Schema;
 import skypebot.handlers.*;
-import skypebot.handlers.addVariableHandlers.AddItemHandler;
-import skypebot.handlers.addVariableHandlers.AddNounHandler;
+import skypebot.handlers.addVariableHandlers.*;
 import skypebot.variables.VariableExpander;
 
 import java.lang.reflect.InvocationTargetException;
@@ -101,7 +100,13 @@ public class Skypebot {
             new AddHandler(),
             new AddItemHandler(),
             new AddNounHandler(),
+            new AddNounsHandler(),
+            new AddAdjectiveHandler(),
+            new AddVerbedHandler(),
+            new AddVerbingHandler(),
+            new AddVerbHandler(),
             new GetInventoryHandler(),
+
             getResponseHandler( m )
         };
     }
