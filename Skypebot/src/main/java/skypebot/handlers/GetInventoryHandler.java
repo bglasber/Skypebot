@@ -20,7 +20,7 @@ public class GetInventoryHandler implements IHandler {
     @Override
     public boolean canHandle( ChatMessage m ) {
         try {
-            return m.getContent().equals( "bucket, inv" );
+            return m.getContent().contains( "bucket, inv" );
         } catch( SkypeException e ) {
             return false;
         }
