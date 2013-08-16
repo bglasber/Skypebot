@@ -72,8 +72,8 @@ public class MockDbManager implements IDbManager {
     @Override
     public boolean deleteRowFromTable(
         Table table,
-        String fieldToCheck,
-        String fieldValueExpected
+        String[] fieldsToCheck,
+        String[] fieldValuesExpected
     ) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
