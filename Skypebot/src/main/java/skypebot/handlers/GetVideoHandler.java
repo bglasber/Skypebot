@@ -14,7 +14,7 @@ public class GetVideoHandler implements IHandler {
     @Override
     public boolean canHandle( ChatMessage m ) {
         try {
-            return m.getContent().toLowerCase().contains( "bucket, video" );
+            return m.getContent().toLowerCase().contains( "bucket, vid" );
         } catch( SkypeException e ) {
             //Something weird happened, just drop the message
             return false;

@@ -41,13 +41,9 @@ public class DropItemHandler implements IHandler {
                 new String[]{ "item" },
                 new String[]{ item }
             );
-            if( !wasSuccessful ) {
-                logger.error( "Could not delete '" + item + "'!" );
-            }
-            else {
-                m.getChat().send( "/me drops " + item );
-                logger.info( "Dropped '" + item + "'" );
-            }
+
+            m.getChat().send( "/me drops " + item );
+            logger.info( "Dropped '" + item + "'" );
 
         } catch( SkypeException e ) {
             //Just drop the message
