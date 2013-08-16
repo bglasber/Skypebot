@@ -68,7 +68,7 @@ public class Schema {
                 "verbs",
                 new String[]{ "verbs" },
                 "verbsIndex",
-                "verb",
+                "verbs",
                 TableType.VERBS
             );
 
