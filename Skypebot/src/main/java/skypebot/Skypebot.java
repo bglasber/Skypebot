@@ -106,6 +106,7 @@ public class Skypebot {
             new AddVerbingHandler(),
             new AddVerbHandler(),
             new GetInventoryHandler(),
+            new StatsHandler(),
 
             getResponseHandler( m )
         };
