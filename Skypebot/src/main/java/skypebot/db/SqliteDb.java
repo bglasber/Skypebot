@@ -146,6 +146,7 @@ public class SqliteDb implements IDbProvider {
             fieldsToCheck,
             fieldValuesExpected
         );
+        logger.trace( "Executing: " + sql.getString() );
         return s.execute( sql.getString() );
     }
 
