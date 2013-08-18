@@ -17,7 +17,7 @@ public class NounVariable implements IVariable {
 
     @Override
     public boolean isContainedInString( String message ) {
-        return message.contains( "$noun" );
+        return message.matches( ".*\\$noun([^s].*)?$" );
     }
 
     @Override
