@@ -58,7 +58,8 @@ public class ResponseHandler implements IHandler {
                     m.getContent()
                 )
             );
-            if( response != null ) {
+            //Don't repeat the same trigger
+            if( response != null && response != prevResponse[ 1 ] ) {
                 setPreviousResponse(
                     m,
                     response
@@ -71,6 +72,9 @@ public class ResponseHandler implements IHandler {
                         response
                     )
                 );
+            }
+            else {
+                logger.debug( "Dropping response, duplicate response or null" );
             }
         } catch( SkypeException e ) {
         } catch( SQLException e ) {
