@@ -59,7 +59,13 @@ public class ResponseHandler implements IHandler {
                 )
             );
             //Don't repeat the same trigger
-            if( response != null && !response.equals( prevResponse[ 1 ] ) ) {
+            if(
+                response != null &&
+                    !response.equals( prevResponse[ 1 ] ) &&
+                    !m.getContent().equals( prevResponse[ 0 ] )
+                ) {
+                logger.trace( "PrevResponse - " + prevResponse[ 1 ] );
+                logger.trace( "CurResponse - " + response );
                 setPreviousResponse(
                     m,
                     response
