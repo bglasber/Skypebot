@@ -53,7 +53,6 @@ public class AddVerbHandler implements IHandler {
 
         } catch( SkypeException e ) {
             //Just drop the message
-            return;
         }
 
     }

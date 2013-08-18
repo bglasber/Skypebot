@@ -42,7 +42,6 @@ public class StatsHandler implements IHandler {
             m.getChat().send( "'ing' verbs - " + manager.getDbCount( manager.getSchema().getVerbingTable() ) );
             m.getChat().send( "Adjectives - " + manager.getDbCount( manager.getSchema().getAdjectiveTable() ) );
         } catch( SkypeException e ) {
-            return;
         }
     }
 }

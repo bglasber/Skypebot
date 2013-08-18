@@ -17,11 +17,9 @@ import java.util.List;
 public class MockDbManager implements IDbManager {
 
     public void setProvider( IDbProvider provider ) {
-        return;
     }
 
     public void constructSchema() throws SQLException {
-        return;
     }
 
     public Schema getSchema() {

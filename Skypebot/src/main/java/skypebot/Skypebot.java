@@ -64,16 +64,16 @@ public class Skypebot {
         );
     }
 
-    private static String sanitize( String messageToSanitize ) {
+    public static String sanitize( String messageToSanitize ) {
 
         messageToSanitize = messageToSanitize.replaceAll(
             "\"",
-            ""
+            "'"
         );
-        messageToSanitize = messageToSanitize.replaceAll(
-            "-",
-            ""
-        );
+        //messageToSanitize = messageToSanitize.replaceAll(
+        //   "-",
+        //    ""
+        //);
         return messageToSanitize;
 
     }

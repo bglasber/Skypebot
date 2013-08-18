@@ -9,6 +9,8 @@ import skypebot.variables.VariableExpander;
 
 import java.sql.SQLException;
 
+import static skypebot.Skypebot.sanitize;
+
 public class ResponseHandler implements IHandler {
 
     private IDbManager dbManager;
@@ -36,17 +38,24 @@ public class ResponseHandler implements IHandler {
                 logger.trace( "Got forget that message" );
                 dbManager.deleteRowFromTable(
                     dbManager.getSchema().getResponseTable(),
-                    new String[]{ "query", "response" },
-                    prevResponse
+                    new String[]{ "response" },
+                    new String[]{ prevResponse[ 1 ] }
                 );
                 m.getChat().send( "Okay, forgetting '" + prevResponse[ 0 ] + "' -> '" + prevResponse[ 1 ] + "'" );
+                return;
+            }
+            //Gives us a number between 0.0 and 1.0, this should give us 35% chance of not responding
+            if( Math.random() > 0.65 ) {
+                //Drop message
                 return;
             }
             String response = dbManager.getSingleFromDbThatContains(
                 table,
                 "query",
                 "response",
-                m.getContent()
+                sanitize(
+                    m.getContent()
+                )
             );
             if( response != null ) {
                 setPreviousResponse(
@@ -63,7 +72,6 @@ public class ResponseHandler implements IHandler {
                 );
             }
         } catch( SkypeException e ) {
-            return;
         } catch( SQLException e ) {
             e.printStackTrace();
         }
