@@ -70,6 +70,31 @@ public class DbManager implements IDbManager {
         );
     }
 
+    public String[] getMultipleFieldsFromDbThatContains(
+        Table table,
+        String fieldNameToCheck,
+        String[] fieldsToReturn,
+        String messageToMatch
+    ) throws SQLException, SkypeException {
+
+        ResultSet resultSet = provider.getResultsByContains(
+            table.getTableName(),
+            table.getTableFields(),
+            fieldNameToCheck,
+            messageToMatch
+        );
+
+        List<String[]> results = new ArrayList<String[]>();
+        while( resultSet.next() ) {
+            List<String> r = new ArrayList<>();
+            for( int i = 0; i < fieldsToReturn.length; i++ ) {
+                r.add( resultSet.getString( fieldsToReturn[ i ] ) );
+            }
+            results.add( ( String[] ) r.toArray() );
+        }
+        return getRandomResult( results );
+    }
+
     public String getSingleFromDbThatEquals(
         Table table,
         String fieldNameToCheck,
@@ -123,11 +148,11 @@ public class DbManager implements IDbManager {
         );
     }
 
-    private String getRandomResult(
-        List<String> resultList
+    private <T> T getRandomResult(
+        List<T> resultList
     ) {
         try {
-            String result = resultList.get(
+            T result = resultList.get(
                 ( int ) ( Math.random() * ( resultList.size() ) )
             );
             logger.debug( "Got random result: " + result );

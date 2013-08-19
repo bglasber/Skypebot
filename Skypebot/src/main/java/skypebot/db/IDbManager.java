@@ -27,6 +27,13 @@ public interface IDbManager {
         String messageToMatch
     ) throws SQLException, SkypeException;
 
+    public String[] getMultipleFieldsFromDbThatContains(
+        Table table,
+        String fieldNameToCheck,
+        String[] fieldsToReturn,
+        String messageToMatch
+    ) throws SQLException, SkypeException;
+
     public String getSingleFromDbThatEquals(
         Table table,
         String fieldNameToCheck,

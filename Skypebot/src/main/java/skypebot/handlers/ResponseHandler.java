@@ -53,10 +53,11 @@ public class ResponseHandler implements IHandler {
                 //Drop message
                 return;
             }
-            String response = dbManager.getSingleFromDbThatContains(
+            //Gives us back query matched as 0, response provided as 1
+            String[] response = dbManager.getMultipleFieldsFromDbThatContains(
                 table,
                 "query",
-                "response",
+                new String[]{ "query", "response", },
                 sanitize(
                     m.getContent()
                 )
@@ -66,21 +67,18 @@ public class ResponseHandler implements IHandler {
                 IsNonDuplicatedResponse(
                     m,
                     referencedOverride,
-                    response
+                    response[ 1 ]
                 )
                 ) {
                 logger.trace( "PrevResponse - " + prevResponse[ 1 ] );
-                logger.trace( "CurResponse - " + response );
-                setPreviousResponse(
-                    m,
-                    response
-                );
+                logger.trace( "CurResponse - " + response[ 1 ] );
+                prevResponse = response;
                 String name = getSenderName( m );
                 m.getChat().send(
                     variableExpander.expandVariables(
                         name,
                         m.getChat(),
-                        response
+                        response[ 1 ]
                     )
                 );
             }
@@ -113,14 +111,6 @@ public class ResponseHandler implements IHandler {
             name = m.getSender().getId();
         }
         return name;
-    }
-
-    private void setPreviousResponse(
-        ChatMessage m,
-        String response
-    ) throws SkypeException {
-        prevResponse[ 0 ] = m.getContent();
-        prevResponse[ 1 ] = response;
     }
 
     @Override
