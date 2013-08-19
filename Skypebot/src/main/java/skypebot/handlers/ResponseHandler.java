@@ -44,6 +44,11 @@ public class ResponseHandler implements IHandler {
                 m.getChat().send( "Okay, forgetting '" + prevResponse[ 0 ] + "' -> '" + prevResponse[ 1 ] + "'" );
                 return;
             }
+            else if( m.getContent().contains( "bucket, what was that" ) ) {
+                logger.trace( "Got what was that message" );
+                m.getChat().send( "That was '" + prevResponse[ 0 ] + "' -> '" + prevResponse[ 1 ] + "'" );
+                return;
+            }
             //Gives us a number between 0.0 and 1.0, this should give us 35% chance of not responding
             boolean referencedOverride = m.getContent().contains( "bucket" ) || m.getContent().contains( "Bucket" );
             if( Math.random() > 0.65 &&
