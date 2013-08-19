@@ -64,11 +64,12 @@ public class ResponseHandler implements IHandler {
             );
             //Don't repeat the same trigger
             if(
-                IsNonDuplicatedResponse(
-                    m,
-                    referencedOverride,
-                    response[ 1 ]
-                )
+                response != null &&
+                    IsNonDuplicatedResponse(
+                        m,
+                        referencedOverride,
+                        response[ 1 ]
+                    )
                 ) {
                 logger.trace( "PrevResponse - " + prevResponse[ 1 ] );
                 logger.trace( "CurResponse - " + response[ 1 ] );
