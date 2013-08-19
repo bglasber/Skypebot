@@ -90,8 +90,7 @@ public class DbManager implements IDbManager {
             for( int i = 0; i < fieldsToReturn.length; i++ ) {
                 r.add( resultSet.getString( fieldsToReturn[ i ] ) );
             }
-            String[] r2 = (String[]) r.toArray(new String[r.size()]);
-            results.add( r2 );
+            results.add( r.toArray( new String[ r.size() ] ) );
         }
         return getRandomResult( results );
     }
@@ -156,7 +155,6 @@ public class DbManager implements IDbManager {
             T result = resultList.get(
                 ( int ) ( Math.random() * ( resultList.size() ) )
             );
-            logger.debug( "Got random result: " + result );
             return result;
         } catch( IndexOutOfBoundsException e ) {
             //No valid responses.

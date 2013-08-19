@@ -72,7 +72,7 @@ public class ResponseHandler implements IHandler {
                     )
                 ) {
                 logger.trace( "PrevResponse - " + prevResponse[ 1 ] );
-                logger.trace( "CurResponse - " + response[ 1 ] );
+                logger.debug( "CurResponse - " + response[ 1 ] );
                 prevResponse = response;
                 String name = getSenderName( m );
                 m.getChat().send(
