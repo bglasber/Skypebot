@@ -63,12 +63,11 @@ public class ResponseHandler implements IHandler {
             );
             //Don't repeat the same trigger
             if(
-                response != null &&
-                    ( referencedOverride ||
-                        !( response.equals( prevResponse[ 1 ] ) ||
-                            m.getContent().equals( prevResponse[ 0 ] )
-                        )
-                    )
+                IsNonDuplicatedResponse(
+                    m,
+                    referencedOverride,
+                    response
+                )
                 ) {
                 logger.trace( "PrevResponse - " + prevResponse[ 1 ] );
                 logger.trace( "CurResponse - " + response );
@@ -93,6 +92,19 @@ public class ResponseHandler implements IHandler {
             e.printStackTrace();
         }
 
+    }
+
+    private boolean IsNonDuplicatedResponse(
+        ChatMessage m,
+        boolean referencedOverride,
+        String response
+    ) throws SkypeException {
+        return response != null &&
+            ( referencedOverride ||
+                !( response.equals( prevResponse[ 1 ] ) ||
+                    m.getContent().equals( prevResponse[ 0 ] )
+                )
+            );
     }
 
     private String getSenderName( ChatMessage m ) throws SkypeException {
