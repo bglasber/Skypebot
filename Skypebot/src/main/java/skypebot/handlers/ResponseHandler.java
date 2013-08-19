@@ -45,7 +45,9 @@ public class ResponseHandler implements IHandler {
                 return;
             }
             //Gives us a number between 0.0 and 1.0, this should give us 35% chance of not responding
-            if( Math.random() > 0.65 ) {
+            if( Math.random() > 0.65 &&
+                !( m.getContent().contains( "bucket" ) || m.getContent().contains( "Bucket" ) )
+                ) {
                 logger.debug( "Dropping message, probability constraint not met" );
                 //Drop message
                 return;
