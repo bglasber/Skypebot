@@ -90,7 +90,8 @@ public class DbManager implements IDbManager {
             for( int i = 0; i < fieldsToReturn.length; i++ ) {
                 r.add( resultSet.getString( fieldsToReturn[ i ] ) );
             }
-            results.add( ( String[] ) r.toArray() );
+            String[] r2 = (String[]) r.toArray(new String[r.size()]);
+            results.add( r2 );
         }
         return getRandomResult( results );
     }
