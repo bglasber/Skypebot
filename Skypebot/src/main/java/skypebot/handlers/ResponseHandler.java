@@ -45,8 +45,9 @@ public class ResponseHandler implements IHandler {
                 return;
             }
             //Gives us a number between 0.0 and 1.0, this should give us 35% chance of not responding
+            boolean referencedOverride = !( m.getContent().contains( "bucket" ) || m.getContent().contains( "Bucket" ) );
             if( Math.random() > 0.65 &&
-                !( m.getContent().contains( "bucket" ) || m.getContent().contains( "Bucket" ) )
+                !referencedOverride
                 ) {
                 logger.debug( "Dropping message, probability constraint not met" );
                 //Drop message
@@ -63,8 +64,11 @@ public class ResponseHandler implements IHandler {
             //Don't repeat the same trigger
             if(
                 response != null &&
-                    !response.equals( prevResponse[ 1 ] ) &&
-                    !m.getContent().equals( prevResponse[ 0 ] )
+                    ( referencedOverride ||
+                        ( !response.equals( prevResponse[ 1 ] ) &&
+                            !m.getContent().equals( prevResponse[ 0 ] )
+                        )
+                    )
                 ) {
                 logger.trace( "PrevResponse - " + prevResponse[ 1 ] );
                 logger.trace( "CurResponse - " + response );
