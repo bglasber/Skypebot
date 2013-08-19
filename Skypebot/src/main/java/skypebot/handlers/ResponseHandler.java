@@ -64,8 +64,8 @@ public class ResponseHandler implements IHandler {
             //Don't repeat the same trigger
             if(
                 response != null &&
-                    ( !referencedOverride &&
-                        ( response.equals( prevResponse[ 1 ] ) &&
+                    ( referencedOverride ||
+                        !( response.equals( prevResponse[ 1 ] ) ||
                             m.getContent().equals( prevResponse[ 0 ] )
                         )
                     )
