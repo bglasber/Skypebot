@@ -89,7 +89,7 @@
             <version>3.7.2</version>
         </dependency>
         <dependency>
-            <groupId>skype4java</groupId>
+            <groupId>com.github.taksan</groupId>
             <artifactId>skype-java-api</artifactId>
             <version>1.4</version>
         </dependency>

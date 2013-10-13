@@ -14,7 +14,7 @@ public class AddHandler implements IHandler {
     @Override
     public boolean canHandle( ChatMessage m ) {
         try {
-            boolean willHandle = m.getContent().matches( "bucket, add '[^']*' '[^']*'" );
+            boolean willHandle = m.getContent().matches( "bucket, add \"[^\"]*\" \"[^\"]*\"" );
             if( willHandle ) {
                 logger.debug( "AddHandler will handle message..." );
             }
@@ -53,7 +53,7 @@ public class AddHandler implements IHandler {
     private String[] getFieldsToInsert( ChatMessage m ) throws SkypeException {
         String message = m.getContent();
         return message.replaceAll(
-            "^.*'([^']*)' '([^']*)'$",
+            "^.*\"([^\"]*)\" \"([^\"]*)\"$",
             "$1@$2"
         ).split( "@" );
     }

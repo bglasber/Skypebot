@@ -39,11 +39,11 @@ public class AddHandlerTest {
 
     @Test
     public void testCanHandle() throws Exception {
-        when( message.getContent() ).thenReturn( "bucket, add 'query' 'response'" );
+        when( message.getContent() ).thenReturn( "bucket, add \"query\" \"response\"" );
         Assert.assertTrue( addHandler.canHandle( message ) );
-        when( message.getContent() ).thenReturn( "bucket, add 'query 'response'" );
+        when( message.getContent() ).thenReturn( "bucket, add \"query \"response\"" );
         Assert.assertFalse( addHandler.canHandle( message ) );
-        when( message.getContent() ).thenReturn( "bakflk, add 'query' 'response'" );
+        when( message.getContent() ).thenReturn( "bakflk, add \"query\" \"response\"" );
         Assert.assertFalse( addHandler.canHandle( message ) );
         when( message.getContent() ).thenReturn( "bucket, add query response" );
         Assert.assertFalse( addHandler.canHandle( message ) );

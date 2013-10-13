@@ -35,6 +35,16 @@ public class MockDbManager implements IDbManager {
         return null;
     }
 
+    @Override
+    public String[] getMultipleFieldsFromDbThatContains(
+        Table table,
+        String fieldNameToCheck,
+        String[] fieldsToReturn,
+        String messageToMatch
+    ) throws SQLException, SkypeException {
+        return new String[ 0 ];  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public String getSingleFromDbThatEquals(
         Table table,
         String fieldNameToCheck,
