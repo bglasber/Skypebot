@@ -9,8 +9,6 @@ import skypebot.variables.VariableExpander;
 
 import java.sql.SQLException;
 
-import static skypebot.Skypebot.sanitize;
-
 public class ResponseHandler implements IHandler {
 
     private IDbManager dbManager;
@@ -63,9 +61,7 @@ public class ResponseHandler implements IHandler {
                 table,
                 "query",
                 new String[]{ "query", "response", },
-                sanitize(
-                    m.getContent()
-                )
+                m.getContent()
             );
             //Don't repeat the same trigger
             if(
