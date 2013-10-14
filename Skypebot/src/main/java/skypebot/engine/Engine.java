@@ -30,9 +30,9 @@ public class Engine {
     private static DbManager dbManager;
 
     public Engine() {
-        WorkerThread.SetHandlers( handlers );
         dbManager = createDbManager();
         handlers = CreateHandlers( dbManager );
+        WorkerThread.SetHandlers( handlers );
         executor = Executors.newFixedThreadPool( getNumberOfCores() );
     }
 
@@ -78,16 +78,6 @@ public class Engine {
     private static DbManager createDbManager() {
         Schema s = new Schema();
         return configureDBManager( s );
-    }
-
-    private static IHandler[] initializeIHandlersOrDie( DbManager m ) {
-        logger.debug( "Adding handlers..." );
-        final IHandler[] handlersInOrder = CreateHandlers( m );
-        if( handlersInOrder.length == 0 ) {
-            logger.error( "No handlers were created... terminating" );
-            System.exit( 1 );
-        }
-        return handlersInOrder;
     }
 
     private static IHandler[] CreateHandlers( DbManager m ) {
