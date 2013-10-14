@@ -34,7 +34,9 @@ public class Engine {
         handlers = CreateHandlers( dbManager );
         WorkerThread.SetDbManager( dbManager );
         WorkerThread.SetHandlers( handlers );
-        executor = Executors.newFixedThreadPool( getNumberOfCores() );
+        int cores = getNumberOfCores();
+        logger.info( "Launching " + cores + " worker threads..." );
+        executor = Executors.newFixedThreadPool( cores );
     }
 
     public boolean Launch() {
