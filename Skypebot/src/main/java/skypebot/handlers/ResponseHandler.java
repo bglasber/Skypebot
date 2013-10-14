@@ -13,7 +13,7 @@ public class ResponseHandler implements IHandler {
 
     private IDbManager dbManager;
     private VariableExpander variableExpander;
-    private String[] prevResponse = new String[ 2 ];
+    private static String[] prevResponse = new String[ 2 ];
     private Logger logger = Logger.getLogger( this.getClass().getCanonicalName() );
 
 
@@ -32,19 +32,24 @@ public class ResponseHandler implements IHandler {
         // Get Response From DB
         Table table = dbManager.getSchema().getResponseTable();
         try {
+            String[] previousResponse;
+            synchronized( prevResponse ) {
+                previousResponse = prevResponse;
+            }
+
             if( m.getContent().contains( "bucket, forget that" ) ) {
                 logger.trace( "Got forget that message" );
                 dbManager.deleteRowFromTable(
                     dbManager.getSchema().getResponseTable(),
                     new String[]{ "response" },
-                    new String[]{ prevResponse[ 1 ] }
+                    new String[]{ previousResponse[ 1 ] }
                 );
-                m.getChat().send( "Okay, forgetting '" + prevResponse[ 0 ] + "' -> '" + prevResponse[ 1 ] + "'" );
+                m.getChat().send( "Okay, forgetting '" + previousResponse[ 0 ] + "' -> '" + previousResponse[ 1 ] + "'" );
                 return;
             }
             else if( m.getContent().contains( "bucket, what was that" ) ) {
                 logger.trace( "Got what was that message" );
-                m.getChat().send( "That was '" + prevResponse[ 0 ] + "' -> '" + prevResponse[ 1 ] + "'" );
+                m.getChat().send( "That was '" + previousResponse[ 0 ] + "' -> '" + previousResponse[ 1 ] + "'" );
                 return;
             }
             //Gives us a number between 0.0 and 1.0, this should give us 35% chance of not responding
@@ -72,9 +77,11 @@ public class ResponseHandler implements IHandler {
                         response[ 1 ]
                     )
                 ) {
-                logger.trace( "PrevResponse - " + prevResponse[ 1 ] );
+                logger.trace( "PrevResponse - " + previousResponse[ 1 ] );
                 logger.debug( "CurResponse - " + response[ 1 ] );
-                prevResponse = response;
+                synchronized( prevResponse ) {
+                    prevResponse = response;
+                }
                 String name = getSenderName( m );
                 m.getChat().send(
                     variableExpander.expandVariables(
