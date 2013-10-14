@@ -32,7 +32,7 @@ public class WorkerThread implements Runnable {
     }
 
     public static void SetHandlers( IHandler[] handlers ) {
-        handlers = handlers;
+        WorkerThread.handlers = handlers;
     }
 
     public static void SetDbManager( IDbManager dbManager ) {

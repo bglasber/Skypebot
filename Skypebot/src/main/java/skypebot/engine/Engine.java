@@ -146,7 +146,7 @@ public class Engine {
                     "unknown"
                 ) + ", " +
                 System.getProperty(
-                    "os.arch",
+                    "os.version",
                     "unknown"
                 )
         );
