@@ -32,6 +32,7 @@ public class Engine {
     public Engine() {
         dbManager = createDbManager();
         handlers = CreateHandlers( dbManager );
+        WorkerThread.SetDbManager( dbManager );
         WorkerThread.SetHandlers( handlers );
         executor = Executors.newFixedThreadPool( getNumberOfCores() );
     }
