@@ -184,8 +184,10 @@ public class NounsVariable implements IVariable {
 
         }
         else if( nounLow.compareTo( "people" ) == 0 ) {
+            return "people";
+        }
+        else if( nounLow.compareTo( "foot" ) == 0 ) {
             return "feet";
-
         }
         else if( nounLow.compareTo( "buffalo" ) == 0 ) {
             return "buffalo";
