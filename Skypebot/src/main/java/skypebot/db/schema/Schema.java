@@ -45,15 +45,6 @@ public class Schema {
                 TableType.VIDEOS
             );
 
-        public static Table NounsTable =
-            new Table(
-                "nouns",
-                new String[]{ "nouns" },
-                "nounIndex",
-                "nouns",
-                TableType.NOUNS
-            );
-
         public static Table VerbTable =
             new Table(
                 "verb",
@@ -110,10 +101,6 @@ public class Schema {
 
     public Table getNounTable() {
         return Tables.NounTable;
-    }
-
-    public Table getNounsTable() {
-        return Tables.NounsTable;
     }
 
     public Table getVideosTable() {
