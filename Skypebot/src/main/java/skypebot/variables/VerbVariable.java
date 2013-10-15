@@ -23,7 +23,7 @@ public class VerbVariable implements IVariable {
     @Override
     public boolean isContainedInString( String message ) {
         //Its technically bad sentence structure to end a sentence with a verb so...
-        return message.contains( "$verb " );
+        return message.contains( "$verbs " );
     }
 
     @Override
@@ -39,7 +39,7 @@ public class VerbVariable implements IVariable {
             );
             logger.trace( "trying to replace \"" + message + "\" with " + verb );
             return message.replaceFirst(
-                "\\$verb",
+                "\\$verbs",
                 verb
             );
         } catch( SQLException e ) {

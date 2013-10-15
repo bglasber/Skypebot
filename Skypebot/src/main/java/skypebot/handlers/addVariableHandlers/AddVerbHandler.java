@@ -21,7 +21,7 @@ public class AddVerbHandler implements IHandler {
     @Override
     public boolean canHandle( ChatMessage m ) {
         try {
-            return m.getContent().contains( "bucket, verb+" );
+            return m.getContent().contains( "bucket, verbs+" );
         } catch( SkypeException e ) {
             return false;
         }
@@ -36,7 +36,7 @@ public class AddVerbHandler implements IHandler {
     public void handle( ChatMessage m ) {
         try {
             String verbToAdd = m.getContent().replace(
-                "bucket, verb+ ",
+                "bucket, verbs+ ",
                 ""
             );
             boolean wasSuccessful = manager.insertFieldsIntoTable(
