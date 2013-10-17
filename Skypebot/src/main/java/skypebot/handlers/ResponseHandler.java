@@ -5,6 +5,7 @@ import com.skype.SkypeException;
 import org.apache.log4j.Logger;
 import skypebot.db.IDbManager;
 import skypebot.db.schema.Table;
+import skypebot.engine.Engine;
 import skypebot.variables.VariableExpander;
 
 import java.sql.SQLException;
@@ -61,6 +62,8 @@ public class ResponseHandler implements IHandler {
                 //Drop message
                 return;
             }
+            logger.trace( "Putting the message into the message list" );
+            Engine.messageList.Put( m );
             //Gives us back query matched as 0, response provided as 1
             String[] response = dbManager.getMultipleFieldsFromDbThatContains(
                 table,

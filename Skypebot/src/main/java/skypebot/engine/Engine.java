@@ -28,6 +28,7 @@ public class Engine {
     private static ExecutorService executor;
     private static Logger logger = Logger.getLogger( Engine.class.getCanonicalName() );
     private static DbManager dbManager;
+    public static MessageList messageList;
 
     public Engine() {
         dbManager = createDbManager();
@@ -35,7 +36,10 @@ public class Engine {
         WorkerThread.SetDbManager( dbManager );
         WorkerThread.SetHandlers( handlers );
         int cores = getNumberOfCores();
+
+        messageList = new MessageList();
         logger.info( "Launching " + cores + " worker threads..." );
+
         executor = Executors.newFixedThreadPool( cores );
     }
 

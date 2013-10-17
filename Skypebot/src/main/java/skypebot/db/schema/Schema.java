@@ -89,6 +89,15 @@ public class Schema {
                 "alias",
                 TableType.ALIAS
             );
+
+        public static Table QuotesTable =
+            new Table(
+                "quotes",
+                new String[]{ "attributedAuthor", "quote" },
+                "quotesIndex",
+                "attributedAuthor",
+                TableType.QUOTE
+            );
     }
 
     public Table getResponseTable() {
@@ -125,6 +134,10 @@ public class Schema {
 
     public Table getAliasTable() {
         return Tables.AliasTable;
+    }
+
+    public Table getQuotesTable() {
+        return Tables.QuotesTable;
     }
 
     public List<SchemaConstructorString> getSchemaConstructionStrings() {
