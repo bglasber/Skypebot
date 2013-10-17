@@ -53,6 +53,8 @@ public class QuoteHandler implements IHandler {
                 "quote",
                 unaliasedId
             );
+
+            m.getChat().send( quote );
         } catch( SkypeException e ) {
             return;
         } catch( SQLException e ) {

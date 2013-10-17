@@ -103,6 +103,8 @@ public class Engine {
             new DropItemHandler(),
             new StatsHandler(),
             new AliasHandler(),
+            new RememberHandler(),
+            new QuoteHandler(),
             getResponseHandler( m )
         };
     }
