@@ -36,7 +36,6 @@ public class StatsHandler implements IHandler {
             m.getChat().send( "Videos - " + manager.getDbCount( manager.getSchema().getVideosTable() ) );
             m.getChat().send( "Inventory - " + manager.getDbCount( manager.getSchema().getItemTable() ) );
             m.getChat().send( "Nouns - " + manager.getDbCount( manager.getSchema().getNounTable() ) );
-            m.getChat().send( "Plural Nouns - " + manager.getDbCount( manager.getSchema().getNounsTable() ) );
             m.getChat().send( "Verbs - " + manager.getDbCount( manager.getSchema().getVerbTable() ) );
             m.getChat().send( "Past Verbs - " + manager.getDbCount( manager.getSchema().getVerbedTable() ) );
             m.getChat().send( "'ing' verbs - " + manager.getDbCount( manager.getSchema().getVerbingTable() ) );

@@ -54,15 +54,6 @@ public class Schema {
                 TableType.VERB
             );
 
-        public static Table VerbsTable =
-            new Table(
-                "verbs",
-                new String[]{ "verbs" },
-                "verbsIndex",
-                "verbs",
-                TableType.VERBS
-            );
-
         public static Table VerbedTable =
             new Table(
                 "verbed",
@@ -88,6 +79,15 @@ public class Schema {
                 "adjectiveIndex",
                 "adjective",
                 TableType.ADJECTIVE
+            );
+
+        public static Table AliasTable =
+            new Table(
+                "alias",
+                new String[]{ "alias", "realId" },
+                "aliasIndex",
+                "alias",
+                TableType.ALIAS
             );
     }
 
@@ -121,6 +121,10 @@ public class Schema {
 
     public Table getAdjectiveTable() {
         return Tables.AdjectiveTable;
+    }
+
+    public Table getAliasTable() {
+        return Tables.AliasTable;
     }
 
     public List<SchemaConstructorString> getSchemaConstructionStrings() {

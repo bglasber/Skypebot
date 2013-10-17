@@ -11,6 +11,6 @@ public enum TableType {
     VERBING,
     ADJECTIVE,
     ITEMS,
-    VIDEOS,
+    VIDEOS, ALIAS,
 
 }
