@@ -38,9 +38,17 @@ public class AliasHandler implements IHandler {
             "bucket, alias ([^ ]+) (.+)",
             "$1@$2"
         ).split( "@" );
-        dbManager.insertFieldsIntoTable(
+        if( dbManager.insertFieldsIntoTable(
             dbManager.getSchema().getAliasTable(),
             fieldsToInsert
-        );
+        )
+            ) {
+            try {
+                m.getChat().send( "Aliased " + fieldsToInsert[ 0 ] + " to " + fieldsToInsert[ 1 ] );
+            } catch( SkypeException e ) {
+                return;
+            }
+        }
+
     }
 }
