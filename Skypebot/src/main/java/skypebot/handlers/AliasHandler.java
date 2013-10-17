@@ -15,7 +15,7 @@ public class AliasHandler implements IHandler {
     @Override
     public boolean canHandle( ChatMessage m ) {
         try {
-            return m.getContent().matches( "bucket, alias [A-Za-z0-9]+ [A-Za-z0-9]+" );
+            return m.getContent().matches( "bucket, alias [A-Za-z0-9]+ .+" );
         } catch( SkypeException e ) {
             return false;
         }
@@ -35,7 +35,7 @@ public class AliasHandler implements IHandler {
             return;
         }
         String[] fieldsToInsert = message.replaceAll(
-            "bucket, alias ([^ ]+) ([^ ]+)",
+            "bucket, alias ([^ ]+) (.+)",
             "$1@$2"
         ).split( "@" );
         dbManager.insertFieldsIntoTable(
