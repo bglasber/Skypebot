@@ -98,7 +98,7 @@ public class Engine {
             new GetInventoryHandler(),
             new DropItemHandler(),
             new StatsHandler(),
-
+            new AliasHandler(),
             getResponseHandler( m )
         };
     }
