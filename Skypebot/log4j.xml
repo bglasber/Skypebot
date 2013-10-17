@@ -53,6 +53,9 @@
     <logger name="StatsHandler">
         <level value="debug"/>
     </logger>
+    <logger name="RememeberHandler">
+        <level value="debug"/>
+    </logger>
 
 
     <!-- Db -->
