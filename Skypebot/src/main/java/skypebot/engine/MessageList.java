@@ -73,6 +73,9 @@ public class MessageList {
                 personToMatch,
                 messageToMatch
             );
+            if( curMessageIndex == -1 ) {
+                return null;
+            }
             String messageToQuote = "";
             for( int i = 0; i < numMessagesToQuote; i++ ) {
                 messageToQuote = messageToQuote + list.get( curMessageIndex ).GetPerson()

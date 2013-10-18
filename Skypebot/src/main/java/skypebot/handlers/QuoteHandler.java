@@ -39,7 +39,7 @@ public class QuoteHandler implements IHandler {
                 ""
             );
             String unaliasedId = manager.getSingleFromDbThatEquals(
-                manager.getSchema().getQuotesTable(),
+                manager.getSchema().getAliasTable(),
                 "alias",
                 "realId",
                 message

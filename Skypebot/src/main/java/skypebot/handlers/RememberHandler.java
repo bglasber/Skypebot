@@ -74,8 +74,12 @@ public class RememberHandler implements IHandler {
                 text,
                 Integer.parseInt( num )
             );
+
             logger.debug( "Got message: " + message );
 
+            if( message == null ) {
+                m.getChat().send( "Could not quote, no messages in my history match" );
+            }
             manager.insertFieldsIntoTable(
                 manager.getSchema().getQuotesTable(),
                 new String[]{

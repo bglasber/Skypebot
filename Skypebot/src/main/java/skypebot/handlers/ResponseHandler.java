@@ -53,6 +53,9 @@ public class ResponseHandler implements IHandler {
                 m.getChat().send( "That was '" + previousResponse[ 0 ] + "' -> '" + previousResponse[ 1 ] + "'" );
                 return;
             }
+            logger.trace( "Putting the message into the message list" );
+            Engine.messageList.Put( m );
+
             //Gives us a number between 0.0 and 1.0, this should give us 35% chance of not responding
             boolean referencedOverride = m.getContent().contains( "bucket" ) || m.getContent().contains( "Bucket" );
             if( Math.random() > 0.65 &&
@@ -62,8 +65,7 @@ public class ResponseHandler implements IHandler {
                 //Drop message
                 return;
             }
-            logger.trace( "Putting the message into the message list" );
-            Engine.messageList.Put( m );
+
             //Gives us back query matched as 0, response provided as 1
             String[] response = dbManager.getMultipleFieldsFromDbThatContains(
                 table,
