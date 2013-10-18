@@ -34,7 +34,7 @@ public class QuoteHandler implements IHandler {
     public void handle( ChatMessage m ) {
         try {
             String message = m.getContent();
-            message.replace(
+            message = message.replace(
                 "bucket, quote ",
                 ""
             );
