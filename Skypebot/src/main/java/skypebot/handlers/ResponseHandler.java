@@ -88,12 +88,17 @@ public class ResponseHandler implements IHandler {
                     prevResponse = response;
                 }
                 String name = getSenderName( m );
+                String messageResponse = variableExpander.expandVariables(
+                    name,
+                    m.getChat(),
+                    response[ 1 ]
+                );
+                Engine.messageList.Put(
+                    "Bucket",
+                    messageResponse
+                );
                 m.getChat().send(
-                    variableExpander.expandVariables(
-                        name,
-                        m.getChat(),
-                        response[ 1 ]
-                    )
+                    messageResponse
                 );
             }
             else {

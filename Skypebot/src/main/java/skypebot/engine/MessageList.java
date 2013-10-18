@@ -25,17 +25,28 @@ public class MessageList {
     //SYNCHRONIZED
     //TODO: make configurable
     public void Put( ChatMessage m ) {
+        try {
+            Put(
+                m.getSender().getFullName(),
+                m.getContent()
+            );
+        } catch( SkypeException e ) {
+            return;
+        }
+    }
+
+    public void Put(
+        String fullName,
+        String message
+    ) {
         synchronized( list ) {
-            try {
-                list.add(
-                    new PersonMessageTuple(
-                        m.getSender().getFullName(),
-                        m.getContent()
-                    )
-                );
-            } catch( SkypeException e ) {
-                return;
-            }
+
+            list.add(
+                new PersonMessageTuple(
+                    fullName,
+                    message
+                )
+            );
             if( list.size() > 20 ) {
                 list.remove( 0 );
             }
