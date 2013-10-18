@@ -2,6 +2,7 @@ package skypebot.handlers;
 
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
+import org.apache.log4j.Logger;
 import skypebot.db.IDbManager;
 
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 public class QuoteHandler implements IHandler {
 
     private IDbManager manager;
+    private static Logger logger = Logger.getLogger( QuoteHandler.class.getCanonicalName() );
 
     @Override
     public boolean canHandle( ChatMessage m ) {
@@ -38,12 +40,14 @@ public class QuoteHandler implements IHandler {
                 "bucket, quote ",
                 ""
             );
+            logger.trace( "Unaliasing: " + message );
             String unaliasedId = manager.getSingleFromDbThatEquals(
                 manager.getSchema().getAliasTable(),
                 "alias",
                 "realId",
                 message
             );
+            logger.trace( "Got realId: " + unaliasedId );
             if( unaliasedId == null ) {
                 return;
             }
@@ -53,7 +57,7 @@ public class QuoteHandler implements IHandler {
                 "quote",
                 unaliasedId
             );
-
+            logger.debug( "Found quote: " + quote );
             m.getChat().send( quote );
         } catch( SkypeException e ) {
             return;
