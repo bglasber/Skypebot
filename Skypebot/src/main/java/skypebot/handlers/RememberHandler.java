@@ -42,11 +42,11 @@ public class RememberHandler implements IHandler {
             String re1 = ".*?";    // Non-greedy match on filler
             String re2 = "(?:[a-z][a-z]+)";    // Uninteresting: word
             String re3 = ".*?";    // Non-greedy match on filler
-            String re4 = "((?:[a-z][a-z]+))";    // Word 1
+            String re4 = "(?:[a-z][a-z]+)";    // Uninteresting: word
             String re5 = ".*?";    // Non-greedy match on filler
-            String re6 = "((?:[a-z][a-z]+))";    // Word 2
+            String re6 = "((?:[a-z][a-z]+))";    // Word 1
             String re7 = ".*?";    // Non-greedy match on filler
-            String re8 = "((?:[a-z][a-z]+))";    // Word 3
+            String re8 = "((?:[a-z][a-z]+))";    // Word 2
             String re9 = ".*?";    // Non-greedy match on filler
             String re10 = "(\\d+)";    // Integer Number 1
             Pattern p = Pattern.compile(
