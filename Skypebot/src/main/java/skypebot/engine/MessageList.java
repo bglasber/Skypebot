@@ -2,6 +2,7 @@ package skypebot.engine;
 
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
+import org.apache.log4j.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 public class MessageList {
 
+    private static Logger logger = Logger.getLogger( MessageList.class.getCanonicalName() );
     private List<PersonMessageTuple> list;
 
     public MessageList() {
@@ -45,7 +47,10 @@ public class MessageList {
         String personToMatch,
         String messageToMatch
     ) {
+        logger.trace( "Trying to find: " + personToMatch + " - " + messageToMatch );
         for( int i = 0; i < list.size(); i++ ) {
+
+            logger.trace( i + ": " + list.get( i ).GetPerson() + " - " + list.get( i ).GetMessage() );
             if(
                 list.get( i ).GetPerson().equals( personToMatch ) &&
                     list.get( i ).GetMessage().contains( messageToMatch )
