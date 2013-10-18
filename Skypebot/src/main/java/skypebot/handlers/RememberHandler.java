@@ -7,6 +7,8 @@ import skypebot.db.IDbManager;
 import skypebot.engine.Engine;
 
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * User: brad
@@ -36,31 +38,47 @@ public class RememberHandler implements IHandler {
     @Override
     public void handle( ChatMessage m ) {
         try {
-            logger.debug( "RememberHandler will be handling the message" );
-            String[] fields = m.getContent().replace(
-                "bucket, remember ([^ ]+) \"([^\"])\" ([0-9]+)",
-                "$1@$2@$3"
-            ).split( "@" );
+            String re1 = ".*?";    // Non-greedy match on filler
+            String re2 = "(?:[a-z][a-z]+)";    // Uninteresting: word
+            String re3 = ".*?";    // Non-greedy match on filler
+            String re4 = "(?:[a-z][a-z]+)";    // Uninteresting: word
+            String re5 = ".*?";    // Non-greedy match on filler
+            String re6 = "((?:[a-z][a-z]+))";    // Word 1
+            String re7 = ".*?";    // Non-greedy match on filler
+            String re8 = "(\".*?\")";    // Double Quote String 1
+            String re9 = ".*?";    // Non-greedy match on filler
+            String re10 = "(\\d+)";    // Integer Number 1
+            Pattern p = Pattern.compile(
+                re1 + re2 + re3 + re4 + re5 + re6 + re7 + re8 + re9 + re10,
+                Pattern.CASE_INSENSITIVE | Pattern.DOTALL
+            );
+            Matcher mat = p.matcher( m.getContent() );
+            mat.find();
+            String name = mat.group( 1 );
+            String text = mat.group( 2 );
+            String num = mat.group( 3 );
+            logger.debug( "(" + name.toString() + ")" + "(" + text.toString() + ")" + "(" + num.toString() + ")" + "\n" );
 
-            logger.trace( "Unaliasing: " + fields[ 0 ] );
+
+            logger.trace( "Unaliasing: " + name );
             String realName = manager.getSingleFromDbThatEquals(
                 manager.getSchema().getAliasTable(),
                 "alias",
                 "realId",
-                fields[ 0 ]
+                name
             );
             logger.debug( "Found Real Name: " + realName );
             String message = Engine.messageList.GetMessageToQuote(
                 realName,
-                fields[ 1 ],
-                Integer.parseInt( fields[ 2 ] )
+                text,
+                Integer.parseInt( num )
             );
             logger.debug( "Got message: " + message );
 
             manager.insertFieldsIntoTable(
                 manager.getSchema().getQuotesTable(),
                 new String[]{
-                    fields[ 0 ], //Fully qualified name
+                    realName, //Fully qualified name
                     message
                 }
             );
