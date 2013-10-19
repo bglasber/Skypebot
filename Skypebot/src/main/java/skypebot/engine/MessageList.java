@@ -44,7 +44,10 @@ public class MessageList {
             list.add(
                 new PersonMessageTuple(
                     fullName,
-                    message
+                    message.replace(
+                        "\"",
+                        "\\\""
+                    )
                 )
             );
             if( list.size() > 20 ) {

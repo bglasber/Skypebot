@@ -66,7 +66,7 @@ public class ResponseHandler implements IHandler {
                 return;
             }
 
-            String message = m.getContent().replaceAll(
+            String message = m.getContent().replace(
                 "\"",
                 "\\\""
             );
