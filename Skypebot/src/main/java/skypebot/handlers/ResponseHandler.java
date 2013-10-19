@@ -66,12 +66,17 @@ public class ResponseHandler implements IHandler {
                 return;
             }
 
+            String message = m.getContent().replaceAll(
+                "\"",
+                "\\\""
+            );
+
             //Gives us back query matched as 0, response provided as 1
             String[] response = dbManager.getMultipleFieldsFromDbThatContains(
                 table,
                 "query",
                 new String[]{ "query", "response", },
-                m.getContent()
+                message
             );
             //Don't repeat the same trigger
             if(
