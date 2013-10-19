@@ -68,7 +68,7 @@ public class ResponseHandler implements IHandler {
 
             String message = m.getContent().replace(
                 "\"",
-                "\\\""
+                "'"
             );
 
             //Gives us back query matched as 0, response provided as 1

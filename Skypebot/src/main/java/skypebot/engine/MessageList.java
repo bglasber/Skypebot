@@ -46,7 +46,7 @@ public class MessageList {
                     fullName,
                     message.replace(
                         "\"",
-                        "\\\""
+                        "'"
                     )
                 )
             );
