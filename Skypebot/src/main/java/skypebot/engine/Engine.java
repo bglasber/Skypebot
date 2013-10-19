@@ -50,7 +50,8 @@ public class Engine {
                 new ChatMessageAdapter() {
                     public void chatMessageReceived( ChatMessage messageReceived ) throws SkypeException {
                         logger.debug( "Message Received: " + messageReceived.getContent() );
-                        if( messageReceived.getType().equals( ChatMessage.Type.SAID ) ) {
+                        if( messageReceived.getType().equals( ChatMessage.Type.SAID ) ||
+                            messageReceived.getType().equals( ChatMessage.Type.EMOTED ) ) {
                             Runnable worker = new WorkerThread( messageReceived );
                             executor.execute( worker );
                         }
