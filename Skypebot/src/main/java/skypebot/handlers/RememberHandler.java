@@ -69,7 +69,7 @@ public class RememberHandler implements IHandler {
                 name
             );
             logger.debug( "Found Real Name: " + realName );
-            String message = Engine.messageList.GetMessageToQuote(
+            String message = Engine.GetQuotableMessage(
                 realName,
                 text,
                 Integer.parseInt( num )

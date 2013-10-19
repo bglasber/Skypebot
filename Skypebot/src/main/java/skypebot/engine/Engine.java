@@ -28,7 +28,7 @@ public class Engine {
     private static ExecutorService executor;
     private static Logger logger = Logger.getLogger( Engine.class.getCanonicalName() );
     private static DbManager dbManager;
-    public static MessageList messageList;
+    private static MessageList messageList;
 
     public Engine() {
         dbManager = createDbManager();
@@ -152,6 +152,32 @@ public class Engine {
         int cores = Runtime.getRuntime().availableProcessors();
         logger.info( "Processors: " + cores );
         return cores;
+    }
+
+    public static void AddToMessageList( ChatMessage m ) {
+        messageList.Put( m );
+    }
+
+    public static void AddToMessageList(
+        String person,
+        String message
+    ) {
+        messageList.Put(
+            person,
+            message
+        );
+    }
+
+    public static String GetQuotableMessage(
+        String person,
+        String textToMatch,
+        int numMessages
+    ) {
+        return messageList.GetMessageToQuote(
+            person,
+            textToMatch,
+            numMessages
+        );
     }
 
 }

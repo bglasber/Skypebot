@@ -54,7 +54,7 @@ public class ResponseHandler implements IHandler {
                 return;
             }
             logger.trace( "Putting the message into the message list" );
-            Engine.messageList.Put( m );
+            Engine.AddToMessageList( m );
 
             //Gives us a number between 0.0 and 1.0, this should give us 35% chance of not responding
             boolean referencedOverride = m.getContent().contains( "bucket" ) || m.getContent().contains( "Bucket" );
@@ -98,7 +98,7 @@ public class ResponseHandler implements IHandler {
                     m.getChat(),
                     response[ 1 ]
                 );
-                Engine.messageList.Put(
+                Engine.AddToMessageList(
                     "Bucket",
                     messageResponse
                 );
