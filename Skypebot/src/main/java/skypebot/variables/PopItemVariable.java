@@ -36,6 +36,9 @@ public class PopItemVariable implements IVariable {
                 manager.getSchema().getItemTable(),
                 "item"
             );
+            if( item == null ) {
+                item = "himself";
+            }
             manager.deleteRowFromTable(
                 manager.getSchema().getItemTable(),
                 new String[]{ "item" },
