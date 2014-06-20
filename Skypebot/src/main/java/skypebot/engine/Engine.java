@@ -95,7 +95,6 @@ public class Engine {
             new AddHandler(),
             new AddItemHandler(),
             new AddNounHandler(),
-            new AddNounsHandler(),
             new AddAdjectiveHandler(),
             new AddVerbedHandler(),
             new AddVerbingHandler(),
